@@ -1,4 +1,4 @@
-package com.supermall.backend.common.utils;
+package com.supermall.backend.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

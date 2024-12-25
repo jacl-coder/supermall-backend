@@ -1,4 +1,4 @@
-package com.supermall.backend.config;
+package com.supermall.backend.common.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;

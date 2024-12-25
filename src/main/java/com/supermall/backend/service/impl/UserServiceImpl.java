@@ -2,7 +2,6 @@ package com.supermall.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.supermall.backend.common.exception.BusinessException;
-import com.supermall.backend.common.utils.JwtUtil;
 import com.supermall.backend.dto.UserLoginDTO;
 import com.supermall.backend.dto.UserRegisterDTO;
 import com.supermall.backend.dto.UserUpdateDTO;
@@ -10,6 +9,7 @@ import com.supermall.backend.dto.PasswordUpdateDTO;
 import com.supermall.backend.entity.User;
 import com.supermall.backend.repository.UserRepository;
 import com.supermall.backend.service.UserService;
+import com.supermall.backend.util.JwtUtil;
 import com.supermall.backend.vo.UserLoginVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;

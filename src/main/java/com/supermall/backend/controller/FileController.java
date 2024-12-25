@@ -1,7 +1,7 @@
 package com.supermall.backend.controller;
 
 import com.supermall.backend.common.response.Result;
-import com.supermall.backend.common.utils.FileUtils;
+import com.supermall.backend.util.FileUtils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;

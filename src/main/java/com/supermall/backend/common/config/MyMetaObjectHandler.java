@@ -1,4 +1,4 @@
-package com.supermall.backend.config;
+package com.supermall.backend.common.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

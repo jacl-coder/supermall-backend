@@ -1,4 +1,4 @@
-package com.supermall.backend.config;
+package com.supermall.backend.common.config;
 
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;

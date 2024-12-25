@@ -1,4 +1,4 @@
-package com.supermall.backend.common.utils;
+package com.supermall.backend.util;
 
 import com.supermall.backend.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;

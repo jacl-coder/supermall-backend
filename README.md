@@ -5,7 +5,32 @@
 `supermall-backend`是一套完整的电商系统的后端部分，基于 Spring Boot 3.x + JDK 17 实现。提供稳定、高性能的后端服务支持。
 
 ### 项目架构
-后端项目采用经典三层架构（Controller-Service-Repository），基于 Spring Boot 技术栈
+采用经典三层架构，结构清晰，便于维护：
+
+```
+src/main/java/com/supermall/backend/
+├── controller/       # 控制器层：处理请求响应
+├── service/         # 服务层：业务逻辑
+│   └── impl/       # 服务实现
+├── repository/      # 数据访问层：数据库交互
+├── entity/         # 实体类：数据库映射
+├── dto/            # 数据传输对象：请求参数
+├── vo/             # 视图对象：响应结果
+├── common/         # 公共组件
+│   ├── config/    # 配置类
+│   ├── exception/ # 异常处理
+│   └── response/  # 统一响应
+└── util/          # 工具类
+```
+
+技术特点：
+- 基于 Spring Boot 3.x
+- MyBatis-Plus 增强持久层
+- JWT 认证
+- 统一响应处理
+- 全局异常处理
+- 参数校验
+- 多环境配置
 
 #### 后端技术栈
 | 技术 | 说明 | 官网 |
@@ -23,6 +48,7 @@
 supermall-backend/
   ├── config/                # 配置类
   ├── controller/            # 控制器层
+  ├── schedule/             # 定时任务
   ├── service/              # 服务层
       ├── impl/             # 服务实现类
   ├── repository/           # 数据访问层
@@ -48,11 +74,14 @@ supermall-backend/
 
 #### 订单模块
 - 订单管理
-  - ✅ 订单创建与处理
-  - ✅ 订单状态流转
-  - ✅ 订单自动取消
+  - ✅ 订单创建
+  - ✅ 订单支付
   - ✅ 订单发货
-  - ✅ 确认收货
+  - ✅ 订单确认收货
+  - ✅ 订单取消
+- 订单自动化
+  - ✅ 超时未支付自动取消（30分钟）
+  - ✅ 发货后自动确认收货（15天）
 
 #### 用户模块
 - 用户管理

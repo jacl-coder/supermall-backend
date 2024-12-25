@@ -1,4 +1,4 @@
-package com.supermall.backend.config;
+package com.supermall.backend.common.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
