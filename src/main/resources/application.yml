@@ -7,26 +7,26 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update  # ??????? `update`????????? `validate` ? `none`
+      ddl-auto: update  # 自动创建表结构
     properties:
       hibernate:
-        format_sql: true  # ??? SQL ??
-        use_sql_comments: true  # ?? SQL ??
-    show-sql: true  # ?? SQL
+        format_sql: true  # 格式化SQL
+        use_sql_comments: true  # 使用SQL注释
+    show-sql: true  # 显示SQL
 
   mybatis-plus:
     configuration:
-      map-underscore-to-camel-case: true  # ????????
+      map-underscore-to-camel-case: true  # 下划线转驼峰
     global-config:
       db-config:
-        logic-delete-value: 1  # ??????
-        logic-not-delete-value: 0  # ?????
+        logic-delete-value: 1  # 逻辑删除值
+        logic-not-delete-value: 0  # 逻辑不删除值
 
   server:
-    port: 8080  # ????
+    port: 8080  # 端口
 
   logging:
     level:
-      root: INFO  # ????????
-      org.springframework.web: DEBUG  # ?? Spring Web ????
-      com.supermall: DEBUG  # ??????????
+      root: INFO  # 根日志级别
+      org.springframework.web: DEBUG  # Spring Web 日志级别
+      com.supermall: DEBUG  # 自定义日志级别
