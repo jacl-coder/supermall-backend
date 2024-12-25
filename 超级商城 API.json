@@ -1,0 +1,947 @@
+{
+	"info": {
+		"_postman_id": "2c9945a6-17dc-47f0-b8c3-ea2c7710f1c2",
+		"name": "超级商城 API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33064293"
+	},
+	"item": [
+		{
+			"name": "用户管理",
+			"item": [
+				{
+					"name": "用户注册",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"password123\",\n    \"email\": \"test@example.com\",\n    \"phone\": \"13800138000\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户登录",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// 测试响应状态码\r",
+									"pm.test(\"状态码是 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"// 测试响应格式\r",
+									"pm.test(\"响应格式正确\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"// 测试业务状态码\r",
+									"pm.test(\"业务状态码是 200\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.code).to.equal(200);\r",
+									"});\r",
+									"\r",
+									"// 测试是否包含 token\r",
+									"pm.test(\"响应包含 token\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.data.token).to.exist;\r",
+									"});\r",
+									"\r",
+									"// 如果登录成功，保存 token 到环境变量\r",
+									"if (pm.response.code === 200) {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    if (jsonData.code === 200 && jsonData.data && jsonData.data.token) {\r",
+									"        pm.environment.set(\"token\", \"Bearer \" + jsonData.data.token);\r",
+									"        console.log(\"Token 已保存到环境变量\");\r",
+									"    }\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改密码",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\": \"newpassword123\",\n    \"newPassword\": \"newpassword123\",\n    \"confirmPassword\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新头像",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "postman-cloud:///1efc273e-4fcb-4910-85cc-952e1ec24b1a"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/avatar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"avatar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "分类管理",
+			"item": [
+				{
+					"name": "创建根分类",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"手机数码\",\n    \"parentId\": 0,\n    \"level\": 1,\n    \"sort\": 1,\n    \"icon\": \"phone\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "创建子分类",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"智能手机\",\n    \"parentId\": \"{{categoryId}}\",\n    \"level\": 2,\n    \"sort\": 1,\n    \"icon\": \"smartphone\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/categories",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取分类树",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/categories/tree",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"tree"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "商品管理",
+			"item": [
+				{
+					"name": "创建商品",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"iPhone 15 Pro\",\n    \"description\": \"最新款苹果手机\",\n    \"categoryId\": \"{{categoryId}}\",\n    \"price\": 8999.00,\n    \"stock\": 100,\n    \"mainImage\": \"iphone15.jpg\",\n    \"subImages\": [\"detail1.jpg\", \"detail2.jpg\"],\n    \"status\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/products",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取商品列表",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/products?pageNum=1&pageSize=10&keyword=iPhone&categoryId={{categoryId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "pageNum",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "keyword",
+									"value": "iPhone"
+								},
+								{
+									"key": "categoryId",
+									"value": "{{categoryId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "评论管理",
+			"item": [
+				{
+					"name": "创建评论",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": \"{{productId}}\",\n    \"content\": \"这个商品非常好用！\",\n    \"rating\": 5,\n    \"images\": [\"/uploads/comments/test1.jpg\", \"/uploads/comments/test2.jpg\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/comments",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取商品评论",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/comments/product/{{productId}}?pageNum=1&pageSize=2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"comments",
+								"product",
+								"{{productId}}"
+							],
+							"query": [
+								{
+									"key": "pageNum",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "购物车管理",
+			"item": [
+				{
+					"name": "添加商品到购物车",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productId\": 1,\n    \"quantity\": 2,\n    \"selected\": true\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新购物车商品数量",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/cart/1/quantity?quantity=3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"1",
+								"quantity"
+							],
+							"query": [
+								{
+									"key": "quantity",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "更新购物车商品选中状态",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/cart/1/selected?selected=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"1",
+								"selected"
+							],
+							"query": [
+								{
+									"key": "selected",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除购物车商品",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/cart/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取购物车列表",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "清空购物车",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "全选/取消全选",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/cart/selected?selected=true",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"selected"
+							],
+							"query": [
+								{
+									"key": "selected",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "订单管理",
+			"item": [
+				{
+					"name": "创建订单",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"张三\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 2\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "成功响应",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"张三\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 2\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/orders"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": {
+								"code": 200,
+								"message": "success",
+								"data": {
+									"id": 1,
+									"orderNo": "20240315123456123456",
+									"totalAmount": 17998.00,
+									"payAmount": 17998.00,
+									"freightAmount": 0,
+									"status": 0,
+									"payType": 0,
+									"createTime": "2024-03-15T12:34:56",
+									"items": [
+										{
+											"id": 1,
+											"productId": 1,
+											"productName": "iPhone 15 Pro",
+											"productImage": "iphone15.jpg",
+											"price": 8999.00,
+											"quantity": 2,
+											"totalAmount": 17998.00
+										}
+									],
+									"delivery": {
+										"receiverName": "张三",
+										"receiverPhone": "13800138000",
+										"receiverProvince": "广东省",
+										"receiverCity": "深圳市",
+										"receiverDistrict": "南山区",
+										"receiverAddress": "科技园"
+									}
+								}
+							}
+						},
+						{
+							"name": "商品不存在",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"张三\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": [\n        {\n            \"productId\": 999,\n            \"quantity\": 2\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/orders"
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": {
+								"code": 400,
+								"message": "商品不存在",
+								"data": null
+							}
+						},
+						{
+							"name": "库存不足",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"张三\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 999\n        }\n    ]\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/orders"
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": {
+								"code": 400,
+								"message": "商品库存不足",
+								"data": null
+							}
+						},
+						{
+							"name": "参数验证失败",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": []\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/orders"
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"body": {
+								"code": 400,
+								"message": "收货人姓名不能为空",
+								"data": null
+							}
+						}
+					]
+				},
+				{
+					"name": "获取订单详情",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "orders", "1"]
+						}
+					},
+					"response": [
+						{
+							"name": "成功响应",
+							"originalRequest": {
+								"method": "GET",
+								"url": {
+									"raw": "{{baseUrl}}/api/orders/1"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"body": {
+								"code": 200,
+								"message": "success",
+								"data": {
+									"id": 1,
+									"orderNo": "20240315123456123456",
+									"totalAmount": 17998.00,
+									"payAmount": 17998.00,
+									"freightAmount": 0,
+									"status": 0,
+									"payType": 0,
+									"createTime": "2024-03-15T12:34:56",
+									"items": [
+										{
+											"id": 1,
+											"productId": 1,
+											"productName": "iPhone 15 Pro",
+											"productImage": "iphone15.jpg",
+											"price": 8999.00,
+											"quantity": 2,
+											"totalAmount": 17998.00
+										}
+									],
+									"delivery": {
+										"receiverName": "张三",
+										"receiverPhone": "13800138000",
+										"receiverProvince": "广东省",
+										"receiverCity": "深圳市",
+										"receiverDistrict": "南山区",
+										"receiverAddress": "科技园"
+									}
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "获取订单列表",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/orders?status=0&pageNum=1&pageSize=10",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "orders"],
+							"query": [
+								{
+									"key": "status",
+									"value": "0",
+									"description": "订单状态：0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单"
+								},
+								{
+									"key": "pageNum",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "成功响应",
+							"originalRequest": {
+								"method": "GET",
+								"url": {
+									"raw": "{{baseUrl}}/api/orders?status=0&pageNum=1&pageSize=10"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"body": {
+								"code": 200,
+								"message": "success",
+								"data": {
+									"records": [
+										{
+											"id": 1,
+											"orderNo": "20240315123456123456",
+											"totalAmount": 17998.00,
+											"payAmount": 17998.00,
+											"freightAmount": 0,
+											"status": 0,
+											"payType": 0,
+											"createTime": "2024-03-15T12:34:56",
+											"items": [
+												{
+													"id": 1,
+													"productId": 1,
+													"productName": "iPhone 15 Pro",
+													"productImage": "iphone15.jpg",
+													"price": 8999.00,
+													"quantity": 2,
+													"totalAmount": 17998.00
+												}
+											],
+											"delivery": {
+												"receiverName": "张三",
+												"receiverPhone": "13800138000",
+												"receiverProvince": "广东省",
+												"receiverCity": "深圳市",
+												"receiverDistrict": "南山区",
+												"receiverAddress": "科技园"
+											}
+										}
+									],
+									"total": 1,
+									"size": 10,
+									"current": 1,
+									"pages": 1
+								}
+							}
+						}
+					]
+				},
+				{
+					"name": "支付宝支付",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/orders/1/alipay",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "orders", "1", "alipay"]
+						}
+					},
+					"response": [
+						{
+							"name": "支付成功",
+							"originalRequest": {
+								"method": "POST",
+								"url": {
+									"raw": "{{baseUrl}}/api/orders/1/alipay"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"body": {
+								"code": 200,
+								"message": "success",
+								"data": {
+									"payForm": "<form>...</form>"
+								}
+							}
+						}
+					]
+				}
+			]
+		}
+	]
+}

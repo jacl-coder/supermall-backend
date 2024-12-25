@@ -4,29 +4,57 @@ spring:
     username: jacl
     password: jacl
     driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  sql:
+    init:
+      mode: never
+      continue-on-error: true
 
   jpa:
     hibernate:
-      ddl-auto: update  # 自动创建表结构
-    properties:
-      hibernate:
-        format_sql: true  # 格式化SQL
-        use_sql_comments: true  # 使用SQL注释
-    show-sql: true  # 显示SQL
+      ddl-auto: none  # 禁用 Hibernate DDL
+    show-sql: false
 
-  mybatis-plus:
-    configuration:
-      map-underscore-to-camel-case: true  # 下划线转驼峰
-    global-config:
-      db-config:
-        logic-delete-value: 1  # 逻辑删除值
-        logic-not-delete-value: 0  # 逻辑不删除值
+  main:
+    allow-bean-definition-overriding: true
+    
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
 
-  server:
-    port: 8080  # 端口
+  alipay:
+    app-id: 9021000142693708
+    private-key: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCnfTqwoyUPg4W1yOBATuKeq5OGqSJKV/96bvZdaUYNgbecKxkuTynZhhnBLRNw3KikfqSMu2UiF+7XXo1sze9SEFvJLw2nqhql4MOvdJXt11Py/4QUNbz/5Rc9rIsFQAlOvRxcoLZVq91WzmbV4uxik/9Mu6sAKmTLBmPzKJs9+qsXTocMepgqyr2sJ7CrZm+uKHJtbHOzgOO2EPiutrsfyNRsCINgCaaKWdtPZbusWEpGfyCr0eu0f3mMjZTz++GuevWKhEPqUHw0vPC08AsQ8TPb7cWWmBSCiH8lqTGtRO0LhHnrxi4uN1RJMgJptt3XlfyP2OJMnAsGgfLQJxijAgMBAAECggEBAKLKukfDWps4l7a3txdqVSQp2isxq22dGGkU/wqN7xPjt+XnkgML2L5fdBrpyBKTtqqjmSZcYhEAOBpHAaj2hJ073yqtPFVxpZMC4tBfvfY9q4/tQKAwFzKVpcBBO6Jvulw4vR9e6bpdYLYlyZgshtvNw3/+jFeN3QfkfzNxjWpv5y6ekIpv5iz3vSwJvSMDJbV5jjXKTrAG3GBUN2RTVapCWC7TcuGxbE5VCXtyaDCTzVefVm7Hih8bBH6+b35U35BtScxy5z/fUoJ5Xp/1EU9GF2J12Wq2nX23sRhksSfNoK+g+D64hq+v7whoWCc7579YKG5oWPj2hIyI+JIRh6kCgYEA+h7rXNuT+jJDgnePs5QlnDqyiLDhkIusDbiYIluIMy8vtj1im9pSqVOBPbM602/iuGAlQUEFc9p8qiHGDPuWNpjLLCfmznDLXvIG3QMdl/Erx7bF6kP7BY2r5pMveaMVxVc5fg9/rJdqvWPS2C7TRUvGgkKMe5YfokxEsRiTuhUCgYEAq20UyZzf+bLhiyBPh/oee0gn50WCNWasOSjm403F/tMYZxvH4qelKUlYAe6SVL8fLxfp13OFE6ltCRCwH8Tnzwx0siMNptkI787BHdAaCY3iKbj4TjqXp/ykPVvdDED9pv5wYl0gV1FA7Pq/K5UDPquh653arD4bGO2QBYOHzdcCgYAK6kaDKuHuTTs8+lK/F3v8sWMRLAbr8+xyPNgGx8/NzAVdApjHDGQHF6nQM34htARE341Ap8HBKIvAMPEfp+sKPui+6I7d+3YkkpNSGcy00MWEVamVa5oMx/30df/gYwmULxZHNg3wTjtOQIj2/jQiFgh3rsfKrOZ8gq+MuvHXcQKBgHNxz2kDG5bGD7wo80Zoe7ScYDsQhWK/FUadM/hpvOgiczGk9NS//6sxOHJ8ntExsKd/XDx7EGiwVbygH2wVp+K4ybHZh20QhkMxIr6YEaDTizZ72cSdEtrPei/UOKXy8p9OhJLJkmkbUDUHnEyWWowO+8l4EfajEI6WFcKQ1JkbAoGAPipnIqcNYDRS/vNeCnvwTusxAY80qz/aJ5aP7DnnyPxMuvDblnDWN7SCvMCHm300GfywHwQqEwfZms2Q3dQTQTkoEjg3LqTQjhMNUMxC6wZoK7qpCk6bDUawc3IspipKkpaYfERXh/DOyP01c+5/MAYjdW98P+IwLdKcq0XBCaI=
+    public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp306sKMlD4OFtcjgQE7inquThqkiSlf/em72XWlGDYG3nCsZLk8p2YYZwS0TcNyopH6kjLtlIhfu116NbM3vUhBbyS8Np6oapeDDr3SV7ddT8v+EFDW8/+UXPayLBUAJTr0cXKC2VavdVs5m1eLsYpP/TLurACpkywZj8yibPfqrF06HDHqYKsq9rCewq2ZvrihybWxzs4DjthD4rra7H8jUbAiDYAmmilnbT2W7rFhKRn8gq9HrtH95jI2U8/vhrnr1ioRD6lB8NLzwtPALEPEz2+3FlpgUgoh/JakxrUTtC4R568YuLjdUSTICabbd15X8j9jiTJwLBoHy0CcYowIDAQAB
+    alipay-public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAq8T1XpXW/BFXTCLcIUFTb/YQBQ8ffWTaVCL3AWcjyqxY5sm9KSokcC95k8+xB6fiqArseUGLS7MB7IMLNkkk+hyIxHkUWvejywmVdp5qtn12EJBozwhAkO1IInPHXS4K2P7zUZ9KpIlD/HFrNLRNOh3B11lOAVTk/utor9ezaMN8147tfPl/YP7WPcUYzvd8y2jXhok95eJED/yPMHxKtRAYlmYzJ1TICMry5W7roE/beXQk/atWXqexyerLAZabZ3oIhLPx7+AjgRmefAuzxwmByiSz2DVyjkdorzyIIr7sskRtTJ2T8BM/vMy2TsB4LeRbUOeRVdjQWxWcnraHAQIDAQAB
+    notify-url: http://localhost:8080/api/orders/alipay/notify
+    return-url: http://localhost:8080/api/orders/alipay/return
 
-  logging:
-    level:
-      root: INFO  # 根日志级别
-      org.springframework.web: DEBUG  # Spring Web 日志级别
-      com.supermall: DEBUG  # 自定义日志级别
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.supermall.backend.entity
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
