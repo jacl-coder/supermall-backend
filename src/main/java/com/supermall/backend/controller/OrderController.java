@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.supermall.backend.repository.OrderRepository;
 import com.supermall.backend.entity.Order;
 import java.time.LocalDateTime;
+import com.supermall.backend.dto.OrderDeliveryDTO;
 
 @Slf4j
 @RestController
@@ -86,5 +87,24 @@ public class OrderController {
         }
         
         return "fail";
+    }
+
+    @PostMapping("/{orderId}/deliver")
+    public Result<OrderVO> deliverOrder(
+            @PathVariable Long orderId,
+            @Valid @RequestBody OrderDeliveryDTO deliveryDTO) {
+        return Result.success(orderService.deliverOrder(orderId, deliveryDTO));
+    }
+
+    @PostMapping("/{orderId}/receive")
+    public Result<OrderVO> confirmReceive(@PathVariable Long orderId) {
+        Long userId = 1L; // TODO: 从token中获取
+        return Result.success(orderService.confirmReceive(userId, orderId));
+    }
+
+    @PostMapping("/{orderId}/cancel")
+    public Result<OrderVO> cancelOrder(@PathVariable Long orderId) {
+        Long userId = 1L; // TODO: 从token中获取
+        return Result.success(orderService.cancelOrder(userId, orderId));
     }
 } 

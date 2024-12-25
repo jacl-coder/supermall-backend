@@ -4,16 +4,21 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.supermall.backend.common.exception.BusinessException;
 import com.supermall.backend.dto.OrderCreateDTO;
+import com.supermall.backend.dto.OrderDeliveryDTO;
 import com.supermall.backend.dto.OrderPayDTO;
 import com.supermall.backend.entity.Order;
 import com.supermall.backend.entity.OrderDelivery;
 import com.supermall.backend.entity.OrderItem;
 import com.supermall.backend.entity.Product;
+import com.supermall.backend.entity.OrderLog;
 import com.supermall.backend.repository.OrderDeliveryRepository;
 import com.supermall.backend.repository.OrderItemRepository;
 import com.supermall.backend.repository.OrderRepository;
 import com.supermall.backend.repository.ProductRepository;
+import com.supermall.backend.repository.OrderLogRepository;
 import com.supermall.backend.service.OrderService;
+import com.supermall.backend.service.NotificationService;
+import com.supermall.backend.service.ProductSalesService;
 import com.supermall.backend.vo.OrderVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -35,15 +40,24 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderDeliveryRepository orderDeliveryRepository;
     private final ProductRepository productRepository;
+    private final OrderLogRepository orderLogRepository;
+    private final NotificationService notificationService;
+    private final ProductSalesService productSalesService;
 
     public OrderServiceImpl(OrderRepository orderRepository,
                           OrderItemRepository orderItemRepository,
                           OrderDeliveryRepository orderDeliveryRepository,
-                          ProductRepository productRepository) {
+                          ProductRepository productRepository,
+                          OrderLogRepository orderLogRepository,
+                          NotificationService notificationService,
+                          ProductSalesService productSalesService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderDeliveryRepository = orderDeliveryRepository;
         this.productRepository = productRepository;
+        this.orderLogRepository = orderLogRepository;
+        this.notificationService = notificationService;
+        this.productSalesService = productSalesService;
     }
 
     @Override
@@ -222,5 +236,165 @@ public class OrderServiceImpl implements OrderService {
 
         // 返回更新后的订单信息
         return getOrderDetail(userId, orderId);
+    }
+
+    @Override
+    @Transactional
+    public OrderVO deliverOrder(Long orderId, OrderDeliveryDTO deliveryDTO) {
+        // 查询订单
+        Order order = orderRepository.selectById(orderId);
+        if (order == null) {
+            throw new BusinessException("订单不存在");
+        }
+
+        // 检查订单状态
+        if (order.getStatus() != 1) {  // 1: 待发货
+            throw new BusinessException("订单状态不正确");
+        }
+
+        // 查询订单物流信息
+        OrderDelivery delivery = orderDeliveryRepository.selectOne(
+            new LambdaQueryWrapper<OrderDelivery>()
+                .eq(OrderDelivery::getOrderId, orderId)
+        );
+        
+        if (delivery == null) {
+            throw new BusinessException("订单物流信息不存在");
+        }
+
+        // 更新物流信息
+        delivery.setDeliveryCompany(deliveryDTO.getDeliveryCompany());
+        delivery.setDeliverySn(deliveryDTO.getDeliverySn());
+        orderDeliveryRepository.updateById(delivery);
+
+        // 更新订单状态
+        order.setStatus(2);  // 2: 已发货
+        order.setDeliveryTime(LocalDateTime.now());
+        orderRepository.updateById(order);
+
+        // 查询订单项
+        List<OrderItem> orderItems = orderItemRepository.selectList(
+            new LambdaQueryWrapper<OrderItem>()
+                .eq(OrderItem::getOrderId, orderId)
+        );
+
+        // 发送发货通知给买家
+        notificationService.sendOrderDeliveryNotification(
+            order.getUserId(), 
+            order.getOrderNo(), 
+            delivery.getDeliveryCompany(), 
+            delivery.getDeliverySn()
+        );
+
+        return buildOrderVO(order, orderItems, delivery);
+    }
+
+    @Override
+    @Transactional
+    public OrderVO confirmReceive(Long userId, Long orderId) {
+        // 查询订单
+        Order order = orderRepository.selectById(orderId);
+        if (order == null || !order.getUserId().equals(userId)) {
+            throw new BusinessException("订单不存在");
+        }
+
+        // 检查订单状态
+        if (order.getStatus() != 2) {  // 2: 已发货
+            throw new BusinessException("订单状态不正确");
+        }
+
+        // 更新订单状态
+        order.setStatus(3);  // 3: 已完成
+        order.setReceiveTime(LocalDateTime.now());
+        orderRepository.updateById(order);
+
+        // 查询订单项和物流信息
+        List<OrderItem> orderItems = orderItemRepository.selectList(
+            new LambdaQueryWrapper<OrderItem>()
+                .eq(OrderItem::getOrderId, orderId)
+        );
+
+        OrderDelivery delivery = orderDeliveryRepository.selectOne(
+            new LambdaQueryWrapper<OrderDelivery>()
+                .eq(OrderDelivery::getOrderId, orderId)
+        );
+
+        // 处理订单完成后的业务逻辑
+        // 1. 更新商品销量
+        for (OrderItem item : orderItems) {
+            productSalesService.increaseSales(item.getProductId(), item.getQuantity());
+        }
+
+        // 2. 发送订单完成通知
+        notificationService.sendOrderCompletedNotification(userId, order.getOrderNo());
+
+        // 3. 记录订单日志
+        saveOrderLog(order, "确认收货",
+            order.getReceiveTime() == null ? "用户确认" : "系统自动确认");
+
+        return buildOrderVO(order, orderItems, delivery);
+    }
+
+    @Override
+    @Transactional
+    public OrderVO cancelOrder(Long userId, Long orderId) {
+        // 查询订单
+        Order order = orderRepository.selectById(orderId);
+        if (order == null || !order.getUserId().equals(userId)) {
+            throw new BusinessException("订单不存在");
+        }
+
+        // 检查订单状态
+        if (order.getStatus() != 0) {  // 只有未支付的订单可以取消
+            throw new BusinessException("订单状态不正确");
+        }
+
+        // 查询订单项
+        List<OrderItem> orderItems = orderItemRepository.selectList(
+            new LambdaQueryWrapper<OrderItem>()
+                .eq(OrderItem::getOrderId, orderId)
+        );
+
+        // 恢复商品库存
+        for (OrderItem item : orderItems) {
+            Product product = productRepository.selectById(item.getProductId());
+            if (product != null) {
+                product.setStock(product.getStock() + item.getQuantity());
+                productRepository.updateById(product);
+            }
+        }
+
+        // 更新订单状态
+        order.setStatus(4);  // 4: 已取消
+        order.setCancelTime(LocalDateTime.now());
+        orderRepository.updateById(order);
+
+        // 查询物流信息
+        OrderDelivery delivery = orderDeliveryRepository.selectOne(
+            new LambdaQueryWrapper<OrderDelivery>()
+                .eq(OrderDelivery::getOrderId, orderId)
+        );
+
+        // 发送订单取消通知
+        notificationService.sendOrderCancelledNotification(userId, order.getOrderNo());
+
+        // 记录订单日志
+        saveOrderLog(order, "取消订单", 
+            order.getCancelTime() == null ? "用户取消" : "系统自动取消");
+
+        return buildOrderVO(order, orderItems, delivery);
+    }
+
+    private void saveOrderLog(Order order, String action, String note) {
+        OrderLog log = OrderLog.builder()
+            .orderId(order.getId())
+            .userId(order.getUserId())
+            .orderStatus(order.getStatus())
+            .action(action)
+            .note(note)
+            .createTime(LocalDateTime.now())
+            .build();
+        
+        orderLogRepository.insert(log);
     }
 } 

@@ -29,7 +29,7 @@ public class CommentController {
         return Result.success(commentService.createComment(commentDTO, userId));
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/products/{productId}/list")
     public Result<IPage<CommentVO>> getProductComments(
             @PathVariable Long productId,
             @RequestParam(defaultValue = "1") Integer pageNum,
@@ -49,5 +49,22 @@ public class CommentController {
     @PostMapping("/images")
     public Result<List<String>> uploadImages(@RequestParam("files") List<MultipartFile> files) {
         return Result.success(commentService.uploadCommentImages(files));
+    }
+
+    @PostMapping("/orders/{orderId}/products/{productId}")
+    public Result<CommentVO> createOrderComment(
+            @PathVariable Long orderId,
+            @PathVariable Long productId,
+            @Valid @RequestBody CommentDTO commentDTO) {
+        Long userId = 1L; // TODO: 从token中获取
+        return Result.success(commentService.createOrderComment(userId, orderId, productId, commentDTO));
+    }
+
+    @GetMapping("/orders/{orderId}/products/{productId}/can-comment")
+    public Result<Boolean> canComment(
+            @PathVariable Long orderId,
+            @PathVariable Long productId) {
+        Long userId = 1L; // TODO: 从token中获取
+        return Result.success(commentService.canComment(userId, orderId, productId));
     }
 }

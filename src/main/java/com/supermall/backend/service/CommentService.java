@@ -27,4 +27,8 @@ public interface CommentService {
     
     // 上传评论图片
     List<String> uploadCommentImages(List<MultipartFile> files);
+    
+    // 添加订单评论相关方法
+    CommentVO createOrderComment(Long userId, Long orderId, Long productId, CommentDTO commentDTO);
+    boolean canComment(Long userId, Long orderId, Long productId);
 } 

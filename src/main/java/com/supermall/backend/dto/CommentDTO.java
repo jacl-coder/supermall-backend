@@ -9,10 +9,9 @@ import java.util.List;
 
 @Data
 public class CommentDTO {
-    @NotNull(message = "商品ID不能为空")
     private Long productId;
     
-    @NotBlank(message = "评论内容不能为空")
+    @NotBlank(message = "评价内容不能为空")
     private String content;
     
     @NotNull(message = "评分不能为空")

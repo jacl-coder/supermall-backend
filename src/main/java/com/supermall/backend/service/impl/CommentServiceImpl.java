@@ -9,9 +9,13 @@ import com.supermall.backend.dto.CommentDTO;
 import com.supermall.backend.entity.Comment;
 import com.supermall.backend.entity.Product;
 import com.supermall.backend.entity.User;
+import com.supermall.backend.entity.Order;
+import com.supermall.backend.entity.OrderItem;
 import com.supermall.backend.repository.CommentRepository;
 import com.supermall.backend.repository.ProductRepository;
 import com.supermall.backend.repository.UserRepository;
+import com.supermall.backend.repository.OrderRepository;
+import com.supermall.backend.repository.OrderItemRepository;
 import com.supermall.backend.service.CommentService;
 import com.supermall.backend.vo.CommentVO;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -35,13 +40,19 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
     public CommentServiceImpl(CommentRepository commentRepository,
                             ProductRepository productRepository,
-                            UserRepository userRepository) {
+                            UserRepository userRepository,
+                            OrderRepository orderRepository,
+                            OrderItemRepository orderItemRepository) {
         this.commentRepository = commentRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Override
@@ -146,6 +157,90 @@ public class CommentServiceImpl implements CommentService {
             imageUrls.add(FileUtils.uploadFile(file, uploadPath, "comments"));
         }
         return imageUrls;
+    }
+
+    @Override
+    @Transactional
+    public CommentVO createOrderComment(Long userId, Long orderId, Long productId, CommentDTO commentDTO) {
+        // 验证订单
+        Order order = orderRepository.selectById(orderId);
+        if (order == null || !order.getUserId().equals(userId)) {
+            throw new BusinessException("订单不存在");
+        }
+
+        // 验证订单状态
+        if (order.getStatus() != 3) { // 3: 已完成
+            throw new BusinessException("订单未完成，不能评价");
+        }
+
+        // 验证订单商品
+        OrderItem orderItem = orderItemRepository.selectOne(
+            new LambdaQueryWrapper<OrderItem>()
+                .eq(OrderItem::getOrderId, orderId)
+                .eq(OrderItem::getProductId, productId)
+        );
+        if (orderItem == null) {
+            throw new BusinessException("订单商品不存在");
+        }
+
+        // 检查是否已评价
+        Comment existingComment = commentRepository.selectOne(
+            new LambdaQueryWrapper<Comment>()
+                .eq(Comment::getOrderId, orderId)
+                .eq(Comment::getProductId, productId)
+                .eq(Comment::getUserId, userId)
+        );
+        if (existingComment != null) {
+            throw new BusinessException("该商品已评价");
+        }
+
+        // 创建评论
+        Comment comment = new Comment();
+        comment.setUserId(userId);
+        comment.setOrderId(orderId);  // 设置订单ID
+        comment.setProductId(productId);
+        comment.setContent(commentDTO.getContent());
+        comment.setRating(commentDTO.getRating());
+        if (commentDTO.getImages() != null && !commentDTO.getImages().isEmpty()) {
+            comment.setImages(String.join(",", commentDTO.getImages()));
+        }
+        
+        commentRepository.insert(comment);
+
+        // 更新订单评价时间
+        order.setCommentTime(LocalDateTime.now());
+        orderRepository.updateById(order);
+
+        return convertToVO(comment);
+    }
+
+    @Override
+    public boolean canComment(Long userId, Long orderId, Long productId) {
+        // 检查订单状态
+        Order order = orderRepository.selectById(orderId);
+        if (order == null || !order.getUserId().equals(userId) || order.getStatus() != 3) {
+            return false;
+        }
+
+        // 检查订单商品
+        OrderItem orderItem = orderItemRepository.selectOne(
+            new LambdaQueryWrapper<OrderItem>()
+                .eq(OrderItem::getOrderId, orderId)
+                .eq(OrderItem::getProductId, productId)
+        );
+        if (orderItem == null) {
+            return false;
+        }
+
+        // 检查是否已评价
+        Comment existingComment = commentRepository.selectOne(
+            new LambdaQueryWrapper<Comment>()
+                .eq(Comment::getOrderId, orderId)
+                .eq(Comment::getProductId, productId)
+                .eq(Comment::getUserId, userId)
+        );
+        
+        return existingComment == null;
     }
 
     private CommentVO convertToVO(Comment comment) {

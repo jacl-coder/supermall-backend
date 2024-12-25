@@ -8,13 +8,12 @@ import java.util.List;
 public class CommentVO {
     private Long id;
     private Long userId;
-    private String username;  // 评论用户名
-    private String userAvatar;  // 用户头像
+    private String username;
+    private String userAvatar;
     private Long productId;
-    private String productName;  // 商品名称
     private String content;
     private Integer rating;
     private List<String> images;
     private LocalDateTime createTime;
-    private LocalDateTime updateTime;
+    private String productName;
 } 

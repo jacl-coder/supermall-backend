@@ -36,4 +36,6 @@ public class Comment {
     
     @TableLogic
     private Integer deleted;
+    
+    private Long orderId;  // 添加订单ID字段
 } 

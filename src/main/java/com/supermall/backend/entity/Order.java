@@ -40,6 +40,8 @@ public class Order {
     
     private LocalDateTime commentTime;
     
+    private LocalDateTime cancelTime;  // 订单取消时间
+    
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     
@@ -48,4 +50,6 @@ public class Order {
     
     @TableLogic
     private Integer deleted;
+    
+    
 } 
