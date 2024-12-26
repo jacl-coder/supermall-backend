@@ -8,14 +8,49 @@ user_token = None
 def setup_module():
     """测试模块初始化"""
     global admin_token, user_token
+    
+    print("\n开始初始化测试模块...")
+    
+    # 检查服务是否可用
+    try:
+        response = requests.get(f'{BASE_URL}/doc.html')
+        print(f"服务状态检查: {response.status_code}")
+        if response.status_code != 200:
+            pytest.fail(f"服务未启动或不可用: {response.status_code}")
+    except Exception as e:
+        pytest.fail(f"无法连接到服务: {str(e)}")
+    
     # 管理员登录
+    print("\n尝试管理员登录...")
     admin_token = login_and_get_token('admin', '123456')
     if not admin_token:
-        pytest.fail("管理员登录失败")
-    # 普通用户登录
+        pytest.fail("管理员登录失败，请检查用户名密码和服务状态")
+    print(f"管理员token: {admin_token}")
+    
+    # 普通用户登录或注册
+    print("\n尝试测试用户登录...")
     user_token = login_and_get_token('testuser', '123456')
     if not user_token:
-        pytest.fail("用户登录失败")
+        print("测试用户不存在，尝试注册...")
+        register_data = {
+            'username': 'testuser',
+            'password': '123456',
+            'email': 'test@example.com',
+            'phone': '13800138001',
+            'nickname': '测试用户'
+        }
+        response = requests.post(f'{BASE_URL}/api/auth/register', json=register_data)
+        print(f"注册响应: {response.text}")
+        
+        if response.status_code == 200:
+            print("注册成功，尝试登录...")
+            user_token = login_and_get_token('testuser', '123456')
+            if not user_token:
+                pytest.fail("测试用户注册成功但登录失败")
+        else:
+            pytest.fail(f"注册测试用户失败: {response.text}")
+    
+    print(f"测试用户token: {user_token}")
 
 def create_test_product():
     """创建测试商品"""

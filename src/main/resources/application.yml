@@ -39,7 +39,7 @@ mybatis-plus:
 jwt:
   secret: supermall-backend-secret-key-must-be-at-least-32-bytes-long
   expiration: 604800
-  tokenPrefix: Bearer
+  token-prefix: Bearer
   header: Authorization
 
 knife4j:

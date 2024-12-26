@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 认证控制器
  */
@@ -30,9 +33,11 @@ public class AuthController {
 
     @Operation(summary = "用户登录")
     @PostMapping("/login")
-    public CommonResult<String> login(@RequestBody LoginParam param) {
+    public CommonResult<Map<String, String>> login(@RequestBody LoginParam param) {
         String token = userService.login(param.getUsername(), param.getPassword());
-        return CommonResult.success(token);
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        return CommonResult.success(tokenMap);
     }
 
     @Operation(summary = "刷新Token")

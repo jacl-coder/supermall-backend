@@ -20,9 +20,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     @Transactional
-    public void create(String name, String subtitle, Long categoryId, Long brandId,
-                      String mainImage, String subImages, String detail,
-                      BigDecimal price, Integer stock) {
+    public Product create(String name, String subtitle, Long categoryId, Long brandId,
+                         String mainImage, String subImages, String detail,
+                         BigDecimal price, Integer stock) {
         Product product = new Product();
         product.setName(name);
         product.setSubtitle(subtitle);
@@ -36,6 +36,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         product.setStatus(1); // 默认上架
 
         save(product);
+        return product;
     }
 
     @Override

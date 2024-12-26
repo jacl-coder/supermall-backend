@@ -11,9 +11,9 @@ public interface ProductService extends IService<Product> {
     /**
      * 创建商品
      */
-    void create(String name, String subtitle, Long categoryId, Long brandId,
-                String mainImage, String subImages, String detail,
-                BigDecimal price, Integer stock);
+    Product create(String name, String subtitle, Long categoryId, Long brandId,
+                  String mainImage, String subImages, String detail,
+                  BigDecimal price, Integer stock);
 
     /**
      * 更新商品
