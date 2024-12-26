@@ -14,6 +14,7 @@ public class ProductVO {
     private String categoryName;
     private BigDecimal price;
     private Integer stock;
+    private Integer sales;
     private String mainImage;
     private List<String> subImages;
     private Integer status;

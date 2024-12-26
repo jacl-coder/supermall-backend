@@ -1,29 +1,28 @@
 package com.supermall.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.supermall.backend.common.exception.BusinessException;
-import com.supermall.backend.dto.ProductDTO;
 import com.supermall.backend.entity.Category;
 import com.supermall.backend.entity.Product;
 import com.supermall.backend.repository.CategoryRepository;
 import com.supermall.backend.repository.ProductRepository;
 import com.supermall.backend.service.ProductService;
 import com.supermall.backend.vo.ProductVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -42,81 +41,110 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ProductVO createProduct(ProductDTO productDTO) {
+    public ProductVO createProduct(Product product) {
         // 检查分类是否存在
-        Category category = categoryRepository.selectById(productDTO.getCategoryId());
+        Category category = categoryRepository.selectById(product.getCategoryId());
         if (category == null) {
-            throw new BusinessException("商品分类不存在");
+            throw new BusinessException("分类不存在");
         }
 
-        Product product = new Product();
-        BeanUtils.copyProperties(productDTO, product);
-        
-        // 处理子图
-        if (productDTO.getSubImages() != null && !productDTO.getSubImages().isEmpty()) {
-            product.setSubImages(String.join(",", productDTO.getSubImages()));
-        }
-
+        // 保存商品
         productRepository.insert(product);
-        return getProduct(product.getId());
+
+        // 转换为VO并返回
+        return convertToVO(product, category.getName());
+    }
+
+    @Override
+    public Page<ProductVO> getProductList(String keyword, Long categoryId, Integer pageNum, Integer pageSize) {
+        // 创建分页对象
+        Page<Product> page = new Page<>(pageNum, pageSize);
+
+        // 构建查询条件
+        LambdaQueryWrapper<Product> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Product::getDeleted, 0);
+
+        // 添加关键词搜索条件
+        if (StringUtils.hasText(keyword)) {
+            queryWrapper.and(wrapper -> wrapper
+                    .like(Product::getName, keyword)
+                    .or()
+                    .like(Product::getDescription, keyword));
+        }
+
+        // 添加分类过滤条件
+        if (categoryId != null) {
+            queryWrapper.eq(Product::getCategoryId, categoryId);
+        }
+
+        // 按创建时间倒序排序
+        queryWrapper.orderByDesc(Product::getCreateTime);
+
+        // 执行分页查询
+        Page<Product> productPage = productRepository.selectPage(page, queryWrapper);
+
+        // 转换为VO
+        List<ProductVO> productVOs = productPage.getRecords().stream()
+                .map(product -> {
+                    Category category = categoryRepository.selectById(product.getCategoryId());
+                    return convertToVO(product, category != null ? category.getName() : null);
+                })
+                .collect(Collectors.toList());
+
+        // 创建VO分页对象
+        Page<ProductVO> voPage = new Page<>();
+        BeanUtils.copyProperties(productPage, voPage, "records");
+        voPage.setRecords(productVOs);
+
+        return voPage;
+    }
+
+    @Override
+    public ProductVO getProductDetail(Long id) {
+        Product product = productRepository.selectById(id);
+        if (product == null || product.getDeleted() == 1) {
+            throw new BusinessException("商品不存在");
+        }
+
+        Category category = categoryRepository.selectById(product.getCategoryId());
+        return convertToVO(product, category != null ? category.getName() : null);
     }
 
     @Override
     @Transactional
-    public ProductVO updateProduct(Long id, ProductDTO productDTO) {
-        Product product = productRepository.selectById(id);
-        if (product == null) {
+    public void updateProduct(Long id, Product product) {
+        // 检查商品是否存在
+        Product existingProduct = productRepository.selectById(id);
+        if (existingProduct == null || existingProduct.getDeleted() == 1) {
             throw new BusinessException("商品不存在");
         }
 
         // 检查分类是否存在
-        Category category = categoryRepository.selectById(productDTO.getCategoryId());
+        Category category = categoryRepository.selectById(product.getCategoryId());
         if (category == null) {
-            throw new BusinessException("商品分类不存在");
+            throw new BusinessException("分类不存在");
         }
 
-        BeanUtils.copyProperties(productDTO, product);
-        
-        // 处理子图
-        if (productDTO.getSubImages() != null && !productDTO.getSubImages().isEmpty()) {
-            product.setSubImages(String.join(",", productDTO.getSubImages()));
-        }
-
+        // 设置ID并更新
+        product.setId(id);
         productRepository.updateById(product);
-        return getProduct(id);
     }
 
     @Override
     @Transactional
-    public void deleteProduct(Long id) {
+    public void updateProductStatus(Long id, Integer status) {
+        // 检查商品是否存在
         Product product = productRepository.selectById(id);
-        if (product == null) {
+        if (product == null || product.getDeleted() == 1) {
             throw new BusinessException("商品不存在");
         }
-        productRepository.deleteById(id);
-    }
 
-    @Override
-    public ProductVO getProduct(Long id) {
-        Product product = productRepository.selectById(id);
-        if (product == null) {
-            throw new BusinessException("商品不存在");
-        }
-        return convertToVO(product);
-    }
-
-    @Override
-    @Transactional
-    public void updateStatus(Long id, Integer status) {
-        Product product = productRepository.selectById(id);
-        if (product == null) {
-            throw new BusinessException("商品不存在");
-        }
-        
+        // 检查状态值是否合法
         if (status != 0 && status != 1) {
-            throw new BusinessException("商品状态不正确");
+            throw new BusinessException("状态值不合法");
         }
-        
+
+        // 更新状态
         Product updateProduct = new Product();
         updateProduct.setId(id);
         updateProduct.setStatus(status);
@@ -124,48 +152,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public IPage<ProductVO> getProductPage(Integer pageNum, Integer pageSize, String keyword, Long categoryId) {
-        Page<Product> page = new Page<>(pageNum, pageSize);
-        
-        LambdaQueryWrapper<Product> queryWrapper = new LambdaQueryWrapper<>();
-        
-        // 添加查询条件
-        if (StringUtils.hasText(keyword)) {
-            queryWrapper.like(Product::getName, keyword)
-                      .or()
-                      .like(Product::getDescription, keyword);
+    @Transactional
+    public void deleteProduct(Long id) {
+        Product product = productRepository.selectById(id);
+        if (product == null || product.getDeleted() == 1) {
+            throw new BusinessException("商品不存在");
         }
-        
-        if (categoryId != null) {
-            queryWrapper.eq(Product::getCategoryId, categoryId);
-        }
-        
-        // 按创建时间倒序
-        queryWrapper.orderByDesc(Product::getCreateTime);
-        
-        IPage<Product> productPage = productRepository.selectPage(page, queryWrapper);
-        
-        return productPage.convert(this::convertToVO);
-    }
 
-    private ProductVO convertToVO(Product product) {
-        ProductVO vo = new ProductVO();
-        BeanUtils.copyProperties(product, vo);
-        
-        // 设置分类名称
-        Category category = categoryRepository.selectById(product.getCategoryId());
-        if (category != null) {
-            vo.setCategoryName(category.getName());
-        }
-        
-        // 处理子图
-        if (StringUtils.hasText(product.getSubImages())) {
-            vo.setSubImages(List.of(product.getSubImages().split(",")));
-        } else {
-            vo.setSubImages(new ArrayList<>());
-        }
-        
-        return vo;
+        productRepository.deleteById(id);
     }
 
     @Override
@@ -211,7 +205,7 @@ public class ProductServiceImpl implements ProductService {
     public List<String> uploadSubImages(Long id, List<MultipartFile> files) {
         // 检查商品是否存在
         Product product = productRepository.selectById(id);
-        if (product == null) {
+        if (product == null || product.getDeleted() == 1) {
             throw new BusinessException("商品不存在");
         }
         
@@ -234,5 +228,37 @@ public class ProductServiceImpl implements ProductService {
         productRepository.updateById(product);
         
         return imageUrls;
+    }
+
+    @Override
+    public void increaseSales(Long productId, Integer quantity) {
+        Product product = productRepository.selectById(productId);
+        if (product == null || Boolean.TRUE.equals(product.getDeleted())) {
+            throw new BusinessException("商品不存在");
+        }
+        
+        if (quantity <= 0) {
+            throw new BusinessException("数量不合法");
+        }
+        
+        int rows = productRepository.increaseSales(productId, quantity);
+        if (rows != 1) {
+            throw new BusinessException("更新销量失败");
+        }
+    }
+
+    private ProductVO convertToVO(Product product, String categoryName) {
+        ProductVO vo = new ProductVO();
+        BeanUtils.copyProperties(product, vo);
+        vo.setCategoryName(categoryName);
+        
+        // 处理子图
+        if (StringUtils.hasText(product.getSubImages())) {
+            vo.setSubImages(List.of(product.getSubImages().split(",")));
+        } else {
+            vo.setSubImages(new ArrayList<>());
+        }
+        
+        return vo;
     }
 }

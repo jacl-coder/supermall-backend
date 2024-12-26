@@ -3,6 +3,7 @@ package com.supermall.backend.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.supermall.backend.common.response.Result;
+import com.supermall.backend.common.util.SecurityUtil;
 import com.supermall.backend.dto.OrderCreateDTO;
 import com.supermall.backend.dto.OrderDeliveryDTO;
 import com.supermall.backend.dto.OrderPayDTO;
@@ -29,14 +30,12 @@ public class OrderController {
 
     @PostMapping
     public Result<OrderVO> createOrder(@Valid @RequestBody OrderCreateDTO orderDTO) {
-        Long userId = 1L;
-        return Result.success(orderService.createOrder(userId, orderDTO));
+        return Result.success(orderService.createOrder(SecurityUtil.getCurrentUserId(), orderDTO));
     }
 
     @GetMapping("/{orderId}")
     public Result<OrderVO> getOrderDetail(@PathVariable Long orderId) {
-        Long userId = 1L;
-        return Result.success(orderService.getOrderDetail(userId, orderId));
+        return Result.success(orderService.getOrderDetail(SecurityUtil.getCurrentUserId(), orderId));
     }
 
     @GetMapping
@@ -44,16 +43,14 @@ public class OrderController {
             @RequestParam(required = false) Integer status,
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize) {
-        Long userId = 1L;
-        return Result.success(orderService.getUserOrders(userId, status, pageNum, pageSize));
+        return Result.success(orderService.getUserOrders(SecurityUtil.getCurrentUserId(), status, pageNum, pageSize));
     }
 
     @PostMapping("/{orderId}/pay")
     public Result<OrderVO> payOrder(@PathVariable Long orderId) {
-        Long userId = 1L; // TODO: 从token中获取
         OrderPayDTO payDTO = new OrderPayDTO();
         payDTO.setPayType(1); // 默认使用支付宝支付类型
-        return Result.success(orderService.payOrder(userId, orderId, payDTO));
+        return Result.success(orderService.payOrder(SecurityUtil.getCurrentUserId(), orderId, payDTO));
     }
 
     @PostMapping("/{orderId}/deliver")
@@ -65,13 +62,11 @@ public class OrderController {
 
     @PostMapping("/{orderId}/receive")
     public Result<OrderVO> confirmReceive(@PathVariable Long orderId) {
-        Long userId = 1L; // TODO: 从token中获取
-        return Result.success(orderService.confirmReceive(userId, orderId));
+        return Result.success(orderService.confirmReceive(SecurityUtil.getCurrentUserId(), orderId));
     }
 
     @PostMapping("/{orderId}/cancel")
     public Result<OrderVO> cancelOrder(@PathVariable Long orderId) {
-        Long userId = 1L; // TODO: 从token中获取
-        return Result.success(orderService.cancelOrder(userId, orderId));
+        return Result.success(orderService.cancelOrder(SecurityUtil.getCurrentUserId(), orderId));
     }
 } 

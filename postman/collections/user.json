@@ -1,0 +1,70 @@
+{
+    "info": {
+        "name": "用户管理",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "修改密码",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"oldPassword\": \"admin\",\n    \"newPassword\": \"admin\",\n    \"confirmPassword\": \"admin\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/password",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "password"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "更新头像",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}",
+                        "type": "text"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "multipart/form-data",
+                        "type": "text"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "file",
+                            "type": "file",
+                            "src": "postman-cloud:///1efc273e-4fcb-4910-85cc-952e1ec24b1a"
+                        }
+                    ]
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/avatar",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "avatar"]
+                }
+            },
+            "response": []
+        }
+    ]
+} 

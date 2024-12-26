@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2c9945a6-17dc-47f0-b8c3-ea2c7710f1c2",
+		"_postman_id": "ed25a039-7373-400c-aa01-1975de310ede",
 		"name": "超级商城 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "33064293"
@@ -21,16 +21,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"password123\",\n    \"email\": \"test@example.com\",\n    \"phone\": \"13800138000\"\n}"
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\",\n    \"nickname\": \"管理员2\",\n    \"phone\": \"13800138002\",\n    \"email\": \"admin2@example.com\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/users/register",
+							"raw": "{{baseUrl}}/api/auth/register",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
-								"users",
+								"auth",
 								"register"
 							]
 						}
@@ -90,16 +90,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"newpassword123\"\n}"
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/users/login",
+							"raw": "{{baseUrl}}/api/auth/login",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
-								"users",
+								"auth",
 								"login"
 							]
 						}
@@ -109,7 +109,7 @@
 				{
 					"name": "修改密码",
 					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
@@ -124,7 +124,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"oldPassword\": \"newpassword123\",\n    \"newPassword\": \"newpassword123\",\n    \"confirmPassword\": \"newpassword123\"\n}"
+							"raw": "{\n    \"oldPassword\": \"admin\",\n    \"newPassword\": \"admin\",\n    \"confirmPassword\": \"admin\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/users/password",
@@ -148,6 +148,11 @@
 							{
 								"key": "Authorization",
 								"value": "{{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
 								"type": "text"
 							}
 						],
@@ -196,7 +201,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"手机数码\",\n    \"parentId\": 0,\n    \"level\": 1,\n    \"sort\": 1,\n    \"icon\": \"phone\"\n}"
+							"raw": "{\n    \"name\": \"电子产品\",\n    \"parentId\": 0,\n    \"sort\": 1,\n    \"icon\": \"electronics.png\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/categories",
@@ -227,7 +232,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"智能手机\",\n    \"parentId\": \"{{categoryId}}\",\n    \"level\": 2,\n    \"sort\": 1,\n    \"icon\": \"smartphone\"\n}"
+							"raw": "{\n    \"name\": \"手机\",\n    \"parentId\": 1,\n    \"sort\": 1,\n    \"icon\": \"phone.png\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/categories",
@@ -287,7 +292,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"iPhone 15 Pro\",\n    \"description\": \"最新款苹果手机\",\n    \"categoryId\": \"{{categoryId}}\",\n    \"price\": 8999.00,\n    \"stock\": 100,\n    \"mainImage\": \"iphone15.jpg\",\n    \"subImages\": [\"detail1.jpg\", \"detail2.jpg\"],\n    \"status\": 1\n}"
+							"raw": "{\n    \"name\": \"iPhone 15 Pro\",\n    \"description\": \"Apple iPhone 15 Pro 256GB 原色钛金属\",\n    \"categoryId\": 3,\n    \"price\": 8999.00,\n    \"stock\": 100,\n    \"mainImage\": \"/uploads/products/iphone15pro.jpg\",\n    \"subImages\": [\n        \"/uploads/products/iphone15pro-1.jpg\",\n        \"/uploads/products/iphone15pro-2.jpg\"\n    ],\n    \"status\": 1\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/products",
@@ -300,7 +305,30 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "创建成功",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"iPhone 15 Pro\",\n    \"description\": \"Apple iPhone 15 Pro 256GB 原色钛金属\",\n    \"categoryId\": 3,\n    \"price\": 8999.00,\n    \"stock\": 100,\n    \"mainImage\": \"/uploads/products/iphone15pro.jpg\",\n    \"subImages\": [\n        \"/uploads/products/iphone15pro-1.jpg\",\n        \"/uploads/products/iphone15pro-2.jpg\"\n    ],\n    \"status\": 1\n}"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"iPhone 15 Pro\",\n        \"description\": \"Apple iPhone 15 Pro 256GB 原色钛金属\",\n        \"categoryId\": 3,\n        \"categoryName\": \"手机\",\n        \"price\": 8999.00,\n        \"stock\": 100,\n        \"sales\": 0,\n        \"mainImage\": \"/uploads/products/iphone15pro.jpg\",\n        \"subImages\": [\n            \"/uploads/products/iphone15pro-1.jpg\",\n            \"/uploads/products/iphone15pro-2.jpg\"\n        ],\n        \"status\": 1,\n        \"createTime\": \"2024-12-26T12:18:20\",\n        \"updateTime\": \"2024-12-26T12:18:20\"\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "获取商品列表",
@@ -313,7 +341,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/products?pageNum=1&pageSize=10&keyword=iPhone&categoryId={{categoryId}}",
+							"raw": "{{baseUrl}}/api/products?pageNum=1&pageSize=10&keyword=iPhone&categoryId=3",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -324,24 +352,344 @@
 							"query": [
 								{
 									"key": "pageNum",
-									"value": "1"
+									"value": "1",
+									"description": "页码"
 								},
 								{
 									"key": "pageSize",
-									"value": "10"
+									"value": "10",
+									"description": "每页数量"
 								},
 								{
 									"key": "keyword",
-									"value": "iPhone"
+									"value": "iPhone",
+									"description": "搜索关键词"
 								},
 								{
 									"key": "categoryId",
-									"value": "{{categoryId}}"
+									"value": "3",
+									"description": "分类ID"
 								}
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "查询成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": []
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"success\",\n    \"data\": {\n        \"records\": [\n            {\n                \"id\": 1,\n                \"name\": \"iPhone 15 Pro\",\n                \"description\": \"Apple iPhone 15 Pro 256GB 原色钛金属\",\n                \"categoryId\": 3,\n                \"categoryName\": \"手机\",\n                \"price\": 8999.00,\n                \"stock\": 100,\n                \"sales\": 0,\n                \"mainImage\": \"/uploads/products/iphone15pro.jpg\",\n                \"subImages\": [\n                    \"/uploads/products/iphone15pro-1.jpg\",\n                    \"/uploads/products/iphone15pro-2.jpg\"\n                ],\n                \"status\": 1,\n                \"createTime\": \"2024-12-26T12:18:20\",\n                \"updateTime\": \"2024-12-26T12:18:20\"\n            }\n        ],\n        \"total\": 1,\n        \"size\": 10,\n        \"current\": 1,\n        \"pages\": 1\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "获取商品详情",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "查询成功",
+							"originalRequest": {
+								"method": "GET",
+								"header": []
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"success\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"iPhone 15 Pro\",\n        \"description\": \"Apple iPhone 15 Pro 256GB 原色钛金属\",\n        \"categoryId\": 3,\n        \"categoryName\": \"手机\",\n        \"price\": 8999.00,\n        \"stock\": 100,\n        \"sales\": 0,\n        \"mainImage\": \"/uploads/products/iphone15pro.jpg\",\n        \"subImages\": [\n            \"/uploads/products/iphone15pro-1.jpg\",\n            \"/uploads/products/iphone15pro-2.jpg\"\n        ],\n        \"status\": 1,\n        \"createTime\": \"2024-12-26T12:18:20\",\n        \"updateTime\": \"2024-12-26T12:18:20\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "更新商品",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"iPhone 15 Pro Max\",\n    \"description\": \"Apple iPhone 15 Pro Max 256GB 原色钛金属，支持移动联通电信5G\",\n    \"categoryId\": 3,\n    \"price\": 9999.00,\n    \"stock\": 100,\n    \"mainImage\": \"/uploads/products/iphone15pro.jpg\",\n    \"subImages\": [\n        \"/uploads/products/iphone15pro-1.jpg\",\n        \"/uploads/products/iphone15pro-2.jpg\",\n        \"/uploads/products/iphone15pro-3.jpg\"\n    ],\n    \"status\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "更新成功",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"iPhone 15 Pro Max\",\n    \"description\": \"Apple iPhone 15 Pro Max 256GB 原色钛金属，支持移动联通电信5G\",\n    \"categoryId\": 3,\n    \"price\": 9999.00,\n    \"stock\": 100,\n    \"mainImage\": \"/uploads/products/iphone15pro.jpg\",\n    \"subImages\": [\n        \"/uploads/products/iphone15pro-1.jpg\",\n        \"/uploads/products/iphone15pro-2.jpg\",\n        \"/uploads/products/iphone15pro-3.jpg\"\n    ],\n    \"status\": 1\n}"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"success\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "更新商品状态",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": 0\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/products/1/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1",
+								"status"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "更新成功",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"status\": 0\n}"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"success\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "删除商品",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "删除成功",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": []
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"success\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "增加商品销量",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"quantity\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/products/1/sales",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1",
+								"sales"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "更新成功",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"quantity\": 2\n}"
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"message\": \"success\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "商品不存在",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"quantity\": 2\n}"
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"message\": \"商品不存在\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "数量不合法",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"quantity\": -1\n}"
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"message\": \"数量不合法\",\n    \"data\": null\n}"
+						}
+					]
 				}
 			]
 		},
@@ -368,7 +716,9 @@
 						},
 						"url": {
 							"raw": "{{baseUrl}}/api/comments/orders/1/products/1",
-							"host": ["{{baseUrl}}"],
+							"host": [
+								"{{baseUrl}}"
+							],
 							"path": [
 								"api",
 								"comments",
@@ -388,7 +738,9 @@
 						"header": [],
 						"url": {
 							"raw": "{{baseUrl}}/api/comments/products/1?pageNum=1&pageSize=10",
-							"host": ["{{baseUrl}}"],
+							"host": [
+								"{{baseUrl}}"
+							],
 							"path": [
 								"api",
 								"comments",
@@ -421,7 +773,9 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/api/comments/orders/1/products/1/can-comment",
-							"host": ["{{baseUrl}}"],
+							"host": [
+								"{{baseUrl}}"
+							],
 							"path": [
 								"api",
 								"comments",
@@ -644,7 +998,7 @@
 									"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"张三\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 2\n        }\n    ]\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/orders"
+									"raw": ""
 								}
 							},
 							"status": "OK",
@@ -656,39 +1010,8 @@
 									"value": "application/json"
 								}
 							],
-							"body": {
-								"code": 200,
-								"message": "success",
-								"data": {
-									"id": 1,
-									"orderNo": "20240315123456123456",
-									"totalAmount": 17998.00,
-									"payAmount": 17998.00,
-									"freightAmount": 0,
-									"status": 0,
-									"payType": 0,
-									"createTime": "2024-03-15T12:34:56",
-									"items": [
-										{
-											"id": 1,
-											"productId": 1,
-											"productName": "iPhone 15 Pro",
-											"productImage": "iphone15.jpg",
-											"price": 8999.00,
-											"quantity": 2,
-											"totalAmount": 17998.00
-										}
-									],
-									"delivery": {
-										"receiverName": "张三",
-										"receiverPhone": "13800138000",
-										"receiverProvince": "广东省",
-										"receiverCity": "深圳市",
-										"receiverDistrict": "南山区",
-										"receiverAddress": "科技园"
-									}
-								}
-							}
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "商品不存在",
@@ -700,7 +1023,7 @@
 									"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"张三\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": [\n        {\n            \"productId\": 999,\n            \"quantity\": 2\n        }\n    ]\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/orders"
+									"raw": ""
 								}
 							},
 							"status": "Bad Request",
@@ -712,11 +1035,8 @@
 									"value": "application/json"
 								}
 							],
-							"body": {
-								"code": 400,
-								"message": "商品不存在",
-								"data": null
-							}
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "库存不足",
@@ -728,7 +1048,7 @@
 									"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"张三\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": [\n        {\n            \"productId\": 1,\n            \"quantity\": 999\n        }\n    ]\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/orders"
+									"raw": ""
 								}
 							},
 							"status": "Bad Request",
@@ -740,11 +1060,8 @@
 									"value": "application/json"
 								}
 							],
-							"body": {
-								"code": 400,
-								"message": "商品库存不足",
-								"data": null
-							}
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "参数验证失败",
@@ -756,7 +1073,7 @@
 									"raw": "{\n    \"delivery\": {\n        \"receiverName\": \"\",\n        \"receiverPhone\": \"13800138000\",\n        \"receiverProvince\": \"广东省\",\n        \"receiverCity\": \"深圳市\",\n        \"receiverDistrict\": \"南山区\",\n        \"receiverAddress\": \"科技园\"\n    },\n    \"items\": []\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/orders"
+									"raw": ""
 								}
 							},
 							"status": "Bad Request",
@@ -768,11 +1085,8 @@
 									"value": "application/json"
 								}
 							],
-							"body": {
-								"code": 400,
-								"message": "收货人姓名不能为空",
-								"data": null
-							}
+							"cookie": [],
+							"body": ""
 						}
 					]
 				},
@@ -787,9 +1101,15 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/orders/1",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "orders", "1"]
+							"raw": "{{baseUrl}}/api/orders/16",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"16"
+							]
 						}
 					},
 					"response": [
@@ -797,45 +1117,17 @@
 							"name": "成功响应",
 							"originalRequest": {
 								"method": "GET",
+								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/api/orders/1"
+									"raw": ""
 								}
 							},
 							"status": "OK",
 							"code": 200,
-							"body": {
-								"code": 200,
-								"message": "success",
-								"data": {
-									"id": 1,
-									"orderNo": "20240315123456123456",
-									"totalAmount": 17998.00,
-									"payAmount": 17998.00,
-									"freightAmount": 0,
-									"status": 0,
-									"payType": 0,
-									"createTime": "2024-03-15T12:34:56",
-									"items": [
-										{
-											"id": 1,
-											"productId": 1,
-											"productName": "iPhone 15 Pro",
-											"productImage": "iphone15.jpg",
-											"price": 8999.00,
-											"quantity": 2,
-											"totalAmount": 17998.00
-										}
-									],
-									"delivery": {
-										"receiverName": "张三",
-										"receiverPhone": "13800138000",
-										"receiverProvince": "广东省",
-										"receiverCity": "深圳市",
-										"receiverDistrict": "南山区",
-										"receiverAddress": "科技园"
-									}
-								}
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
 					]
 				},
@@ -851,8 +1143,13 @@
 						],
 						"url": {
 							"raw": "{{baseUrl}}/api/orders?status=0&pageNum=1&pageSize=10",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "orders"],
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders"
+							],
 							"query": [
 								{
 									"key": "status",
@@ -875,53 +1172,17 @@
 							"name": "成功响应",
 							"originalRequest": {
 								"method": "GET",
+								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/api/orders?status=0&pageNum=1&pageSize=10"
+									"raw": ""
 								}
 							},
 							"status": "OK",
 							"code": 200,
-							"body": {
-								"code": 200,
-								"message": "success",
-								"data": {
-									"records": [
-										{
-											"id": 1,
-											"orderNo": "20240315123456123456",
-											"totalAmount": 17998.00,
-											"payAmount": 17998.00,
-											"freightAmount": 0,
-											"status": 0,
-											"payType": 0,
-											"createTime": "2024-03-15T12:34:56",
-											"items": [
-												{
-													"id": 1,
-													"productId": 1,
-													"productName": "iPhone 15 Pro",
-													"productImage": "iphone15.jpg",
-													"price": 8999.00,
-													"quantity": 2,
-													"totalAmount": 17998.00
-												}
-											],
-											"delivery": {
-												"receiverName": "张三",
-												"receiverPhone": "13800138000",
-												"receiverProvince": "广东省",
-												"receiverCity": "深圳市",
-												"receiverDistrict": "南山区",
-												"receiverAddress": "科技园"
-											}
-										}
-									],
-									"total": 1,
-									"size": 10,
-									"current": 1,
-									"pages": 1
-								}
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
 					]
 				},
@@ -936,9 +1197,16 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/orders/1/alipay",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "orders", "1", "alipay"]
+							"raw": "{{baseUrl}}/api/orders/16/pay",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"16",
+								"pay"
+							]
 						}
 					},
 					"response": [
@@ -946,19 +1214,17 @@
 							"name": "支付成功",
 							"originalRequest": {
 								"method": "POST",
+								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/api/orders/1/alipay"
+									"raw": ""
 								}
 							},
 							"status": "OK",
 							"code": 200,
-							"body": {
-								"code": 200,
-								"message": "success",
-								"data": {
-									"payForm": "<form>...</form>"
-								}
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
 					]
 				},
@@ -981,9 +1247,16 @@
 							"raw": "{\n    \"deliveryCompany\": \"顺丰快递\",\n    \"deliverySn\": \"SF1234567890\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/api/orders/1/deliver",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "orders", "1", "deliver"]
+							"raw": "{{baseUrl}}/api/orders/16/deliver",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"16",
+								"deliver"
+							]
 						}
 					},
 					"response": [
@@ -991,93 +1264,61 @@
 							"name": "发货成功",
 							"originalRequest": {
 								"method": "POST",
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\n    \"deliveryCompany\": \"顺丰快递\",\n    \"deliverySn\": \"SF1234567890\"\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/orders/1/deliver"
+									"raw": ""
 								}
 							},
 							"status": "OK",
 							"code": 200,
-							"body": {
-								"code": 200,
-								"message": "success",
-								"data": {
-									"id": 1,
-									"orderNo": "20240315123456123456",
-									"totalAmount": 17998.00,
-									"payAmount": 17998.00,
-									"freightAmount": 0,
-									"status": 2,
-									"payType": 1,
-									"payTime": "2024-03-15T13:45:30",
-									"deliveryTime": "2024-03-15T14:30:00",
-									"createTime": "2024-03-15T12:34:56",
-									"items": [
-										{
-											"id": 1,
-											"productId": 1,
-											"productName": "iPhone 15 Pro",
-											"productImage": "iphone15.jpg",
-											"price": 8999.00,
-											"quantity": 2,
-											"totalAmount": 17998.00
-										}
-									],
-									"delivery": {
-										"receiverName": "张三",
-										"receiverPhone": "13800138000",
-										"receiverProvince": "广东省",
-										"receiverCity": "深圳市",
-										"receiverDistrict": "南山区",
-										"receiverAddress": "科技园",
-										"deliveryCompany": "顺丰快递",
-										"deliverySn": "SF1234567890"
-									}
-								}
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "订单不存在",
 							"originalRequest": {
 								"method": "POST",
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\n    \"deliveryCompany\": \"顺丰快递\",\n    \"deliverySn\": \"SF1234567890\"\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/orders/999/deliver"
+									"raw": ""
 								}
 							},
 							"status": "Bad Request",
 							"code": 400,
-							"body": {
-								"code": 400,
-								"message": "订单不存在",
-								"data": null
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "订单状态不正确",
 							"originalRequest": {
 								"method": "POST",
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\n    \"deliveryCompany\": \"顺丰快递\",\n    \"deliverySn\": \"SF1234567890\"\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}/api/orders/1/deliver"
+									"raw": ""
 								}
 							},
 							"status": "Bad Request",
 							"code": 400,
-							"body": {
-								"code": 400,
-								"message": "订单状态不正确",
-								"data": null
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
 					]
 				},
@@ -1092,9 +1333,16 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/orders/1/receive",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "orders", "1", "receive"]
+							"raw": "{{baseUrl}}/api/orders/16/receive",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"16",
+								"receive"
+							]
 						}
 					},
 					"response": [
@@ -1102,69 +1350,77 @@
 							"name": "确认成功",
 							"originalRequest": {
 								"method": "POST",
+								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/api/orders/1/receive"
+									"raw": ""
 								}
 							},
 							"status": "OK",
 							"code": 200,
-							"body": {
-								"code": 200,
-								"message": "success",
-								"data": {
-									"id": 1,
-									"orderNo": "20240315123456123456",
-									"totalAmount": 17998.00,
-									"payAmount": 17998.00,
-									"status": 3,
-									"payType": 1,
-									"payTime": "2024-03-15T13:45:30",
-									"deliveryTime": "2024-03-15T14:30:00",
-									"receiveTime": "2024-03-15T15:30:00",
-									"createTime": "2024-03-15T12:34:56",
-									"items": [
-										{
-											"id": 1,
-											"productId": 1,
-											"productName": "iPhone 15 Pro",
-											"productImage": "iphone15.jpg",
-											"price": 8999.00,
-											"quantity": 2,
-											"totalAmount": 17998.00
-										}
-									],
-									"delivery": {
-										"receiverName": "张三",
-										"receiverPhone": "13800138000",
-										"receiverProvince": "广东省",
-										"receiverCity": "深圳市",
-										"receiverDistrict": "南山区",
-										"receiverAddress": "科技园",
-										"deliveryCompany": "顺丰快递",
-										"deliverySn": "SF1234567890"
-									}
-								}
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "订单不存在",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/orders/16/receive",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"16",
+										"receive"
+									]
+								}
+							},
 							"status": "Bad Request",
 							"code": 400,
-							"body": {
-								"code": 400,
-								"message": "订单不存在",
-								"data": null
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "订单状态不正确",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/orders/16/receive",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"16",
+										"receive"
+									]
+								}
+							},
 							"status": "Bad Request",
 							"code": 400,
-							"body": {
-								"code": 400,
-								"message": "订单状态不正确",
-								"data": null
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
 					]
 				},
@@ -1179,9 +1435,16 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/api/orders/1/cancel",
-							"host": ["{{baseUrl}}"],
-							"path": ["api", "orders", "1", "cancel"]
+							"raw": "{{baseUrl}}/api/orders/16/cancel",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"16",
+								"cancel"
+							]
 						}
 					},
 					"response": [
@@ -1189,64 +1452,77 @@
 							"name": "取消成功",
 							"originalRequest": {
 								"method": "POST",
+								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}/api/orders/1/cancel"
+									"raw": ""
 								}
 							},
 							"status": "OK",
 							"code": 200,
-							"body": {
-								"code": 200,
-								"message": "success",
-								"data": {
-									"id": 1,
-									"orderNo": "20240315123456123456",
-									"totalAmount": 17998.00,
-									"payAmount": 17998.00,
-									"status": 4,
-									"createTime": "2024-03-15T12:34:56",
-									"cancelTime": "2024-03-15T12:40:00",
-									"items": [
-										{
-											"id": 1,
-											"productId": 1,
-											"productName": "iPhone 15 Pro",
-											"productImage": "iphone15.jpg",
-											"price": 8999.00,
-											"quantity": 2,
-											"totalAmount": 17998.00
-										}
-									],
-									"delivery": {
-										"receiverName": "张三",
-										"receiverPhone": "13800138000",
-										"receiverProvince": "广东省",
-										"receiverCity": "深圳市",
-										"receiverDistrict": "南山区",
-										"receiverAddress": "科技园"
-									}
-								}
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "订单不存在",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/orders/16/cancel",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"16",
+										"cancel"
+									]
+								}
+							},
 							"status": "Bad Request",
 							"code": 400,
-							"body": {
-								"code": 400,
-								"message": "订单不存在",
-								"data": null
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						},
 						{
 							"name": "订单状态不正确",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/api/orders/16/cancel",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"orders",
+										"16",
+										"cancel"
+									]
+								}
+							},
 							"status": "Bad Request",
 							"code": 400,
-							"body": {
-								"code": 400,
-								"message": "订单状态不正确",
-								"data": null
-							}
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
 						}
 					]
 				}

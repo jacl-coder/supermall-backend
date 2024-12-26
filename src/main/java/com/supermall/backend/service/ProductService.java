@@ -1,33 +1,55 @@
 package com.supermall.backend.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.supermall.backend.dto.ProductDTO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.supermall.backend.entity.Product;
 import com.supermall.backend.vo.ProductVO;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 public interface ProductService {
-    // 创建商品
-    ProductVO createProduct(ProductDTO productDTO);
-    
-    // 更新商品
-    ProductVO updateProduct(Long id, ProductDTO productDTO);
-    
-    // 删除商品
-    void deleteProduct(Long id);
-    
-    // 获取商品详情
-    ProductVO getProduct(Long id);
-    
-    // 商品上下架
-    void updateStatus(Long id, Integer status);
-    
-    // 分页查询商品
-    IPage<ProductVO> getProductPage(Integer pageNum, Integer pageSize, String keyword, Long categoryId);
+    /**
+     * 创建商品
+     */
+    ProductVO createProduct(Product product);
 
-    // 上传主图
+    /**
+     * 获取商品列表
+     */
+    Page<ProductVO> getProductList(String keyword, Long categoryId, Integer pageNum, Integer pageSize);
+
+    /**
+     * 获取商品详情
+     */
+    ProductVO getProductDetail(Long id);
+
+    /**
+     * 更新商品
+     */
+    void updateProduct(Long id, Product product);
+
+    /**
+     * 更新商品状态
+     */
+    void updateProductStatus(Long id, Integer status);
+
+    /**
+     * 删除商品
+     */
+    void deleteProduct(Long id);
+
+    /**
+     * 上传商品图片
+     */
     String uploadImage(MultipartFile file);
 
-    // 上传子图
+    /**
+     * 上传商品子图
+     */
     List<String> uploadSubImages(Long id, List<MultipartFile> files);
+
+    /**
+     * 增加商品销量
+     */
+    void increaseSales(Long productId, Integer quantity);
 }

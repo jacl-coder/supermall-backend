@@ -11,18 +11,17 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     public void sendOrderDeliveryNotification(Long userId, String orderNo, 
             String deliveryCompany, String deliverySn) {
-        // TODO: 集成实际的短信/邮件服务
-        log.info("发送订单发货通知 - 用户ID: {}, 订单号: {}, 物流公司: {}, 物流单号: {}", 
+        log.info("[订单发货通知] 用户ID: {}, 订单号: {}, 物流公司: {}, 物流单号: {}", 
                 userId, orderNo, deliveryCompany, deliverySn);
     }
 
     @Override
     public void sendOrderCompletedNotification(Long userId, String orderNo) {
-        log.info("发送订单完成通知 - 用户ID: {}, 订单号: {}", userId, orderNo);
+        log.info("[订单完成通知] 用户ID: {}, 订单号: {}", userId, orderNo);
     }
 
     @Override
     public void sendOrderCancelledNotification(Long userId, String orderNo) {
-        log.info("发送订单取消通知 - 用户ID: {}, 订单号: {}", userId, orderNo);
+        log.info("[订单取消通知] 用户ID: {}, 订单号: {}", userId, orderNo);
     }
 } 

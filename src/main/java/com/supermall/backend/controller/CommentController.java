@@ -2,6 +2,7 @@ package com.supermall.backend.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.supermall.backend.common.response.Result;
+import com.supermall.backend.common.util.SecurityUtil;
 import com.supermall.backend.dto.CommentDTO;
 import com.supermall.backend.service.CommentService;
 import com.supermall.backend.vo.CommentVO;
@@ -25,8 +26,7 @@ public class CommentController {
     @PostMapping
     public Result<CommentVO> createComment(
             @Valid @RequestBody CommentDTO commentDTO) {
-        Long userId = 1L;
-        return Result.success(commentService.createComment(commentDTO, userId));
+        return Result.success(commentService.createComment(commentDTO, SecurityUtil.getCurrentUserId()));
     }
 
     @GetMapping("/products/{productId}/list")
@@ -56,15 +56,13 @@ public class CommentController {
             @PathVariable Long orderId,
             @PathVariable Long productId,
             @Valid @RequestBody CommentDTO commentDTO) {
-        Long userId = 1L; // TODO: 从token中获取
-        return Result.success(commentService.createOrderComment(userId, orderId, productId, commentDTO));
+        return Result.success(commentService.createOrderComment(SecurityUtil.getCurrentUserId(), orderId, productId, commentDTO));
     }
 
     @GetMapping("/orders/{orderId}/products/{productId}/can-comment")
     public Result<Boolean> canComment(
             @PathVariable Long orderId,
             @PathVariable Long productId) {
-        Long userId = 1L; // TODO: 从token中获取
-        return Result.success(commentService.canComment(userId, orderId, productId));
+        return Result.success(commentService.canComment(SecurityUtil.getCurrentUserId(), orderId, productId));
     }
 }
