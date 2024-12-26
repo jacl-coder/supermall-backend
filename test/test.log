@@ -1,0 +1,420 @@
+2024-12-26 22:25:21,319 - mysql.connector - DEBUG - Building SSL context
+2024-12-26 22:25:21,379 - mysql.connector - DEBUG - Switching to SSL
+2024-12-26 22:25:21,383 - mysql.connector - DEBUG - SSL has been enabled
+2024-12-26 22:25:21,384 - mysql.connector - DEBUG - Starting authorization phase
+2024-12-26 22:25:21,393 - mysql.connector - DEBUG - The provided initial strategy is caching_sha2_password
+2024-12-26 22:25:21,394 - mysql.connector - INFO - package: mysql.connector.plugins
+2024-12-26 22:25:21,402 - mysql.connector - INFO - plugin_name: caching_sha2_password
+2024-12-26 22:25:21,403 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2024-12-26 22:25:21,405 - mysql.connector - DEBUG - Server's response is an auth switch request
+2024-12-26 22:25:21,405 - mysql.connector - DEBUG - Switching to strategy mysql_native_password
+2024-12-26 22:25:21,406 - mysql.connector - INFO - package: mysql.connector.plugins
+2024-12-26 22:25:21,407 - mysql.connector - INFO - plugin_name: mysql_native_password
+2024-12-26 22:25:21,408 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLNativePasswordAuthPlugin
+2024-12-26 22:25:21,409 - mysql.connector - DEBUG - # request: b'\xe8\xb6\x13_\x13\x19q\xcc\xe4\xec\xd3@oe\xe7f\x01\xc7\x05\x8c' size: 20
+2024-12-26 22:25:21,417 - mysql.connector - DEBUG - # server response packet: b'\x07\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00'
+2024-12-26 22:25:21,419 - mysql.connector - DEBUG - mysql_native_password completed succesfully
+2024-12-26 22:25:21,434 - mysql.connector - DEBUG - Building SSL context
+2024-12-26 22:25:21,461 - mysql.connector - DEBUG - Switching to SSL
+2024-12-26 22:25:21,464 - mysql.connector - DEBUG - SSL has been enabled
+2024-12-26 22:25:21,465 - mysql.connector - DEBUG - Starting authorization phase
+2024-12-26 22:25:21,465 - mysql.connector - DEBUG - The provided initial strategy is caching_sha2_password
+2024-12-26 22:25:21,467 - mysql.connector - DEBUG - Server's response is an auth switch request
+2024-12-26 22:25:21,468 - mysql.connector - DEBUG - Switching to strategy mysql_native_password
+2024-12-26 22:25:21,469 - mysql.connector - DEBUG - # request: b'\x8b\x84\x07b.\t\xe5\x13\xf9.\xab$\x91\xf5\xf3o=\x82j*' size: 20
+2024-12-26 22:25:21,469 - mysql.connector - DEBUG - # server response packet: b'\x07\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00'
+2024-12-26 22:25:21,471 - mysql.connector - DEBUG - mysql_native_password completed succesfully
+2024-12-26 22:25:21,486 - mysql.connector - DEBUG - Building SSL context
+2024-12-26 22:25:21,513 - mysql.connector - DEBUG - Switching to SSL
+2024-12-26 22:25:21,516 - mysql.connector - DEBUG - SSL has been enabled
+2024-12-26 22:25:21,517 - mysql.connector - DEBUG - Starting authorization phase
+2024-12-26 22:25:21,518 - mysql.connector - DEBUG - The provided initial strategy is caching_sha2_password
+2024-12-26 22:25:21,519 - mysql.connector - DEBUG - Server's response is an auth switch request
+2024-12-26 22:25:21,520 - mysql.connector - DEBUG - Switching to strategy mysql_native_password
+2024-12-26 22:25:21,521 - mysql.connector - DEBUG - # request: b'~\xfb\xb9\x80Uz\xf3\xae\xea\xea\x83\x93\xd4\xa4\x99\xae*\x7f=^' size: 20
+2024-12-26 22:25:21,522 - mysql.connector - DEBUG - # server response packet: b'\x07\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00'
+2024-12-26 22:25:21,523 - mysql.connector - DEBUG - mysql_native_password completed succesfully
+2024-12-26 22:25:21,540 - mysql.connector - DEBUG - Building SSL context
+2024-12-26 22:25:21,566 - mysql.connector - DEBUG - Switching to SSL
+2024-12-26 22:25:21,568 - mysql.connector - DEBUG - SSL has been enabled
+2024-12-26 22:25:21,570 - mysql.connector - DEBUG - Starting authorization phase
+2024-12-26 22:25:21,571 - mysql.connector - DEBUG - The provided initial strategy is caching_sha2_password
+2024-12-26 22:25:21,573 - mysql.connector - DEBUG - Server's response is an auth switch request
+2024-12-26 22:25:21,573 - mysql.connector - DEBUG - Switching to strategy mysql_native_password
+2024-12-26 22:25:21,574 - mysql.connector - DEBUG - # request: b'd\xb1\xc8\xee\xf7\xa7i\xebh\xfd<\x82\x94E\xe4\xc0\xa9\r\xff\xe3' size: 20
+2024-12-26 22:25:21,574 - mysql.connector - DEBUG - # server response packet: b'\x07\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00'
+2024-12-26 22:25:21,576 - mysql.connector - DEBUG - mysql_native_password completed succesfully
+2024-12-26 22:25:21,589 - mysql.connector - DEBUG - Building SSL context
+2024-12-26 22:25:21,617 - mysql.connector - DEBUG - Switching to SSL
+2024-12-26 22:25:21,621 - mysql.connector - DEBUG - SSL has been enabled
+2024-12-26 22:25:21,622 - mysql.connector - DEBUG - Starting authorization phase
+2024-12-26 22:25:21,622 - mysql.connector - DEBUG - The provided initial strategy is caching_sha2_password
+2024-12-26 22:25:21,624 - mysql.connector - DEBUG - Server's response is an auth switch request
+2024-12-26 22:25:21,625 - mysql.connector - DEBUG - Switching to strategy mysql_native_password
+2024-12-26 22:25:21,627 - mysql.connector - DEBUG - # request: b'\x1f\x01V7/\x10F\n\x07=$y\xd3\xf1u\xc0\xac\xca\xbcJ' size: 20
+2024-12-26 22:25:21,628 - mysql.connector - DEBUG - # server response packet: b'\x07\x00\x00\x05\x00\x00\x00\x02\x00\x00\x00'
+2024-12-26 22:25:21,629 - mysql.connector - DEBUG - mysql_native_password completed succesfully
+2024-12-26 22:25:21,738 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:21,833 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/register HTTP/1.1" 200 None
+2024-12-26 22:25:21,836 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:21,891 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:21,896 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:21,950 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:21,952 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:21,958 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/refresh HTTP/1.1" 200 None
+2024-12-26 22:25:21,963 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,017 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,019 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,032 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,035 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,043 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,047 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,103 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,105 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,115 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,118 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,176 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,179 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,192 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/brands/2 HTTP/1.1" 200 None
+2024-12-26 22:25:22,195 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,254 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,255 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,270 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,273 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,330 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,332 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,344 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/brands/3/status?status=0 HTTP/1.1" 200 None
+2024-12-26 22:25:22,349 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,408 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,410 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,420 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,423 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,477 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,478 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,489 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/brands/4 HTTP/1.1" 200 None
+2024-12-26 22:25:22,493 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,548 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,551 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,561 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,562 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,617 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,619 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,632 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/brands/batch HTTP/1.1" 200 None
+2024-12-26 22:25:22,636 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,642 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/brands/all HTTP/1.1" 200 None
+2024-12-26 22:25:22,645 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,703 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,705 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,717 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,718 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,727 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,729 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,734 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/brands/all HTTP/1.1" 200 None
+2024-12-26 22:25:22,736 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,793 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,795 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,807 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:22,808 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,865 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,866 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,876 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/brands/7 HTTP/1.1" 200 None
+2024-12-26 22:25:22,877 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,932 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:22,934 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:22,946 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/brands/7/status?status=0 HTTP/1.1" 200 None
+2024-12-26 22:25:22,949 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,002 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,004 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,053 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/brands/7 HTTP/1.1" 200 None
+2024-12-26 22:25:23,056 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,110 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,112 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,121 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:23,122 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,175 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,177 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,188 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/brands/batch HTTP/1.1" 200 None
+2024-12-26 22:25:23,195 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,250 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,251 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,264 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,269 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,274 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,278 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,333 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,335 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,347 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,350 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,356 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/categories/2 HTTP/1.1" 200 None
+2024-12-26 22:25:23,360 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,417 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,420 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,431 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,432 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,488 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,491 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,503 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/categories/3 HTTP/1.1" 200 None
+2024-12-26 22:25:23,506 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,564 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,565 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,577 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,578 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,633 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,635 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,647 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/categories/4/status?status=0 HTTP/1.1" 200 None
+2024-12-26 22:25:23,651 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,706 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,707 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,718 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,720 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,775 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,777 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,789 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/categories/5 HTTP/1.1" 200 None
+2024-12-26 22:25:23,793 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,849 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,851 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,862 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,864 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,869 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,870 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,922 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,926 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,936 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:23,937 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,941 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/categories/7 HTTP/1.1" 200 None
+2024-12-26 22:25:23,944 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:23,995 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:23,998 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,010 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/categories/7 HTTP/1.1" 200 None
+2024-12-26 22:25:24,011 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,065 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,068 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,079 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/categories/7/status?status=0 HTTP/1.1" 200 None
+2024-12-26 22:25:24,081 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,137 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,139 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,150 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/categories/7 HTTP/1.1" 200 None
+2024-12-26 22:25:24,157 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,212 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,215 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,225 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/categories HTTP/1.1" 200 None
+2024-12-26 22:25:24,226 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,236 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/brands HTTP/1.1" 200 None
+2024-12-26 22:25:24,239 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,295 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,297 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,303 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/categories/1 HTTP/1.1" 200 None
+2024-12-26 22:25:24,305 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,359 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,360 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,365 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/brands/1 HTTP/1.1" 500 None
+2024-12-26 22:25:24,367 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,419 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,422 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,433 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:24,438 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,445 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:24,449 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,504 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,506 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,518 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:24,520 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,530 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/products/2 HTTP/1.1" 200 None
+2024-12-26 22:25:24,535 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,597 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,599 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,613 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:24,616 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,676 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,679 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,694 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/products/3 HTTP/1.1" 200 None
+2024-12-26 22:25:24,699 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,759 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,761 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,774 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:24,776 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,832 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,834 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,844 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/products/4/status?status=0 HTTP/1.1" 200 None
+2024-12-26 22:25:24,849 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,904 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,906 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,916 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:24,918 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,970 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:24,973 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:24,983 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/products/5 HTTP/1.1" 200 None
+2024-12-26 22:25:24,987 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,041 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,043 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,052 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:25,055 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,108 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,110 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,119 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/products/batch HTTP/1.1" 200 None
+2024-12-26 22:25:25,124 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,178 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,180 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,186 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/categories/1 HTTP/1.1" 200 None
+2024-12-26 22:25:25,187 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,239 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,241 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,245 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/brands/1 HTTP/1.1" 500 None
+2024-12-26 22:25:25,247 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,301 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,303 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,315 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:25,316 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,322 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:25,324 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,377 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,379 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,390 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:25,392 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,397 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/products/8 HTTP/1.1" 200 None
+2024-12-26 22:25:25,399 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,452 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,455 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,468 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/products/8 HTTP/1.1" 200 None
+2024-12-26 22:25:25,470 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,522 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,525 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,537 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/products/8/status?status=0 HTTP/1.1" 200 None
+2024-12-26 22:25:25,538 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,591 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,592 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,602 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/products/8 HTTP/1.1" 200 None
+2024-12-26 22:25:25,604 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,658 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,659 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,669 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:25,671 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,725 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,726 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,738 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/products/batch HTTP/1.1" 200 None
+2024-12-26 22:25:25,745 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,799 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,802 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,812 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/products HTTP/1.1" 200 None
+2024-12-26 22:25:25,814 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,820 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/products/10 HTTP/1.1" 200 None
+2024-12-26 22:25:25,822 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,877 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,878 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,891 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/cart HTTP/1.1" 200 None
+2024-12-26 22:25:25,896 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,952 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:25,954 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:25,961 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/cart HTTP/1.1" 200 None
+2024-12-26 22:25:25,964 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,020 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,021 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,037 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/cart HTTP/1.1" 200 None
+2024-12-26 22:25:26,040 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,096 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,099 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,111 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/cart/1/quantity?quantity=3 HTTP/1.1" 200 None
+2024-12-26 22:25:26,114 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,172 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,174 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,190 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/cart HTTP/1.1" 200 None
+2024-12-26 22:25:26,192 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,247 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,248 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,259 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/cart/1/checked?checked=False HTTP/1.1" 200 None
+2024-12-26 22:25:26,264 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,318 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,319 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,332 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/cart HTTP/1.1" 200 None
+2024-12-26 22:25:26,335 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,389 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,390 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,402 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/cart/1 HTTP/1.1" 200 None
+2024-12-26 22:25:26,406 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,460 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,463 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,469 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/cart/clear HTTP/1.1" 200 None
+2024-12-26 22:25:26,473 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,528 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,531 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,545 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/cart HTTP/1.1" 200 None
+2024-12-26 22:25:26,548 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,601 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,603 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,609 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/cart HTTP/1.1" 200 None
+2024-12-26 22:25:26,611 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,665 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,667 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,681 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/cart HTTP/1.1" 200 None
+2024-12-26 22:25:26,683 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,737 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,739 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,751 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/cart/2/quantity?quantity=3 HTTP/1.1" 200 None
+2024-12-26 22:25:26,752 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,806 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,808 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,819 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/cart/2/checked?checked=False HTTP/1.1" 200 None
+2024-12-26 22:25:26,821 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,877 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,879 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,890 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/cart/2 HTTP/1.1" 200 None
+2024-12-26 22:25:26,892 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,947 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:26,949 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:26,958 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/cart/clear HTTP/1.1" 200 None
+2024-12-26 22:25:26,965 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,019 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,022 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,040 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/orders HTTP/1.1" 200 None
+2024-12-26 22:25:27,043 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,098 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,100 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,108 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/orders HTTP/1.1" 200 None
+2024-12-26 22:25:27,112 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,165 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,168 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,185 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/orders HTTP/1.1" 200 None
+2024-12-26 22:25:27,188 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,241 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,242 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,248 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/orders/2 HTTP/1.1" 200 None
+2024-12-26 22:25:27,252 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,308 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,309 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,325 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/orders HTTP/1.1" 200 None
+2024-12-26 22:25:27,328 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,382 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,383 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,396 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/orders/3/status?status=1 HTTP/1.1" 200 None
+2024-12-26 22:25:27,400 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,457 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,459 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,476 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/orders HTTP/1.1" 200 None
+2024-12-26 22:25:27,479 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,538 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,539 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,554 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/orders/4 HTTP/1.1" 200 None
+2024-12-26 22:25:27,558 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,614 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,615 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,636 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/orders HTTP/1.1" 200 None
+2024-12-26 22:25:27,637 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,691 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,693 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,702 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/orders HTTP/1.1" 200 None
+2024-12-26 22:25:27,704 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,758 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,759 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,777 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/orders HTTP/1.1" 200 None
+2024-12-26 22:25:27,780 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,837 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,839 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,846 - urllib3.connectionpool - DEBUG - http://localhost:8081 "GET /api/orders/6 HTTP/1.1" 200 None
+2024-12-26 22:25:27,848 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,904 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,907 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,918 - urllib3.connectionpool - DEBUG - http://localhost:8081 "PUT /api/orders/6/status?status=1 HTTP/1.1" 200 None
+2024-12-26 22:25:27,920 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,977 - urllib3.connectionpool - DEBUG - http://localhost:8081 "POST /api/auth/login HTTP/1.1" 200 None
+2024-12-26 22:25:27,978 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): localhost:8081
+2024-12-26 22:25:27,988 - urllib3.connectionpool - DEBUG - http://localhost:8081 "DELETE /api/orders/6 HTTP/1.1" 200 None

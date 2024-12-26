@@ -1,36 +1,36 @@
 package com.supermall.backend.security.util;
 
 import com.supermall.backend.common.exception.ApiException;
+import com.supermall.backend.domain.user.entity.User;
+import com.supermall.backend.domain.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SecurityUtil {
     
     private static final Logger log = LoggerFactory.getLogger(SecurityUtil.class);
+    private static UserService userService;
+    
+    public SecurityUtil(UserService userService) {
+        SecurityUtil.userService = userService;
+    }
     
     /**
      * 获取当前登录用户ID
      */
     public static Long getCurrentUserId() {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            log.debug("当前认证信息: {}", authentication);
-            
-            if (authentication == null || !authentication.isAuthenticated()) {
-                throw new ApiException("用户未登录");
+            String username = getCurrentUsername();
+            User user = userService.getByUsername(username);
+            if (user == null) {
+                throw new ApiException("用户不存在");
             }
-            
-            Object principal = authentication.getPrincipal();
-            log.debug("当前用户主体: {}", principal);
-            
-            if (principal instanceof UserDetails) {
-                return Long.valueOf(((UserDetails) principal).getUsername());
-            }
-            
-            throw new ApiException("获取用户信息失败");
+            return user.getId();
         } catch (Exception e) {
             log.error("获取当前用户ID失败", e);
             throw new ApiException("获取当前用户ID失败: " + e.getMessage());

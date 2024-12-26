@@ -41,7 +41,11 @@ def setup_test_data():
 
 @pytest.fixture
 def new_cart_item():
-    """创建一个购物车项并返回数据"""
+    """创建一个购物车项并返回数据（用于测试函数的fixture）"""
+    return create_cart_item()
+
+def create_cart_item():
+    """创建一个购物车项并返回数据（可直接调用的函数）"""
     url = f"{BASE_URL}/api/cart"
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
     data = {
@@ -56,7 +60,7 @@ def new_cart_item():
         assert response_data["data"] is not None
         return response_data["data"]
     except Exception as e:
-        pytest.fail(f"创建购物车项失败: {str(e)}")
+        raise Exception(f"创建购物车项失败: {str(e)}")
 
 def test_add_to_cart():
     """测试添加商品到购物车"""
@@ -171,7 +175,7 @@ def test_cart_flow():
     test_get_cart_list()
     
     # 创建一个购物车项用于测试
-    cart_item = new_cart_item()
+    cart_item = create_cart_item()  # 使用普通函数而不是fixture
     
     # 更新购物车商品数量
     test_update_cart_quantity(cart_item)

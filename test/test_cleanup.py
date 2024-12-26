@@ -8,16 +8,19 @@ def test_cleanup():
     """清理测试数据"""
     print("\n开始清理测试数据...")
     
-    # 1. 清理商品数据
+    # 1. 清理购物车数据
+    cleanup_cart()
+    
+    # 2. 清理商品数据
     cleanup_products()
     
-    # 2. 清理分类数据
+    # 3. 清理分类数据
     cleanup_categories()
     
-    # 3. 清理品牌数据
+    # 4. 清理品牌数据
     cleanup_brands()
     
-    # 4. 清理订单数据
+    # 5. 清理订单数据
     cleanup_orders()
     
     print("测试数据清理完成")
@@ -41,6 +44,15 @@ def execute_sql(sql, description=""):
             cursor.close()
         if 'conn' in locals():
             conn.close()
+
+def cleanup_cart():
+    """清理购物车数据"""
+    print("清理购物车数据...")
+    sql = """
+    DELETE FROM cart;
+    ALTER TABLE cart AUTO_INCREMENT = 1;
+    """
+    execute_sql(sql, "购物车数据")
 
 def cleanup_products():
     """清理商品数据"""
@@ -73,8 +85,10 @@ def cleanup_orders():
     """清理订单数据"""
     print("清理订单数据...")
     sql = """
-    DELETE FROM order;
-    ALTER TABLE order AUTO_INCREMENT = 1;
+    DELETE FROM `order`;
+    ALTER TABLE `order` AUTO_INCREMENT = 1;
+    DELETE FROM order_item;
+    ALTER TABLE order_item AUTO_INCREMENT = 1;
     """
     execute_sql(sql, "订单数据")
 
