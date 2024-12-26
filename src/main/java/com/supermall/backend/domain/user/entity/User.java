@@ -38,11 +38,11 @@ public class User {
     @Schema(description = "角色：ROLE_USER, ROLE_ADMIN")
     private String role;
 
-    @TableField(fill = FieldFill.INSERT)
+    @TableField("created_time")
     @Schema(description = "创建时间")
     private LocalDateTime createdTime;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField("updated_time")
     @Schema(description = "更新时间")
     private LocalDateTime updatedTime;
 
