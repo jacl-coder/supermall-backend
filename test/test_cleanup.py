@@ -17,6 +17,9 @@ def test_cleanup():
     # 3. 清理品牌数据
     cleanup_brands()
     
+    # 4. 清理订单数据
+    cleanup_orders()
+    
     print("测试数据清理完成")
 
 def execute_sql(sql, description=""):
@@ -65,6 +68,15 @@ def cleanup_brands():
     ALTER TABLE brand AUTO_INCREMENT = 1;
     """
     execute_sql(sql, "品牌数据")
+
+def cleanup_orders():
+    """清理订单数据"""
+    print("清理订单数据...")
+    sql = """
+    DELETE FROM order;
+    ALTER TABLE order AUTO_INCREMENT = 1;
+    """
+    execute_sql(sql, "订单数据")
 
 if __name__ == "__main__":
     test_cleanup() 

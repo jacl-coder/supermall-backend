@@ -22,7 +22,8 @@ def run_tests():
         'test_auth.py',
         'test_brand.py',
         'test_category.py',
-        'test_product.py'
+        'test_product.py',
+        'test_order.py'
     ])
 
 if __name__ == '__main__':
