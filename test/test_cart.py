@@ -1,185 +1,208 @@
-from test_common import BASE_URL, print_response, get_user_token
+import pytest
 import requests
-import json
+from test_common import BASE_URL, login_and_get_token
+
+def setup_module():
+    """测试模块初始化"""
+    global admin_token, user_token
+    # 管理员登录
+    admin_token = login_and_get_token('admin', 'admin123')
+    # 普通用户登录
+    user_token = login_and_get_token('user01', 'user123')
+
+def create_test_product():
+    """创建测试商品"""
+    headers = {'Authorization': f'Bearer {admin_token}'}
+    product_data = {
+        'name': '测试商品',
+        'subtitle': '测试商品副标题',
+        'categoryId': 1,
+        'brandId': 1,
+        'mainImage': 'test.jpg',
+        'subImages': '["test1.jpg", "test2.jpg"]',
+        'detail': '测试商品详情',
+        'price': 99.99,
+        'stock': 100
+    }
+    response = requests.post(f'{BASE_URL}/api/products', json=product_data, headers=headers)
+    assert response.status_code == 200
+    return response.json()['data']
 
 def test_add_to_cart():
     """测试添加商品到购物车"""
-    print("\n测试添加商品到购物车...")
-    url = f"{BASE_URL}/api/cart"
-    headers = {"Authorization": f"Bearer {get_user_token()}"}
-    data = {
-        "productId": 4,
-        "quantity": 2
+    # 创建测试商品
+    product = create_test_product()
+    
+    # 添加商品到购物车
+    headers = {'Authorization': f'Bearer {user_token}'}
+    cart_data = {
+        'productId': product['id'],
+        'quantity': 2
     }
-    try:
-        response = requests.post(url, headers=headers, json=data)
-        print_response(response)
-        return response.status_code == 200
-    except Exception as e:
-        print(f"发生错误: {str(e)}")
-        return False
+    response = requests.post(f'{BASE_URL}/api/cart', json=cart_data, headers=headers)
+    assert response.status_code == 200
+    
+    # 验证购物车列表
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    cart_list = response.json()['data']
+    assert len(cart_list) > 0
+    cart_item = next(item for item in cart_list if item['productId'] == product['id'])
+    assert cart_item['quantity'] == 2
+    assert cart_item['checked'] == True
+    assert float(cart_item['price']) == 99.99
+    assert float(cart_item['totalAmount']) == 199.98
 
-def test_list_cart():
-    """测试获取购物车列表"""
-    print("\n测试获取购物车列表...")
-    url = f"{BASE_URL}/api/cart"
-    headers = {"Authorization": f"Bearer {get_user_token()}"}
-    try:
-        response = requests.get(url, headers=headers)
-        print_response(response)
-        if response.status_code == 200:
-            return json.loads(response.text)["data"]
-        return None
-    except Exception as e:
-        print(f"发生错误: {str(e)}")
-        return None
-
-def test_update_quantity(product_id):
+def test_update_cart_quantity():
     """测试更新购物车商品数量"""
-    print("\n测试更新购物车商品数量...")
-    url = f"{BASE_URL}/api/cart/{product_id}/quantity"
-    headers = {"Authorization": f"Bearer {get_user_token()}"}
-    data = {
-        "quantity": 3
-    }
-    try:
-        response = requests.put(url, headers=headers, json=data)
-        print_response(response)
-        return response.status_code == 200
-    except Exception as e:
-        print(f"发生错误: {str(e)}")
-        return False
+    headers = {'Authorization': f'Bearer {user_token}'}
+    
+    # 获取购物车列表
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    cart_list = response.json()['data']
+    assert len(cart_list) > 0
+    cart_item = cart_list[0]
+    
+    # 更新数量
+    quantity_data = {'quantity': 3}
+    response = requests.put(
+        f'{BASE_URL}/api/cart/{cart_item["productId"]}/quantity',
+        json=quantity_data,
+        headers=headers
+    )
+    assert response.status_code == 200
+    
+    # 验证更新结果
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    cart_list = response.json()['data']
+    updated_item = next(item for item in cart_list if item['productId'] == cart_item['productId'])
+    assert updated_item['quantity'] == 3
 
-def test_update_checked(product_id):
-    """测试更新商品选中状态"""
-    print("\n测试更新商品选中状态...")
-    url = f"{BASE_URL}/api/cart/{product_id}/checked"
-    headers = {"Authorization": f"Bearer {get_user_token()}"}
-    data = {
-        "checked": 0
-    }
-    try:
-        response = requests.put(url, headers=headers, json=data)
-        print_response(response)
-        return response.status_code == 200
-    except Exception as e:
-        print(f"发生错误: {str(e)}")
-        return False
+def test_update_cart_checked():
+    """测试更新购物车商品选中状态"""
+    headers = {'Authorization': f'Bearer {user_token}'}
+    
+    # 获取购物车列表
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    cart_list = response.json()['data']
+    assert len(cart_list) > 0
+    cart_item = cart_list[0]
+    
+    # 更新选中状态
+    checked_data = {'checked': 0}
+    response = requests.put(
+        f'{BASE_URL}/api/cart/{cart_item["productId"]}/checked',
+        json=checked_data,
+        headers=headers
+    )
+    assert response.status_code == 200
+    
+    # 验证更新结果
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    cart_list = response.json()['data']
+    updated_item = next(item for item in cart_list if item['productId'] == cart_item['productId'])
+    assert updated_item['checked'] == False
 
-def test_update_checked_all():
-    """测试批量更新商品选中状态"""
-    print("\n测试批量更新商品选中状态...")
-    url = f"{BASE_URL}/api/cart/checked"
-    headers = {"Authorization": f"Bearer {get_user_token()}"}
-    data = {
-        "checked": 1
-    }
-    try:
-        response = requests.put(url, headers=headers, json=data)
-        print_response(response)
-        return response.status_code == 200
-    except Exception as e:
-        print(f"发生错误: {str(e)}")
-        return False
+def test_update_all_checked():
+    """测试批量更新购物车商品选中状态"""
+    headers = {'Authorization': f'Bearer {user_token}'}
+    
+    # 批量更新选中状态
+    checked_data = {'checked': 1}
+    response = requests.put(f'{BASE_URL}/api/cart/checked', json=checked_data, headers=headers)
+    assert response.status_code == 200
+    
+    # 验证更新结果
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    cart_list = response.json()['data']
+    assert all(item['checked'] for item in cart_list)
 
 def test_get_cart_count():
     """测试获取购物车商品数量"""
-    print("\n测试获取购物车商品数量...")
-    url = f"{BASE_URL}/api/cart/count"
-    headers = {"Authorization": f"Bearer {get_user_token()}"}
-    try:
-        response = requests.get(url, headers=headers)
-        print_response(response)
-        if response.status_code == 200:
-            return json.loads(response.text)["data"]
-        return None
-    except Exception as e:
-        print(f"发生错误: {str(e)}")
-        return None
+    headers = {'Authorization': f'Bearer {user_token}'}
+    
+    # 获取购物车商品总数
+    response = requests.get(f'{BASE_URL}/api/cart/count', headers=headers)
+    assert response.status_code == 200
+    count = response.json()['data']
+    assert isinstance(count, int)
+    assert count > 0
 
-def test_delete_from_cart(product_id):
+def test_delete_cart_item():
     """测试删除购物车商品"""
-    print("\n测试删除购物车商品...")
-    url = f"{BASE_URL}/api/cart/{product_id}"
-    headers = {"Authorization": f"Bearer {get_user_token()}"}
-    try:
-        response = requests.delete(url, headers=headers)
-        print_response(response)
-        return response.status_code == 200
-    except Exception as e:
-        print(f"发生错误: {str(e)}")
-        return False
+    headers = {'Authorization': f'Bearer {user_token}'}
+    
+    # 获取购物车列表
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    cart_list = response.json()['data']
+    assert len(cart_list) > 0
+    cart_item = cart_list[0]
+    
+    # 删除商品
+    response = requests.delete(f'{BASE_URL}/api/cart/{cart_item["productId"]}', headers=headers)
+    assert response.status_code == 200
+    
+    # 验证删除结果
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    new_cart_list = response.json()['data']
+    assert len(new_cart_list) == len(cart_list) - 1
+    assert not any(item['productId'] == cart_item['productId'] for item in new_cart_list)
 
 def test_clear_cart():
     """测试清空购物车"""
-    print("\n测试清空购物车...")
-    url = f"{BASE_URL}/api/cart"
-    headers = {"Authorization": f"Bearer {get_user_token()}"}
-    try:
-        response = requests.delete(url, headers=headers)
-        print_response(response)
-        return response.status_code == 200
-    except Exception as e:
-        print(f"发生错误: {str(e)}")
-        return False
-
-def main():
-    """主测试函数"""
-    print("开始购物车功能测试...")
+    headers = {'Authorization': f'Bearer {user_token}'}
     
-    # 测试添加商品到购物车
-    if test_add_to_cart():
-        print("添加商品到购物车测试通过")
-    else:
-        print("添加商品到购物车测试失败")
-        return
+    # 清空购物车
+    response = requests.delete(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    
+    # 验证清空结果
+    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+    assert response.status_code == 200
+    cart_list = response.json()['data']
+    assert len(cart_list) == 0
 
-    # 获取购物车列表
-    cart_items = test_list_cart()
-    if cart_items is not None:
-        print("获取购物车列表测试通过")
-        if len(cart_items) > 0:
-            product_id = cart_items[0]["productId"]
-            
-            # 测试更新购物车商品数量
-            if test_update_quantity(product_id):
-                print("更新购物车商品数量测试通过")
-            else:
-                print("更新购物车商品数量测试失败")
+def test_add_invalid_product():
+    """测试添加不存在的商品到购物车"""
+    headers = {'Authorization': f'Bearer {user_token}'}
+    cart_data = {
+        'productId': 99999,  # 不存在的商品ID
+        'quantity': 1
+    }
+    response = requests.post(f'{BASE_URL}/api/cart', json=cart_data, headers=headers)
+    assert response.status_code == 500
+    assert '商品不存在' in response.json()['message']
 
-            # 测试更新商品选中状态
-            if test_update_checked(product_id):
-                print("更新商品选中状态测试通过")
-            else:
-                print("更新商品选中状态测试失败")
-
-            # 测试批量更新商品选中状态
-            if test_update_checked_all():
-                print("批量更新商品选中状态测试通过")
-            else:
-                print("批量更新商品选中状态测试失败")
-
-            # 测试获取购物车商品数量
-            if test_get_cart_count() is not None:
-                print("获取购物车商品数量测试通过")
-            else:
-                print("获取购物车商品数量测试失败")
-
-            # 测试删除购物车商品
-            if test_delete_from_cart(product_id):
-                print("删除购物车商品测试通过")
-            else:
-                print("删除购物车商品测试失败")
-
-            # 测试清空购物车
-            if test_clear_cart():
-                print("清空购物车测试通过")
-            else:
-                print("清空购物车测试失败")
-        else:
-            print("购物车为空")
-    else:
-        print("获取购物车列表测试失败")
-
-if __name__ == "__main__":
-    main() 
+def test_add_out_of_stock():
+    """测试添加库存不足的商品到购物车"""
+    # 创建库存为1的测试商品
+    headers = {'Authorization': f'Bearer {admin_token}'}
+    product_data = {
+        'name': '库存测试商品',
+        'subtitle': '库存测试',
+        'categoryId': 1,
+        'brandId': 1,
+        'mainImage': 'test.jpg',
+        'price': 99.99,
+        'stock': 1
+    }
+    response = requests.post(f'{BASE_URL}/api/products', json=product_data, headers=headers)
+    assert response.status_code == 200
+    product = response.json()['data']
+    
+    # 尝试添加超过库存数量的商品
+    headers = {'Authorization': f'Bearer {user_token}'}
+    cart_data = {
+        'productId': product['id'],
+        'quantity': 2
+    }
+    response = requests.post(f'{BASE_URL}/api/cart', json=cart_data, headers=headers)
+    assert response.status_code == 500
+    assert '商品库存不足' in response.json()['message'] 
