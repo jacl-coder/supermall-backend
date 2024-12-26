@@ -91,7 +91,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     
     @Override
     public List<Category> listChildren(Long parentId) {
-        log.debug("��取子分类列表: parentId={}", parentId);
+        log.debug("获取子分类列表: parentId={}", parentId);
         try {
             return baseMapper.listChildren(parentId);
         } catch (Exception e) {

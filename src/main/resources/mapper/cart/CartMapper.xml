@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermall.backend.domain.cart.mapper.CartMapper">
+    
+    <resultMap id="CartVOMap" type="com.supermall.backend.domain.cart.vo.CartVO">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="productImage" column="product_image"/>
+        <result property="productPrice" column="product_price"/>
+        <result property="quantity" column="quantity"/>
+        <result property="checked" column="checked"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+    </resultMap>
+    
+    <select id="listByUserId" resultMap="CartVOMap">
+        SELECT 
+            c.*,
+            p.name as product_name,
+            p.main_image as product_image,
+            p.price as product_price,
+            p.price * c.quantity as total_price
+        FROM cart c
+        LEFT JOIN product p ON c.product_id = p.id
+        WHERE c.user_id = #{userId}
+            AND c.deleted = 0
+        ORDER BY c.created_time DESC
+    </select>
+    
+    <select id="getCartById" resultMap="CartVOMap">
+        SELECT 
+            c.*,
+            p.name as product_name,
+            p.main_image as product_image,
+            p.price as product_price,
+            p.price * c.quantity as total_price
+        FROM cart c
+        LEFT JOIN product p ON c.product_id = p.id
+        WHERE c.id = #{id}
+            AND c.deleted = 0
+    </select>
+    
+    <update id="clearByUserId">
+        UPDATE cart 
+        SET deleted = 1
+        WHERE user_id = #{userId}
+            AND deleted = 0
+    </update>
+</mapper> 
