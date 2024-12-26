@@ -1,14 +1,21 @@
 import pytest
 import requests
-from test_common import BASE_URL, login_and_get_token
+from test_common import BASE_URL, login_and_get_token, print_response
+
+admin_token = None
+user_token = None
 
 def setup_module():
     """测试模块初始化"""
     global admin_token, user_token
     # 管理员登录
-    admin_token = login_and_get_token('admin', 'admin123')
+    admin_token = login_and_get_token('admin', '123456')
+    if not admin_token:
+        pytest.fail("管理员登录失败")
     # 普通用户登录
-    user_token = login_and_get_token('user01', 'user123')
+    user_token = login_and_get_token('testuser', '123456')
+    if not user_token:
+        pytest.fail("用户登录失败")
 
 def create_test_product():
     """创建测试商品"""
@@ -22,36 +29,55 @@ def create_test_product():
         'subImages': '["test1.jpg", "test2.jpg"]',
         'detail': '测试商品详情',
         'price': 99.99,
-        'stock': 100
+        'stock': 100,
+        'status': 1  # 添加状态字段
     }
+    
     response = requests.post(f'{BASE_URL}/api/products', json=product_data, headers=headers)
-    assert response.status_code == 200
-    return response.json()['data']
+    print_response(response)  # 添加这行来打印详细信息
+    
+    if response.status_code != 200:
+        pytest.fail(f"创建商品失败: {response.text}")
+        
+    response_data = response.json()
+    if 'data' not in response_data:
+        pytest.fail(f"创建商品响应格式错误: {response_data}")
+        
+    return response_data['data']
 
 def test_add_to_cart():
     """测试添加商品到购物车"""
     # 创建测试商品
-    product = create_test_product()
-    
-    # 添加商品到购物车
-    headers = {'Authorization': f'Bearer {user_token}'}
-    cart_data = {
-        'productId': product['id'],
-        'quantity': 2
-    }
-    response = requests.post(f'{BASE_URL}/api/cart', json=cart_data, headers=headers)
-    assert response.status_code == 200
-    
-    # 验证购物车列表
-    response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
-    assert response.status_code == 200
-    cart_list = response.json()['data']
-    assert len(cart_list) > 0
-    cart_item = next(item for item in cart_list if item['productId'] == product['id'])
-    assert cart_item['quantity'] == 2
-    assert cart_item['checked'] == True
-    assert float(cart_item['price']) == 99.99
-    assert float(cart_item['totalAmount']) == 199.98
+    try:
+        product = create_test_product()
+        if not product:
+            pytest.fail("创建商品失败")
+            
+        print(f"创建的商品信息: {product}")  # 添加这行来打印商品信息
+        
+        # 添加商品到购物车
+        headers = {'Authorization': f'Bearer {user_token}'}
+        cart_data = {
+            'productId': product['id'],
+            'quantity': 2
+        }
+        response = requests.post(f'{BASE_URL}/api/cart', json=cart_data, headers=headers)
+        print_response(response)  # 添加这行来打印详细信息
+        
+        assert response.status_code == 200
+        
+        # 验证购物车列表
+        response = requests.get(f'{BASE_URL}/api/cart', headers=headers)
+        assert response.status_code == 200
+        cart_list = response.json()['data']
+        assert len(cart_list) > 0
+        cart_item = next(item for item in cart_list if item['productId'] == product['id'])
+        assert cart_item['quantity'] == 2
+        assert cart_item['checked'] == True
+        assert float(cart_item['price']) == 99.99
+        assert float(cart_item['totalAmount']) == 199.98
+    except Exception as e:
+        pytest.fail(f"测试失败: {str(e)}")
 
 def test_update_cart_quantity():
     """测试更新购物车商品数量"""
@@ -123,7 +149,7 @@ def test_update_all_checked():
     assert all(item['checked'] for item in cart_list)
 
 def test_get_cart_count():
-    """测试获取购物车商品数量"""
+    """���试获取购物车商品数量"""
     headers = {'Authorization': f'Bearer {user_token}'}
     
     # 获取购物车商品总数

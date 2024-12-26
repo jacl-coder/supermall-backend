@@ -1,0 +1,8 @@
+test:
+  base_url: http://localhost:8081
+  admin:
+    username: admin
+    password: 123456
+  user:
+    username: testuser
+    password: 123456 
