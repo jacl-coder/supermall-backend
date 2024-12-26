@@ -22,11 +22,11 @@ public class ProductController {
 
     @Operation(summary = "创建商品")
     @PostMapping
-    public CommonResult<Void> create(@RequestBody CreateProductParam param) {
-        productService.create(param.getName(), param.getSubtitle(), param.getCategoryId(),
-                param.getBrandId(), param.getMainImage(), param.getSubImages(),
-                param.getDetail(), param.getPrice(), param.getStock());
-        return CommonResult.success(null);
+    public CommonResult<Product> create(@RequestBody CreateProductParam param) {
+        Product product = productService.create(param.getName(), param.getSubtitle(), 
+                param.getCategoryId(), param.getBrandId(), param.getMainImage(), 
+                param.getSubImages(), param.getDetail(), param.getPrice(), param.getStock());
+        return CommonResult.success(product);
     }
 
     @Operation(summary = "更新商品")
