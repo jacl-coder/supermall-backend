@@ -1,52 +1,62 @@
 package com.supermall.backend.controller;
 
-import com.supermall.backend.common.response.Result;
-import com.supermall.backend.common.util.JwtUtil;
-import com.supermall.backend.dto.LoginDTO;
-import com.supermall.backend.dto.RegisterDTO;
-import com.supermall.backend.service.UserService;
-import com.supermall.backend.vo.TokenVO;
-import jakarta.validation.Valid;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.supermall.backend.common.api.CommonResult;
+import com.supermall.backend.domain.user.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 认证控制器
+ */
+@Tag(name = "认证管理", description = "认证管理接口")
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
-
-    private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
     private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager,
-                         JwtUtil jwtUtil,
-                         UserService userService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
-        this.userService = userService;
-    }
-
-    @PostMapping("/login")
-    public Result<TokenVO> login(@Valid @RequestBody LoginDTO loginDTO) {
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword())
-        );
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String token = jwtUtil.generateToken(userDetails);
-
-        return Result.success(new TokenVO(token));
-    }
-
+    @Operation(summary = "用户注册")
     @PostMapping("/register")
-    public Result<Void> register(@Valid @RequestBody RegisterDTO registerDTO) {
-        userService.register(registerDTO);
-        return Result.success();
+    public CommonResult<Void> register(@RequestBody RegisterParam param) {
+        userService.register(param.getUsername(), param.getPassword(), param.getEmail());
+        return CommonResult.success(null);
+    }
+
+    @Operation(summary = "用户登录")
+    @PostMapping("/login")
+    public CommonResult<String> login(@RequestBody LoginParam param) {
+        String token = userService.login(param.getUsername(), param.getPassword());
+        return CommonResult.success(token);
+    }
+
+    @Operation(summary = "刷新Token")
+    @PostMapping("/refresh")
+    public CommonResult<String> refreshToken(@RequestBody RefreshTokenParam param) {
+        String token = userService.refreshToken(param.getToken());
+        return CommonResult.success(token);
+    }
+
+    @Data
+    public static class RegisterParam {
+        private String username;
+        private String password;
+        private String email;
+    }
+
+    @Data
+    public static class LoginParam {
+        private String username;
+        private String password;
+    }
+
+    @Data
+    public static class RefreshTokenParam {
+        private String token;
     }
 } 

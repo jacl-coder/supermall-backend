@@ -1,63 +1,78 @@
 package com.supermall.backend.controller;
 
-import com.supermall.backend.common.response.Result;
-import com.supermall.backend.entity.Category;
-import com.supermall.backend.service.CategoryService;
-import com.supermall.backend.vo.CategoryVO;
+import com.supermall.backend.common.api.CommonResult;
+import com.supermall.backend.domain.category.service.CategoryService;
+import com.supermall.backend.domain.category.vo.CategoryVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * 商品分类控制器
+ */
+@Tag(name = "商品分类管理", description = "商品分类管理接口")
 @RestController
 @RequestMapping("/api/categories")
+@RequiredArgsConstructor
 public class CategoryController {
-
     private final CategoryService categoryService;
 
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
-
-    @PostMapping
-    public Result<Void> createCategory(@RequestBody Category category) {
-        categoryService.createCategory(category);
-        return Result.success();
-    }
-
-    @PutMapping("/{id}")
-    public Result<Void> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-        category.setId(id);
-        categoryService.updateCategory(category);
-        return Result.success();
-    }
-
-    @DeleteMapping("/{id}")
-    public Result<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-        return Result.success();
-    }
-
-    @GetMapping("/{id}")
-    public Result<Category> getCategoryById(@PathVariable Long id) {
-        Category category = categoryService.getCategoryById(id);
-        return Result.success(category);
-    }
-
-    @GetMapping("/parent/{parentId}")
-    public Result<List<Category>> getCategoriesByParentId(@PathVariable Long parentId) {
-        List<Category> categories = categoryService.getCategoriesByParentId(parentId);
-        return Result.success(categories);
-    }
-
+    @Operation(summary = "获取分类列表")
     @GetMapping
-    public Result<List<Category>> getAllCategories() {
-        List<Category> categories = categoryService.getAllCategories();
-        return Result.success(categories);
+    public CommonResult<List<CategoryVO>> list() {
+        List<CategoryVO> categories = categoryService.listWithTree();
+        return CommonResult.success(categories);
     }
 
-    @GetMapping("/tree")
-    public Result<List<CategoryVO>> getCategoryTree() {
-        List<CategoryVO> categoryTree = categoryService.getCategoryTree();
-        return Result.success(categoryTree);
+    @Operation(summary = "创建分类")
+    @PostMapping
+    public CommonResult<Void> create(@RequestBody CreateCategoryParam param) {
+        categoryService.create(param.getName(), param.getParentId(), param.getSort(), param.getIcon());
+        return CommonResult.success(null);
     }
-}
+
+    @Operation(summary = "更新分类")
+    @PutMapping("/{id}")
+    public CommonResult<Void> update(@PathVariable Long id, @RequestBody UpdateCategoryParam param) {
+        categoryService.update(id, param.getName(), param.getSort(), param.getIcon());
+        return CommonResult.success(null);
+    }
+
+    @Operation(summary = "删除分类")
+    @DeleteMapping("/{id}")
+    public CommonResult<Void> delete(@PathVariable Long id) {
+        categoryService.delete(id);
+        return CommonResult.success(null);
+    }
+
+    @Operation(summary = "更新分类状态")
+    @PutMapping("/{id}/status")
+    public CommonResult<Void> updateStatus(@PathVariable Long id, @RequestBody UpdateStatusParam param) {
+        categoryService.updateStatus(id, param.getStatus());
+        return CommonResult.success(null);
+    }
+
+    @Data
+    public static class CreateCategoryParam {
+        private String name;
+        private Long parentId;
+        private Integer sort;
+        private String icon;
+    }
+
+    @Data
+    public static class UpdateCategoryParam {
+        private String name;
+        private Integer sort;
+        private String icon;
+    }
+
+    @Data
+    public static class UpdateStatusParam {
+        private Integer status;
+    }
+} 

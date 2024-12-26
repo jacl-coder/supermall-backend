@@ -1,9 +1,137 @@
 {
     "info": {
+        "_postman_id": "user-collection-id",
         "name": "用户管理",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
+        {
+            "name": "用户注册",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"username\": \"test_user\",\n    \"password\": \"Test123456\",\n    \"nickname\": \"测试用户\",\n    \"phone\": \"13800138000\",\n    \"email\": \"test@example.com\",\n    \"gender\": 1,\n    \"birthday\": \"1990-01-01T00:00:00\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/register",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "register"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "用户登录",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/login?username=test_user&password=Test123456",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "login"],
+                    "query": [
+                        {
+                            "key": "username",
+                            "value": "test_user"
+                        },
+                        {
+                            "key": "password",
+                            "value": "Test123456"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "获取用户信息",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/1",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "1"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "获取用户列表",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users?keyword=test&pageNum=1&pageSize=10",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users"],
+                    "query": [
+                        {
+                            "key": "keyword",
+                            "value": "test",
+                            "description": "搜索关键词"
+                        },
+                        {
+                            "key": "pageNum",
+                            "value": "1"
+                        },
+                        {
+                            "key": "pageSize",
+                            "value": "10"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "更新用户信息",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"nickname\": \"更新后的昵称\",\n    \"phone\": \"13800138001\",\n    \"email\": \"update@example.com\",\n    \"gender\": 2,\n    \"birthday\": \"1991-01-01T00:00:00\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/1",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "1"]
+                }
+            },
+            "response": []
+        },
         {
             "name": "修改密码",
             "request": {
@@ -11,18 +139,16 @@
                 "header": [
                     {
                         "key": "Authorization",
-                        "value": "{{token}}",
-                        "type": "text"
+                        "value": "{{token}}"
                     },
                     {
                         "key": "Content-Type",
-                        "value": "application/json",
-                        "type": "text"
+                        "value": "application/json"
                     }
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n    \"oldPassword\": \"admin\",\n    \"newPassword\": \"admin\",\n    \"confirmPassword\": \"admin\"\n}"
+                    "raw": "{\n    \"oldPassword\": \"Test123456\",\n    \"newPassword\": \"NewTest123456\",\n    \"confirmPassword\": \"NewTest123456\"\n}"
                 },
                 "url": {
                     "raw": "{{baseUrl}}/api/users/password",
@@ -33,19 +159,13 @@
             "response": []
         },
         {
-            "name": "更新头像",
+            "name": "上传头像",
             "request": {
                 "method": "POST",
                 "header": [
                     {
                         "key": "Authorization",
-                        "value": "{{token}}",
-                        "type": "text"
-                    },
-                    {
-                        "key": "Content-Type",
-                        "value": "multipart/form-data",
-                        "type": "text"
+                        "value": "{{token}}"
                     }
                 ],
                 "body": {
@@ -54,17 +174,166 @@
                         {
                             "key": "file",
                             "type": "file",
-                            "src": "postman-cloud:///1efc273e-4fcb-4910-85cc-952e1ec24b1a"
+                            "src": "/path/to/avatar.jpg"
                         }
                     ]
                 },
                 "url": {
-                    "raw": "{{baseUrl}}/api/users/avatar",
+                    "raw": "{{baseUrl}}/api/users/1/avatar",
                     "host": ["{{baseUrl}}"],
-                    "path": ["api", "users", "avatar"]
+                    "path": ["api", "users", "1", "avatar"]
                 }
             },
             "response": []
+        },
+        {
+            "name": "更新用户状态",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/1/status?status=1",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "1", "status"],
+                    "query": [
+                        {
+                            "key": "status",
+                            "value": "1",
+                            "description": "用户状态：0-禁用，1-启用"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "增加积分",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/1/points/increase?points=100",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "1", "points", "increase"],
+                    "query": [
+                        {
+                            "key": "points",
+                            "value": "100",
+                            "description": "增加的积分数量"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "增加余额",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/1/balance/increase?amount=100.00",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "1", "balance", "increase"],
+                    "query": [
+                        {
+                            "key": "amount",
+                            "value": "100.00",
+                            "description": "增加的金额"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "扣减余额",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/1/balance/decrease?amount=50.00",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "1", "balance", "decrease"],
+                    "query": [
+                        {
+                            "key": "amount",
+                            "value": "50.00",
+                            "description": "扣减的金额"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "更新会员等级",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/1/member-level?level=1",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "1", "member-level"],
+                    "query": [
+                        {
+                            "key": "level",
+                            "value": "1",
+                            "description": "会员等级：0-普通会员，1-白银会员，2-黄金会员，3-钻石会员"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "删除用户",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/1",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "users", "1"]
+                }
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8080"
         }
     ]
 } 

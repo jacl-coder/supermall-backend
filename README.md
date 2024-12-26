@@ -68,9 +68,16 @@ supermall-backend/
 - 商品管理
   - ✅ 商品增删改查
   - ✅ 商品分类管理
-  - ❌ 品牌管理
+  - ✅ 品牌管理
   - ❌ 商品规格管理
   - ❌ 商品参数管理
+
+#### 品牌模块
+- 品牌管理
+  - ✅ 品牌增删改查
+  - ✅ 品牌Logo上传
+  - ✅ 品牌商品统计
+  - ✅ 品牌排序管理
 
 #### 订单模块
 - 订单管理
@@ -107,9 +114,8 @@ supermall-backend/
 
 #### 支付模块
 - 支付功能
-  - ✅ 支付宝支付
+  - ✅ 余额支付
   - ❌ 微信支付
-  - ❌ 余额支付
 
 #### 营销模块
 - 营销功能
@@ -117,6 +123,27 @@ supermall-backend/
   - ❌ 优惠券系统
   - ❌ 促销活动
   - ❌ 广告系统
+
+### API 接口
+
+#### 品牌管理接口
+- POST `/api/brands` - 创建品牌
+- GET `/api/brands` - 获取品牌列表（支持分页和关键词搜索）
+- GET `/api/brands/{id}` - 获取品牌详情
+- PUT `/api/brands/{id}` - 更新品牌
+- DELETE `/api/brands/{id}` - 删除品牌
+- POST `/api/brands/logo` - 上传品牌Logo
+
+#### 商品管理接口
+- POST `/api/products` - 创建商品（支持品牌关联）
+- GET `/api/products` - 获取商品列表（支持品牌筛选）
+- GET `/api/products/{id}` - 获取商品详情（包含品牌信息）
+- PUT `/api/products/{id}` - 更新商品（支持修改品牌）
+- DELETE `/api/products/{id}` - 删除商品
+- PUT `/api/products/{id}/status` - 更新商品状态
+- PUT `/api/products/{id}/sales` - 更新商品销量
+- POST `/api/products/upload` - 上传商品图片
+- POST `/api/products/{id}/images` - 上传商品子图
 
 ## 开发规范
 1. 命名规范

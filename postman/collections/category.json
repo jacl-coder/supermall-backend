@@ -1,26 +1,27 @@
 {
     "info": {
-        "name": "分类管理",
+        "_postman_id": "category-collection-id",
+        "name": "商品分类管理",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
         {
-            "name": "创建根分类",
+            "name": "创建分类",
             "request": {
                 "method": "POST",
                 "header": [
                     {
-                        "key": "Content-Type",
-                        "value": "application/json"
-                    },
-                    {
                         "key": "Authorization",
                         "value": "{{token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
                     }
                 ],
                 "body": {
                     "mode": "raw",
-                    "raw": "{\n    \"name\": \"电子产品\",\n    \"parentId\": 0,\n    \"sort\": 1,\n    \"icon\": \"electronics.png\"\n}"
+                    "raw": "{\n    \"name\": \"手机数码\",\n    \"parentId\": 0,\n    \"level\": 1,\n    \"sort\": 1,\n    \"icon\": \"phone.png\"\n}"
                 },
                 "url": {
                     "raw": "{{baseUrl}}/api/categories",
@@ -31,33 +32,7 @@
             "response": []
         },
         {
-            "name": "创建子分类",
-            "request": {
-                "method": "POST",
-                "header": [
-                    {
-                        "key": "Content-Type",
-                        "value": "application/json"
-                    },
-                    {
-                        "key": "Authorization",
-                        "value": "{{token}}"
-                    }
-                ],
-                "body": {
-                    "mode": "raw",
-                    "raw": "{\n    \"name\": \"手机\",\n    \"parentId\": 1,\n    \"sort\": 1,\n    \"icon\": \"phone.png\"\n}"
-                },
-                "url": {
-                    "raw": "{{baseUrl}}/api/categories",
-                    "host": ["{{baseUrl}}"],
-                    "path": ["api", "categories"]
-                }
-            },
-            "response": []
-        },
-        {
-            "name": "获取分类树",
+            "name": "获取分类列表",
             "request": {
                 "method": "GET",
                 "header": [
@@ -67,12 +42,87 @@
                     }
                 ],
                 "url": {
-                    "raw": "{{baseUrl}}/api/categories/tree",
+                    "raw": "{{baseUrl}}/api/categories?parentId=0",
                     "host": ["{{baseUrl}}"],
-                    "path": ["api", "categories", "tree"]
+                    "path": ["api", "categories"],
+                    "query": [
+                        {
+                            "key": "parentId",
+                            "value": "0",
+                            "description": "父分类ID，0表示一级分类"
+                        }
+                    ]
                 }
             },
             "response": []
+        },
+        {
+            "name": "获取分类详情",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/categories/1",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "categories", "1"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "更新分类",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"name\": \"手机数码更新\",\n    \"sort\": 2,\n    \"icon\": \"phone-update.png\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/categories/1",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "categories", "1"]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "删除分类",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/categories/1",
+                    "host": ["{{baseUrl}}"],
+                    "path": ["api", "categories", "1"]
+                }
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8080"
         }
     ]
 } 
