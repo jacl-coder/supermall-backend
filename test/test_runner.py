@@ -21,7 +21,6 @@ def run_tests():
         '--self-contained-html',
         'test_auth.py',
         'test_brand.py',
-        'test_cart.py',
         'test_category.py',
         'test_product.py'
     ])

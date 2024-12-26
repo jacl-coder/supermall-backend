@@ -39,8 +39,20 @@ def login_and_get_token(username, password):
         return None
 
 def get_admin_token():
-    """获取管理员令牌"""
-    return login_and_get_token(CONFIG['admin']['username'], CONFIG['admin']['password'])
+    """获取管理员token"""
+    url = f"{BASE_URL}/api/auth/login"
+    data = {
+        "username": "admin",
+        "password": "123456"
+    }
+    try:
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
+            return json.loads(response.text)["data"]["token"]
+        return None
+    except Exception as e:
+        print(f"获取管理员token失败: {str(e)}")
+        return None
 
 def get_user_token():
     """获取普通用户令牌"""

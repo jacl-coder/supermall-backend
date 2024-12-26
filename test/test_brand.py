@@ -1,6 +1,29 @@
+import pytest
 from test_common import BASE_URL, print_response, get_admin_token
 import requests
 import json
+
+@pytest.fixture
+def new_brand():
+    """创建一个测试品牌并返回品牌数据"""
+    url = f"{BASE_URL}/api/brands"
+    headers = {"Authorization": f"Bearer {get_admin_token()}"}
+    data = {
+        "name": "测试品牌",
+        "logo": "test-logo.png",
+        "description": "这是一个测试品牌",
+        "sort": 1,
+        "status": 1
+    }
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        assert response_data["code"] == 200
+        assert response_data["data"] is not None
+        return response_data["data"]
+    except Exception as e:
+        pytest.fail(f"创建测试品牌失败: {str(e)}")
 
 def test_create_brand():
     """测试创建品牌"""
@@ -9,120 +32,180 @@ def test_create_brand():
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
     data = {
         "name": "测试品牌",
-        "logo": "http://example.com/logo.png",
+        "logo": "test-logo.png",
         "description": "这是一个测试品牌",
-        "sort": 1
+        "sort": 1,
+        "status": 1
     }
     try:
         response = requests.post(url, headers=headers, json=data)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
+        assert response_data["data"] is not None
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def test_list_brands():
+def test_get_brand_list():
     """测试获取品牌列表"""
     print("\n测试获取品牌列表...")
     url = f"{BASE_URL}/api/brands"
-    headers = {"Authorization": f"Bearer {get_admin_token()}"}
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url)
         print_response(response)
-        if response.status_code == 200:
-            return json.loads(response.text)["data"]
-        return None
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
+        assert isinstance(response_data["data"], dict)
+        # 验证分页字段
+        data = response_data["data"]
+        assert "records" in data
+        assert "total" in data
+        assert "size" in data
+        assert "current" in data
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return None
+        pytest.fail(str(e))
 
-def test_update_brand(brand_id):
+def test_update_brand(new_brand):
     """测试更新品牌"""
     print("\n测试更新品牌...")
-    url = f"{BASE_URL}/api/brands/{brand_id}"
+    url = f"{BASE_URL}/api/brands/{new_brand['id']}"
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
     data = {
         "name": "更新后的品牌",
-        "logo": "http://example.com/new-logo.png",
-        "description": "这是更新后的品牌描述",
-        "sort": 2
+        "logo": "updated-logo.png",
+        "description": "这是更新后的测试品牌",
+        "sort": 2,
+        "status": 1
     }
     try:
         response = requests.put(url, headers=headers, json=data)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def test_update_brand_status(brand_id):
+def test_update_brand_status(new_brand):
     """测试更新品牌状态"""
     print("\n测试更新品牌状态...")
-    url = f"{BASE_URL}/api/brands/{brand_id}/status"
+    url = f"{BASE_URL}/api/brands/{new_brand['id']}/status"
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
-    data = {
-        "status": 0  # 0-禁用 1-启用
-    }
+    params = {"status": 0}
     try:
-        response = requests.put(url, headers=headers, json=data)
+        response = requests.put(url, headers=headers, params=params)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def test_delete_brand(brand_id):
+def test_delete_brand(new_brand):
     """测试删除品牌"""
     print("\n测试删除品牌...")
-    url = f"{BASE_URL}/api/brands/{brand_id}"
+    url = f"{BASE_URL}/api/brands/{new_brand['id']}"
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
     try:
         response = requests.delete(url, headers=headers)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def main():
-    """主测试函数"""
-    print("开始品牌管理功能测试...")
+def test_batch_delete_brands(new_brand):
+    """测试批量删除品牌"""
+    print("\n测试批量删除品牌...")
+    url = f"{BASE_URL}/api/brands/batch"
+    headers = {"Authorization": f"Bearer {get_admin_token()}"}
+    data = [new_brand["id"]]
+    try:
+        response = requests.delete(url, headers=headers, json=data)
+        print_response(response)
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
+    except Exception as e:
+        print(f"发生错误: {str(e)}")
+        pytest.fail(str(e))
+
+def test_get_all_brands():
+    """测试获取所有品牌"""
+    print("\n测试获取所有品牌...")
+    url = f"{BASE_URL}/api/brands/all"
+    try:
+        response = requests.get(url)
+        print_response(response)
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
+        assert isinstance(response_data["data"], list)
+    except Exception as e:
+        print(f"发生错误: {str(e)}")
+        pytest.fail(str(e))
+
+def create_test_brand():
+    """创建一个测试品牌并返回品牌数据"""
+    url = f"{BASE_URL}/api/brands"
+    headers = {"Authorization": f"Bearer {get_admin_token()}"}
+    data = {
+        "name": "测试品牌",
+        "logo": "test-logo.png",
+        "description": "这是一个测试品牌",
+        "sort": 1,
+        "status": 1
+    }
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        assert response_data["code"] == 200
+        assert response_data["data"] is not None
+        return response_data["data"]
+    except Exception as e:
+        raise Exception(f"创建测试品牌失败: {str(e)}")
+
+def test_brand_flow():
+    """测试品牌完整流程"""
+    # 创建品牌
+    test_create_brand()
     
-    # 测试创建品牌
-    if test_create_brand():
-        print("创建品牌测试通过")
-    else:
-        print("创建品牌测试失败")
-        return
-
     # 获取品牌列表
-    brands = test_list_brands()
-    if brands is not None:
-        print("获取品牌列表测试通过")
-        if len(brands) > 0:
-            brand_id = brands[0]["id"]
-            
-            # 测试更新品牌
-            if test_update_brand(brand_id):
-                print("更新品牌测试通过")
-            else:
-                print("更新品牌测试失败")
-
-            # 测试更新品牌状态
-            if test_update_brand_status(brand_id):
-                print("更新品牌状态测试通过")
-            else:
-                print("更新品牌状态测试失败")
-
-            # 测试删除品牌
-            if test_delete_brand(brand_id):
-                print("删除品牌测试通过")
-            else:
-                print("删除品牌测试失败")
-        else:
-            print("品牌列表为空")
-    else:
-        print("获取品牌列表测试失败")
-
-if __name__ == "__main__":
-    main() 
+    test_get_brand_list()
+    
+    # 获取所有品牌
+    test_get_all_brands()
+    
+    # 创建一个品牌用于更新和删除测试
+    brand = create_test_brand()
+    
+    # 更新品牌
+    test_update_brand(brand)
+    
+    # 更新品牌状态
+    test_update_brand_status(brand)
+    
+    # 删除品牌
+    test_delete_brand(brand)
+    
+    # 创建一个品牌用于批量删除测试
+    brand = create_test_brand()
+    
+    # 批量删除品牌
+    test_batch_delete_brands(brand) 

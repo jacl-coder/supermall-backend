@@ -3,52 +3,27 @@ package com.supermall.backend.domain.product.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.supermall.backend.domain.product.entity.Product;
-
-import java.math.BigDecimal;
+import com.supermall.backend.domain.product.vo.ProductVO;
 import java.util.List;
 
 public interface ProductService extends IService<Product> {
     /**
-     * 创建商品
+     * 分页查询商品
      */
-    Product create(String name, String subtitle, Long categoryId, Long brandId,
-                  String mainImage, String subImages, String detail,
-                  BigDecimal price, Integer stock);
-
-    /**
-     * 更新商品
-     */
-    void update(Long id, String name, String subtitle,
-                String mainImage, String subImages, String detail,
-                BigDecimal price, Integer stock);
-
-    /**
-     * 删除商品
-     */
-    void delete(Long id);
-
+    Page<ProductVO> page(Integer pageNum, Integer pageSize, String keyword);
+    
     /**
      * 更新商品状态
      */
     void updateStatus(Long id, Integer status);
-
+    
     /**
-     * 分页获取商品列表
+     * 批量删除商品
      */
-    Page<Product> page(Integer pageNum, Integer pageSize);
-
+    void deleteBatch(List<Long> ids);
+    
     /**
-     * 根据分类获取商品列表
+     * 获取商品详情
      */
-    List<Product> listByCategory(Long categoryId);
-
-    /**
-     * 根据品牌获取商品列表
-     */
-    List<Product> listByBrand(Long brandId);
-
-    /**
-     * 搜索商品
-     */
-    List<Product> search(String keyword);
+    ProductVO getDetail(Long id);
 } 

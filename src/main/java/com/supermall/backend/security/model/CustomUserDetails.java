@@ -7,7 +7,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Data
 public class CustomUserDetails implements UserDetails {
@@ -19,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
     private String avatar;
     private Integer status;
     private String role;
-    private Boolean enabled = true;
+    private boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -53,6 +52,6 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled != null && enabled;
+        return enabled;
     }
 } 

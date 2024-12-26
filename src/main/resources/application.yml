@@ -57,3 +57,13 @@ knife4j:
     enableRequestCache: true
     enableHost: false
     enableHostText: 
+
+logging:
+  level:
+    root: INFO
+    com.supermall.backend: debug
+    org.springframework.security: DEBUG
+    org.springframework.web: info
+    org.hibernate.SQL: DEBUG
+    com.baomidou.mybatisplus: debug
+    org.springframework.jdbc.core: TRACE 

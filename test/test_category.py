@@ -1,6 +1,29 @@
+import pytest
 from test_common import BASE_URL, print_response, get_admin_token
 import requests
 import json
+
+@pytest.fixture
+def new_category():
+    """创建一个测试分类并返回分类数据"""
+    url = f"{BASE_URL}/api/categories"
+    headers = {"Authorization": f"Bearer {get_admin_token()}"}
+    data = {
+        "name": "测试分类",
+        "parentId": 0,
+        "level": 1,
+        "sort": 1,
+        "status": 1
+    }
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        assert response_data["code"] == 200
+        assert response_data["data"] is not None
+        return response_data["data"]
+    except Exception as e:
+        pytest.fail(f"创建测试分类失败: {str(e)}")
 
 def test_create_category():
     """测试创建分类"""
@@ -9,119 +32,157 @@ def test_create_category():
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
     data = {
         "name": "测试分类",
-        "parentId": 0,  # 顶级分类
+        "parentId": 0,
+        "level": 1,
         "sort": 1,
-        "icon": "http://example.com/icon.png"
+        "status": 1
     }
     try:
         response = requests.post(url, headers=headers, json=data)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
+        assert response_data["data"] is not None
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def test_list_categories():
+def test_get_category_list():
     """测试获取分类列表"""
     print("\n测试获取分类列表...")
     url = f"{BASE_URL}/api/categories"
-    headers = {"Authorization": f"Bearer {get_admin_token()}"}
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url)
         print_response(response)
-        if response.status_code == 200:
-            return json.loads(response.text)["data"]
-        return None
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
+        assert isinstance(response_data["data"], list)
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return None
+        pytest.fail(str(e))
 
-def test_update_category(category_id):
+def test_get_category_detail(new_category):
+    """测试获取分类详情"""
+    print("\n测试获取分类详情...")
+    url = f"{BASE_URL}/api/categories/{new_category['id']}"
+    try:
+        response = requests.get(url)
+        print_response(response)
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
+        assert response_data["data"] is not None
+        
+        # 验证返回的数据
+        data = response_data["data"]
+        assert data["id"] == new_category["id"]
+        assert data["name"] == new_category["name"]
+        assert data["level"] == new_category["level"]
+    except Exception as e:
+        print(f"发生错误: {str(e)}")
+        pytest.fail(str(e))
+
+def test_update_category(new_category):
     """测试更新分类"""
     print("\n测试更新分类...")
-    url = f"{BASE_URL}/api/categories/{category_id}"
+    url = f"{BASE_URL}/api/categories/{new_category['id']}"
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
     data = {
         "name": "更新后的分类",
+        "parentId": 0,
+        "level": 1,
         "sort": 2,
-        "icon": "http://example.com/new-icon.png"
+        "status": 1
     }
     try:
         response = requests.put(url, headers=headers, json=data)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def test_update_category_status(category_id):
+def test_update_category_status(new_category):
     """测试更新分类状态"""
     print("\n测试更新分类状态...")
-    url = f"{BASE_URL}/api/categories/{category_id}/status"
+    url = f"{BASE_URL}/api/categories/{new_category['id']}/status"
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
-    data = {
-        "status": 0  # 0-禁用 1-启用
-    }
+    params = {"status": 0}
     try:
-        response = requests.put(url, headers=headers, json=data)
+        response = requests.put(url, headers=headers, params=params)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def test_delete_category(category_id):
-    """测试删��分类"""
+def test_delete_category(new_category):
+    """测试删除分类"""
     print("\n测试删除分类...")
-    url = f"{BASE_URL}/api/categories/{category_id}"
+    url = f"{BASE_URL}/api/categories/{new_category['id']}"
     headers = {"Authorization": f"Bearer {get_admin_token()}"}
     try:
         response = requests.delete(url, headers=headers)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert response_data["code"] == 200
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def main():
-    """主测试函数"""
-    print("开始分类管理功能测试...")
+def create_test_category():
+    """创建一个测试分类并返回分类数据"""
+    url = f"{BASE_URL}/api/categories"
+    headers = {"Authorization": f"Bearer {get_admin_token()}"}
+    data = {
+        "name": "测试分类",
+        "parentId": 0,
+        "level": 1,
+        "sort": 1,
+        "status": 1
+    }
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        assert response_data["code"] == 200
+        assert response_data["data"] is not None
+        return response_data["data"]
+    except Exception as e:
+        raise Exception(f"创建测试分类失败: {str(e)}")
+
+def test_category_flow():
+    """测试分类完整流程"""
+    # 创建分类
+    test_create_category()
     
-    # 测试创建分类
-    if test_create_category():
-        print("创建分类测试通过")
-    else:
-        print("创建分类测试失败")
-        return
-
     # 获取分类列表
-    categories = test_list_categories()
-    if categories is not None:
-        print("获取分类列表测试通过")
-        if len(categories) > 0:
-            category_id = categories[0]["id"]
-            
-            # 测试更新分类
-            if test_update_category(category_id):
-                print("更新分类测试通过")
-            else:
-                print("更新分类测试失败")
-
-            # 测试更新分类状态
-            if test_update_category_status(category_id):
-                print("更新分类状态测试通过")
-            else:
-                print("更新分类状态���试失败")
-
-            # 测试删除分类
-            if test_delete_category(category_id):
-                print("删除分类测试通过")
-            else:
-                print("删除分类测试失败")
-        else:
-            print("分类列表为空")
-    else:
-        print("获取分类列表测试失败")
-
-if __name__ == "__main__":
-    main() 
+    test_get_category_list()
+    
+    # 创建一个分类用于详情和更新测试
+    category = create_test_category()
+    
+    # 获取分类详情
+    test_get_category_detail(category)
+    
+    # 更新分类
+    test_update_category(category)
+    
+    # 更新分类状态
+    test_update_category_status(category)
+    
+    # 删除分类
+    test_delete_category(category) 

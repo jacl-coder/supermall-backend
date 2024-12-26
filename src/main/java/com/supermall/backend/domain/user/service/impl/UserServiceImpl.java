@@ -33,8 +33,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public User getByUsername(String username) {
         log.info("正在查询用户: {}", username);
-        return getOne(new LambdaQueryWrapper<User>()
-                .eq(User::getUsername, username));
+        return userMapper.selectByUsername(username);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new ApiException("邮箱已存在");
         }
 
-        // 创建用��
+        // 创建用户
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
@@ -71,60 +70,64 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public String login(String username, String password) {
-        log.info("尝试登录用户: {}", username);
-        
-        User user = userMapper.selectOne(
-            new LambdaQueryWrapper<User>()
-                .eq(User::getUsername, username)
-        );
-        
-        log.info("查询到的用户信息: {}", user);
-        
-        if (user == null) {
-            log.warn("用户不存在: {}", username);
-            throw new ApiException("用户不存在");
-        }
-        
-        boolean matches = passwordEncoder.matches(password, user.getPassword());
-        log.info("密码匹配结果: {}", matches);
-        
-        if (!matches) {
-            log.warn("密码错误: {}", username);
-            throw new ApiException("密码错误");
-        }
-        
-        if (user.getStatus() == 0) {
-            log.warn("账号已被禁用: {}", username);
-            throw new ApiException("账号已被禁用");
-        }
-        
+        log.info("开始登录流程 - 用户名: {}", username);
         try {
-            // 创建用户详情
-            CustomUserDetails userDetails = new CustomUserDetails();
-            userDetails.setId(user.getId());
-            userDetails.setUsername(user.getUsername());
-            userDetails.setPassword(user.getPassword());
-            userDetails.setEmail(user.getEmail());
-            userDetails.setPhone(user.getPhone());
-            userDetails.setAvatar(user.getAvatar());
-            userDetails.setStatus(user.getStatus());
-            userDetails.setRole(user.getRole() != null ? user.getRole() : "USER");
-            userDetails.setEnabled(user.getStatus() == 1);
+            User user = userMapper.selectByUsername(username);
+            log.debug("SQL查询: SELECT id, username, password, avatar, phone, email, status, role, " +
+                    "created_time, updated_time, deleted FROM user WHERE deleted = 0 AND username = '{}'", username);
+            log.info("数据库查询结果 - 用户: {}", user);
             
-            log.info("创建的用户详情: {}", userDetails);
+            if (user == null) {
+                log.warn("登录失败 - 用户不存在: {}", username);
+                throw new ApiException("用户名或密码错误");
+            }
             
-            // 设置认证信息
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("正在验证密码...");
+            log.debug("数据库中的密码hash: {}", user.getPassword());
+            boolean matches = passwordEncoder.matches(password, user.getPassword());
+            log.info("密码验证结果: {}", matches);
             
-            // 生成token
-            String token = jwtTokenUtil.generateToken(userDetails);
-            log.info("生成的token: {}", token);
-            return token;
+            if (!matches) {
+                log.warn("登录失败 - 密码错误: {}", username);
+                throw new ApiException("用户名或密码错误");
+            }
+            
+            if (user.getStatus() == 0) {
+                log.warn("账号已被禁用: {}", username);
+                throw new ApiException("账号已被禁用");
+            }
+            
+            try {
+                // 创建用户详情
+                CustomUserDetails userDetails = new CustomUserDetails();
+                userDetails.setId(user.getId());
+                userDetails.setUsername(user.getUsername());
+                userDetails.setPassword(user.getPassword());
+                userDetails.setEmail(user.getEmail());
+                userDetails.setPhone(user.getPhone());
+                userDetails.setAvatar(user.getAvatar());
+                userDetails.setStatus(user.getStatus());
+                userDetails.setRole(user.getRole() != null ? user.getRole() : "USER");
+                userDetails.setEnabled(user.getStatus() == 1);
+                
+                log.info("创建的用户详情: {}", userDetails);
+                
+                // 设置认证信息
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userDetails, null, userDetails.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                
+                // 生成token
+                String token = jwtTokenUtil.generateToken(userDetails);
+                log.info("生成的token: {}", token);
+                return token;
+            } catch (Exception e) {
+                log.error("登录过程中发生错误", e);
+                throw new ApiException("系统异常，请联系管理员");
+            }
         } catch (Exception e) {
-            log.error("登录过程中发生错误", e);
-            throw new ApiException("系统异常，请联系管理员");
+            log.error("登录过程发生异常", e);
+            throw new ApiException("登录失败: " + e.getMessage());
         }
     }
 

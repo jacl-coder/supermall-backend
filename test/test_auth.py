@@ -1,7 +1,25 @@
+import pytest
 from test_common import BASE_URL, print_response
 import requests
 import json
 import time
+
+@pytest.fixture
+def user_token():
+    """获取测试用户token的fixture"""
+    url = f"{BASE_URL}/api/auth/login"
+    data = {
+        "username": "testuser",
+        "password": "123456"
+    }
+    try:
+        response = requests.post(url, json=data)
+        if response.status_code == 200:
+            return json.loads(response.text)["data"]["token"]
+        return None
+    except Exception as e:
+        print(f"获取token失败: {str(e)}")
+        return None
 
 def test_register():
     """测试用户注册"""
@@ -15,44 +33,52 @@ def test_register():
     try:
         response = requests.post(url, json=data)
         print_response(response)
-        return response.status_code == 200
+        assert response.status_code == 200
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return False
+        pytest.fail(str(e))
 
-def test_login(username="admin", password="123456"):
+def test_login():
     """测试用户登录"""
-    print(f"\n测试{username}登录...")
+    print("\n测试登录功能...")
     url = f"{BASE_URL}/api/auth/login"
     data = {
-        "username": username,
-        "password": password
+        "username": "admin",
+        "password": "123456"
     }
     try:
         response = requests.post(url, json=data)
         print_response(response)
-        if response.status_code == 200:
-            return json.loads(response.text)["data"]
-        return None
+        print(f"详细响应内容: {response.text}")
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert "data" in response_data
+        assert "token" in response_data["data"]
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return None
+        print(f"详细错误信息: {getattr(e, 'response', {}).get('text', '')}")
+        pytest.fail(str(e))
 
-def test_refresh_token(token):
+def test_refresh_token(user_token):
     """测试刷新令牌"""
     print("\n测试刷新令牌...")
     url = f"{BASE_URL}/api/auth/refresh"
-    headers = {"Authorization": f"Bearer {token}"}
-    data = {"token": token}
+    headers = {"Authorization": f"Bearer {user_token}"}
+    data = {"token": user_token}
     try:
         response = requests.post(url, headers=headers, json=data)
         print_response(response)
-        if response.status_code == 200:
-            return json.loads(response.text)["data"]
-        return None
+        print(f"详细响应内容: {response.text}")
+        assert response.status_code == 200
+        response_data = json.loads(response.text)
+        print(f"响应数据: {response_data}")
+        assert "data" in response_data
+        assert "token" in response_data["data"]
     except Exception as e:
         print(f"发生错误: {str(e)}")
-        return None
+        print(f"详细错误信息: {getattr(e, 'response', {}).get('text', '')}")
+        pytest.fail(str(e))
 
 def main():
     """主测试函数"""
@@ -97,7 +123,7 @@ def main():
     new_admin_token = test_refresh_token(admin_token)
     if new_admin_token:
         print("管理员刷新令牌测试通过")
-        print(f"新的令牌: {new_admin_token}")
+        print(f"新��令牌: {new_admin_token}")
     else:
         print("管理员刷新令牌测试失败")
 

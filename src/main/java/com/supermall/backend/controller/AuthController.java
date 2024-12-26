@@ -4,12 +4,11 @@ import com.supermall.backend.common.api.CommonResult;
 import com.supermall.backend.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +32,7 @@ public class AuthController {
 
     @Operation(summary = "用户登录")
     @PostMapping("/login")
-    public CommonResult<Map<String, String>> login(@RequestBody LoginParam param) {
+    public CommonResult<Map<String, String>> login(@RequestBody @Valid LoginParam param) {
         String token = userService.login(param.getUsername(), param.getPassword());
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
@@ -42,9 +41,11 @@ public class AuthController {
 
     @Operation(summary = "刷新Token")
     @PostMapping("/refresh")
-    public CommonResult<String> refreshToken(@RequestBody RefreshTokenParam param) {
+    public CommonResult<Map<String, String>> refreshToken(@RequestBody RefreshTokenParam param) {
         String token = userService.refreshToken(param.getToken());
-        return CommonResult.success(token);
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        return CommonResult.success(tokenMap);
     }
 
     @Data
@@ -56,7 +57,10 @@ public class AuthController {
 
     @Data
     public static class LoginParam {
+        @NotBlank(message = "用户名不能为空")
         private String username;
+        
+        @NotBlank(message = "密码不能为空")
         private String password;
     }
 
