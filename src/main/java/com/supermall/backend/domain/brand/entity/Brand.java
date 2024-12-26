@@ -16,10 +16,10 @@ public class Brand {
     private Integer status;
     private Integer sort;
     
-    @TableField(fill = FieldFill.INSERT)
+    @TableField("created_time")
     private LocalDateTime createdTime;
     
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField("updated_time")
     private LocalDateTime updatedTime;
     
     @TableLogic
