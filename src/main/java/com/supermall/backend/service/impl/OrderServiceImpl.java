@@ -222,13 +222,11 @@ public class OrderServiceImpl implements OrderService {
 
         // 检查订单状态
         if (order.getStatus() != 0) {
-            throw new BusinessException("订单状态不正确");
+            String statusDesc = getOrderStatusDesc(order.getStatus());
+            throw new BusinessException(String.format("当前订单状态为%s，不能支付", statusDesc));
         }
 
-        // 模拟调用支付接口
-        log.info("调用支付接口，订单号：{}，支付方式：{}", order.getOrderNo(), payDTO.getPayType());
-
-        // 更新订单状态
+        // 直接更新订单状态为已支付
         order.setStatus(1);  // 更新为待发货
         order.setPayType(payDTO.getPayType());
         order.setPayTime(LocalDateTime.now());
@@ -249,7 +247,8 @@ public class OrderServiceImpl implements OrderService {
 
         // 检查订单状态
         if (order.getStatus() != 1) {  // 1: 待发货
-            throw new BusinessException("订单状态不正确");
+            String statusDesc = getOrderStatusDesc(order.getStatus());
+            throw new BusinessException(String.format("当前订单状态为%s，不能发货", statusDesc));
         }
 
         // 查询订单物流信息
@@ -300,7 +299,8 @@ public class OrderServiceImpl implements OrderService {
 
         // 检查订单状态
         if (order.getStatus() != 2) {  // 2: 已发货
-            throw new BusinessException("订单状态不正确");
+            String statusDesc = getOrderStatusDesc(order.getStatus());
+            throw new BusinessException(String.format("当前订单状态为%s，不能确认收货", statusDesc));
         }
 
         // 更新订单状态
@@ -346,7 +346,8 @@ public class OrderServiceImpl implements OrderService {
 
         // 检查订单状态
         if (order.getStatus() != 0) {  // 只有未支付的订单可以取消
-            throw new BusinessException("订单状态不正确");
+            String statusDesc = getOrderStatusDesc(order.getStatus());
+            throw new BusinessException(String.format("当前订单状态为%s，不能取消", statusDesc));
         }
 
         // 查询订单项
@@ -396,5 +397,27 @@ public class OrderServiceImpl implements OrderService {
             .build();
         
         orderLogRepository.insert(log);
+    }
+
+    /**
+     * 获取订单状态描述
+     */
+    private String getOrderStatusDesc(Integer status) {
+        switch (status) {
+            case 0:
+                return "待付款";
+            case 1:
+                return "待发货";
+            case 2:
+                return "已发货";
+            case 3:
+                return "已完成";
+            case 4:
+                return "已取消";
+            case 5:
+                return "无效订单";
+            default:
+                return "未知状态";
+        }
     }
 } 
