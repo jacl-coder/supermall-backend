@@ -27,8 +27,16 @@ public class SystemLogAspect {
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         // 获取当前登录用户
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long authId = authentication != null && authentication.isAuthenticated() ? 
-                Long.parseLong(authentication.getName()) : null;
+        Long authId = null;
+        
+        if (authentication != null && authentication.isAuthenticated() 
+                && !"anonymousUser".equals(authentication.getPrincipal())) {
+            try {
+                authId = Long.parseLong(authentication.getName());
+            } catch (NumberFormatException e) {
+                // 如果转换失败，保持authId为null
+            }
+        }
 
         // 获取请求信息
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

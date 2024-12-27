@@ -1,3 +1,6 @@
+-- 删除数据库
+DROP DATABASE IF EXISTS super_mall;
+
 -- 创建数据库
 CREATE DATABASE IF NOT EXISTS super_mall DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
