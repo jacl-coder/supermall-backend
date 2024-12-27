@@ -8,6 +8,15 @@ import java.time.LocalDateTime;
 @Data
 @TableName("products")
 public class Product {
+    public enum Status {
+        DRAFT,
+        PENDING,
+        APPROVED,
+        REJECTED,
+        ON_SALE,
+        OFF_SALE
+    }
+
     @TableId(value = "product_id", type = IdType.AUTO)
     private Long id;
     private Long merchantId;
@@ -21,7 +30,7 @@ public class Product {
     private String mainImage;
     
     @TableField("`status`")
-    private String status;
+    private Status status;
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;

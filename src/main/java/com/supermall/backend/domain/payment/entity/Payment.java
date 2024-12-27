@@ -19,6 +19,7 @@ public class Payment {
     private String transactionId;
     private String status;
     private String failureReason;
+    private String callbackContent;
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;

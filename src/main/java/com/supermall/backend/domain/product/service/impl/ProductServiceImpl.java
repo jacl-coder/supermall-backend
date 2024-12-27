@@ -25,7 +25,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         product.setOriginalPrice(request.getOriginalPrice());
         product.setStock(request.getStock());
         product.setMainImage(request.getMainImage());
-        product.setStatus("pending");
+        product.setStatus(Product.Status.PENDING);
         
         save(product);
         return product;
@@ -53,7 +53,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public Page<Product> getProductsByCategory(Long categoryId, int page, int size) {
         return page(new Page<>(page, size), new LambdaQueryWrapper<Product>()
                 .eq(Product::getCategoryId, categoryId)
-                .eq(Product::getStatus, "on_sale")
+                .eq(Product::getStatus, Product.Status.ON_SALE)
                 .orderByDesc(Product::getCreatedAt));
     }
 
@@ -63,7 +63,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 .like(Product::getName, keyword)
                 .or()
                 .like(Product::getDescription, keyword)
-                .eq(Product::getStatus, "on_sale")
+                .eq(Product::getStatus, Product.Status.ON_SALE)
                 .orderByDesc(Product::getCreatedAt));
     }
 } 

@@ -14,9 +14,16 @@ public class OrderItem {
     private Long orderId;
     private Long productId;
     private Long merchantId;
+    @TableField(value = "product_snapshot")
     private String productSnapshot;
     private Integer quantity;
     private BigDecimal price;
+    
+    @TableField(exist = false)
+    private String productName;
+    
+    @TableField(exist = false)
+    private String productImage;
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;

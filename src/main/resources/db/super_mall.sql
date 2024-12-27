@@ -301,3 +301,69 @@ CREATE TABLE system_logs (
     INDEX idx_module (module),
     INDEX idx_created_at (created_at)
 );
+
+-- 8. 库存变动记录表
+CREATE TABLE stock_movements (
+    movement_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL COMMENT '正数表示入库，负数表示出库',
+    type ENUM('order_create', 'order_cancel', 'return', 'manual_adjustment') NOT NULL,
+    reference_id INT COMMENT '关联的订单ID或退货单ID',
+    operator_id INT COMMENT '操作人ID',
+    notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (operator_id) REFERENCES auth_users(auth_id),
+    INDEX idx_product_id (product_id),
+    INDEX idx_reference_id (reference_id)
+);
+
+-- 9. 退货订单表
+CREATE TABLE return_orders (
+    return_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    order_item_id INT NOT NULL,
+    user_id INT NOT NULL,
+    merchant_id INT NOT NULL,
+    return_amount DECIMAL(10,2) NOT NULL,
+    status ENUM('pending', 'approved', 'rejected', 'returned', 'refunded') NOT NULL,
+    reason_type ENUM('quality_issue', 'wrong_item', 'not_satisfied', 'other') NOT NULL,
+    reason_detail TEXT,
+    handling_notes TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (order_item_id) REFERENCES order_items(item_id),
+    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id),
+    FOREIGN KEY (merchant_id) REFERENCES merchant_profiles(merchant_id),
+    INDEX idx_order_id (order_id),
+    INDEX idx_user_id (user_id),
+    INDEX idx_merchant_id (merchant_id)
+);
+
+-- 10. 收藏夹表
+CREATE TABLE user_favorites (
+    favorite_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    UNIQUE KEY uk_user_product (user_id, product_id),
+    INDEX idx_user_id (user_id)
+);
+
+-- 11. 消息通知表
+CREATE TABLE notifications (
+    notification_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    type ENUM('order_status', 'return_status', 'system') NOT NULL,
+    reference_id INT COMMENT '相关的订单ID或退货单ID',
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id),
+    INDEX idx_user_id (user_id),
+    INDEX idx_reference_id (reference_id)
+);

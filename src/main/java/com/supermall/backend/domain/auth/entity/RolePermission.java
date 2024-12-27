@@ -6,12 +6,10 @@ import java.time.LocalDateTime;
 
 @Data
 @TableName("role_permissions")
-@KeySequence("role_permissions_seq")
 public class RolePermission {
-    @TableId(value = "role_id", type = IdType.INPUT)
+    @TableId(value = "role_id")
     private Long roleId;
     
-    @TableField("permission_id")
     private Long permissionId;
     
     @TableField(fill = FieldFill.INSERT)
