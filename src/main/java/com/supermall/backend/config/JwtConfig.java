@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "jwt")
+@ConfigurationProperties(prefix = "spring.security.jwt")
 public class JwtConfig {
     /**
      * JWT加解密使用的密钥

@@ -14,28 +14,56 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.supermall.backend.domain.user.service.impl.UserServiceImpl;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+
+    @Autowired
+    private UserServiceImpl userService;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, 
-            JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter) throws Exception {
-        http
-            .csrf(AbstractHttpConfigurer::disable)
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                // 公开接口
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/categories/**").permitAll()
-                .requestMatchers("/api/brands/**").permitAll()
-                .requestMatchers("/api/products/**").permitAll()
+                .requestMatchers("/api/products").permitAll()
                 .requestMatchers("/doc.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                
+                // 管理员接口
+                .requestMatchers("/api/categories/**").hasRole("ADMIN")
+                .requestMatchers("/api/brands/**").hasRole("ADMIN")
+                .requestMatchers("/api/products/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/orders/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/payments/admin/**").hasRole("ADMIN")
+                
+                // 商家接口
+                .requestMatchers("/api/products/merchant/**").hasRole("MERCHANT")
+                .requestMatchers(HttpMethod.POST, "/api/products").hasRole("MERCHANT")
+                .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("MERCHANT")
+                .requestMatchers("/api/orders/merchant/**").hasRole("MERCHANT")
+                .requestMatchers("/api/payments/merchant/**").hasRole("MERCHANT")
+                
+                // 用户接口
+                .requestMatchers("/api/cart/**").hasRole("USER")
+                .requestMatchers("/api/orders/**").hasAnyRole("USER", "MERCHANT")
+                .requestMatchers("/api/payments/**").hasRole("USER")
+                
+                // 其他接口需要认证
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-
+        
         return http.build();
     }
 
@@ -47,5 +75,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return userService;
     }
 } 

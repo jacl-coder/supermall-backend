@@ -1,49 +1,19 @@
 import pytest
-import os
-import yaml
-import logging
 
-def load_config():
-    """加载测试配置"""
-    config_path = os.path.join(os.path.dirname(__file__), 'config.yml')
-    with open(config_path, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
-
-def setup_logging():
-    """设置日志"""
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler('test.log'),
-            logging.StreamHandler()
-        ]
-    )
-
-def run_tests():
-    """运行所有测试并生成报告"""
-    # 设置日志
-    setup_logging()
+def run_all_tests():
+    """运行所有测试"""
+    # 按照业务流程顺序执行测试
+    test_files = [
+        "test_auth.py",        # 先测试认证功能
+        "test_product.py",     # 然后测试商品管理
+        "test_cart.py",        # 接着测试购物车
+        "test_order.py",       # 再测试订单
+        "test_payment.py"      # 最后测试支付
+    ]
     
-    # 创建报告目录
-    report_dir = os.path.join(os.path.dirname(__file__), 'report')
-    if not os.path.exists(report_dir):
-        os.makedirs(report_dir)
-    
-    # 清理旧数据
-    pytest.main(['test_cleanup.py'])
-    
-    # 运行测试
-    pytest.main([
-        '--html=report/report.html',
-        '--self-contained-html',
-        'test_auth.py',
-        'test_brand.py',
-        'test_category.py',
-        'test_product.py',
-        'test_cart.py',
-        'test_order.py'
-    ])
+    for test_file in test_files:
+        print(f"\n{'='*20} 运行 {test_file} {'='*20}")
+        pytest.main(["-v", test_file])
 
-if __name__ == '__main__':
-    run_tests() 
+if __name__ == "__main__":
+    run_all_tests() 

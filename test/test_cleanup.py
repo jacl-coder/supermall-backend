@@ -8,20 +8,23 @@ def test_cleanup():
     """清理测试数据"""
     print("\n开始清理测试数据...")
     
-    # 1. 清理购物车数据
+    # 1. 清理支付记录数据
+    cleanup_payments()
+    
+    # 2. 清理购物车数据
     cleanup_cart()
     
-    # 2. 清理商品数据
+    # 3. 清理订单数据
+    cleanup_orders()
+    
+    # 4. 清理商品数据
     cleanup_products()
     
-    # 3. 清理分类数据
+    # 5. 清理分类数据
     cleanup_categories()
     
-    # 4. 清理品牌数据
+    # 6. 清理品牌数据
     cleanup_brands()
-    
-    # 5. 清理订单数据
-    cleanup_orders()
     
     print("测试数据清理完成")
 
@@ -91,6 +94,15 @@ def cleanup_orders():
     ALTER TABLE order_item AUTO_INCREMENT = 1;
     """
     execute_sql(sql, "订单数据")
+
+def cleanup_payments():
+    """清理支付记录数据"""
+    print("清理支付记录数据...")
+    sql = """
+    DELETE FROM payment;
+    ALTER TABLE payment AUTO_INCREMENT = 1;
+    """
+    execute_sql(sql, "支付记录数据")
 
 if __name__ == "__main__":
     test_cleanup() 

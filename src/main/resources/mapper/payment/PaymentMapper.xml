@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermall.backend.domain.payment.mapper.PaymentMapper">
+    
+    <resultMap id="PaymentVOMap" type="com.supermall.backend.domain.payment.vo.PaymentVO">
+        <id property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="paymentNo" column="payment_no"/>
+        <result property="paymentMethod" column="payment_method"/>
+        <result property="paymentAmount" column="payment_amount"/>
+        <result property="status" column="status"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedTime" column="updated_time"/>
+    </resultMap>
+    
+    <select id="listByUserId" resultMap="PaymentVOMap">
+        SELECT 
+            id, order_no, user_id, payment_no, 
+            CASE payment_method
+                WHEN 1 THEN 'ALIPAY'
+                WHEN 2 THEN 'WECHAT'
+                WHEN 3 THEN 'BANK_CARD'
+                ELSE 'UNKNOWN'
+            END as payment_method,
+            payment_amount,
+            CASE status
+                WHEN 0 THEN 'PENDING'
+                WHEN 1 THEN 'SUCCESS'
+                WHEN 2 THEN 'FAILED'
+                WHEN 3 THEN 'CLOSED'
+                ELSE 'UNKNOWN'
+            END as status,
+            created_time, updated_time
+        FROM payment
+        WHERE user_id = #{userId}
+        ORDER BY created_time DESC
+    </select>
+    
+    <select id="getPaymentById" resultMap="PaymentVOMap">
+        SELECT 
+            id, order_no, user_id, payment_no, 
+            CASE payment_method
+                WHEN 1 THEN 'ALIPAY'
+                WHEN 2 THEN 'WECHAT'
+                WHEN 3 THEN 'BANK_CARD'
+                ELSE 'UNKNOWN'
+            END as payment_method,
+            payment_amount,
+            CASE status
+                WHEN 0 THEN 'PENDING'
+                WHEN 1 THEN 'SUCCESS'
+                WHEN 2 THEN 'FAILED'
+                WHEN 3 THEN 'CLOSED'
+                ELSE 'UNKNOWN'
+            END as status,
+            created_time, updated_time
+        FROM payment
+        WHERE id = #{id}
+    </select>
+</mapper> 

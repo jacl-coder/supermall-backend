@@ -2,11 +2,10 @@ package com.supermall.backend.security.model;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 
 @Data
 public class CustomUserDetails implements UserDetails {
@@ -17,12 +16,12 @@ public class CustomUserDetails implements UserDetails {
     private String phone;
     private String avatar;
     private Integer status;
-    private String role;
     private boolean enabled;
+    private Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
+        return authorities;
     }
 
     @Override
@@ -53,5 +52,9 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 } 

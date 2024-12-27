@@ -1,12 +1,9 @@
 package com.supermall.backend.domain.user.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
+import com.supermall.backend.domain.user.vo.UserVO;
 import com.supermall.backend.domain.user.entity.User;
 
-/**
- * 用户服务接口
- */
-public interface UserService extends IService<User> {
+public interface UserService {
     /**
      * 根据用户名获取用户
      */
@@ -15,10 +12,10 @@ public interface UserService extends IService<User> {
     /**
      * 注册用户
      */
-    void register(String username, String password, String email);
+    UserVO register(User user, String roleCode);
 
     /**
-     * 登录
+     * 用户登录
      */
     String login(String username, String password);
 
@@ -26,4 +23,9 @@ public interface UserService extends IService<User> {
      * 刷新token
      */
     String refreshToken(String token);
+
+    /**
+     * 获取当前登录用户
+     */
+    User getCurrentUser();
 } 

@@ -1,0 +1,44 @@
+{
+  "properties": [
+    {
+      "name": "spring.security.jwt.secret",
+      "type": "java.lang.String",
+      "description": "JWT加解密使用的密钥"
+    },
+    {
+      "name": "spring.security.jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "JWT的超期限时间(单位：秒)"
+    },
+    {
+      "name": "spring.security.jwt.token-prefix",
+      "type": "java.lang.String",
+      "description": "JWT令牌前缀"
+    },
+    {
+      "name": "spring.security.jwt.header",
+      "type": "java.lang.String",
+      "description": "JWT存储的请求头"
+    }
+  ],
+  "hints": [
+    {
+      "name": "spring.security.jwt.token-prefix",
+      "values": [
+        {
+          "value": "Bearer",
+          "description": "Bearer authentication"
+        }
+      ]
+    },
+    {
+      "name": "spring.security.jwt.header",
+      "values": [
+        {
+          "value": "Authorization",
+          "description": "Standard Authorization header"
+        }
+      ]
+    }
+  ]
+} 
