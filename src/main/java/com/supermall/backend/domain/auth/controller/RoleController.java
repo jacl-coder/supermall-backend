@@ -4,6 +4,7 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.auth.dto.RoleRequest;
 import com.supermall.backend.domain.auth.dto.RoleResponse;
 import com.supermall.backend.domain.auth.service.RoleService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "角色管理", description = "包括角色的创建、修改、删除、查询，以及角色权限的分配和管理功能")
 @RestController
 @RequestMapping("/api/roles")
 @RequiredArgsConstructor

@@ -4,6 +4,7 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.user.dto.AddressRequest;
 import com.supermall.backend.domain.user.dto.AddressResponse;
 import com.supermall.backend.domain.user.service.UserAddressService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "用户地址管理", description = "包括用户收货地址的增删改查、设置默认地址等功能")
 @RestController
 @RequestMapping("/api/users/addresses")
 @RequiredArgsConstructor

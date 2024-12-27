@@ -11,19 +11,6 @@ spring:
     username: root
     password: lai20031024
     
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      database: 0
-      timeout: 10000
-      lettuce:
-        pool:
-          max-active: 8
-          max-wait: -1ms
-          max-idle: 8
-          min-idle: 0
-
   jwt:
     secret: 8Zz5tw0Ionm3XPZZfN0NOml3z9FMfmpgXwovR9fp6ryDIoGRM8EPHAB6iHsc0fb
     expiration: 86400000  # 24小时，单位：毫秒

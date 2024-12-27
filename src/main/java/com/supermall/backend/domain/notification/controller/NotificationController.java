@@ -11,7 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "消息通知", description = "消息通知相关接口")
+@Tag(name = "消息通知管理", description = "包括系统消息推送、用户通知查询、消息状态更新等功能")
 @RestController
 @RequestMapping("/api/v1/notifications")
 @RequiredArgsConstructor

@@ -63,6 +63,45 @@ SuperMall是一个基于Spring Boot的现代电商系统后端，提供完整的
 - 数据统计
 - 系统监控
 
+### 9. 营销系统
+- 优惠券管理
+- 秒杀活动
+- 拼团活动
+- 满减促销
+- 积分系统
+- 会员等级
+
+### 10. 搜索系统
+- 商品搜索
+- 搜索历史
+- 热门搜索
+- 相关推荐
+- 搜索过滤
+- 分类筛选
+
+### 11. 数据统计系统
+- 销售统计
+- 用户分析
+- 商品分析
+- 订单分析
+- 流量分析
+- 实时监控
+
+### 12. 物流系统
+- 物流跟踪
+- 配送管理
+- 运费模板
+- 快递公司管理
+- 发货管理
+- 退货管理
+
+### 13. 客服系统
+- 在线客服
+- 工单系统
+- 常见问题
+- 反馈管理
+- 客服评价
+
 ## API 接口
 
 ### 用户接口
@@ -109,6 +148,8 @@ SuperMall是一个基于Spring Boot的现代电商系统后端，提供完整的
 - PUT `/api/v1/notifications/{id}/read` - 标记通知已读
 - DELETE `/api/v1/notifications/{id}` - 删除通知
 
+
+
 ## 数据库设计
 
 系统包含以下主要数据表：
@@ -144,7 +185,12 @@ src/main/java/com/supermall/backend/
 │   ├── favorite/         # 收藏模块
 │   ├── review/           # 评价模块
 │   ├── payment/          # 支付模块
-│   └── notification/     # 通知模块
+│   ├── notification/     # 通知模块
+│   ├── marketing/        # 营销模块
+│   ├── search/           # 搜索模块
+│   ├── statistics/       # 统计模块
+│   ├── logistics/        # 物流模块
+│   └── support/          # 客服模块
 └── SupermallBackendApplication.java
 ```
 

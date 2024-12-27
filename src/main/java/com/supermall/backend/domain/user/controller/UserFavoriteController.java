@@ -11,9 +11,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "收藏夹", description = "收藏夹相关接口")
+@Tag(name = "用户收藏管理", description = "包括商品收藏、收藏列表查询、取消收藏等功能")
 @RestController
-@RequestMapping("/api/v1/favorites")
+@RequestMapping("/api/users/favorites")
 @RequiredArgsConstructor
 public class UserFavoriteController {
 

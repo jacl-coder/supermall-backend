@@ -5,11 +5,13 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.order.dto.OrderCreateRequest;
 import com.supermall.backend.domain.order.dto.OrderResponse;
 import com.supermall.backend.domain.order.service.OrderService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "订单管理", description = "包括订单创建、查询、修改、删除等订单全生命周期管理功能")
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor

@@ -4,6 +4,7 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.product.dto.ProductImageRequest;
 import com.supermall.backend.domain.product.dto.ProductImageResponse;
 import com.supermall.backend.domain.product.service.ProductImageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "商品图片管理", description = "提供商品图片相关的API接口，包括图片上传、删除、查询等功能，支持商品主图和详情图的管理，确保商品展示的完整性")
 @RestController
 @RequestMapping("/api/products/{productId}/images")
 @RequiredArgsConstructor

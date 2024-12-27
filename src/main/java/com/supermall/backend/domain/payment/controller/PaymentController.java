@@ -5,11 +5,13 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.payment.dto.PaymentRequest;
 import com.supermall.backend.domain.payment.dto.PaymentResponse;
 import com.supermall.backend.domain.payment.service.PaymentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "支付管理", description = "支付模块相关接口，包括订单支付处理、退款管理、支付状态查询、支付记录管理等支付系统核心功能")
 @RestController
 @RequestMapping("/api/payments")
 @RequiredArgsConstructor

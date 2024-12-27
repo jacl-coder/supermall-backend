@@ -4,11 +4,13 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.user.dto.UserProfileRequest;
 import com.supermall.backend.domain.user.dto.UserProfileResponse;
 import com.supermall.backend.domain.user.service.UserProfileService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "用户资料管理", description = "包括用户基本信息的创建、修改、查询和删除，用于管理用户的个人资料信息")
 @RestController
 @RequestMapping("/api/users/profile")
 @RequiredArgsConstructor

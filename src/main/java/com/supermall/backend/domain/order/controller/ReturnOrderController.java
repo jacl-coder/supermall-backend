@@ -15,7 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "退货管理", description = "退货相关接口")
+@Tag(name = "Return Order Management", description = "APIs for managing return orders including creation, querying, and processing of return order requests")
 @RestController
 @RequestMapping("/api/v1/returns")
 @RequiredArgsConstructor

@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.log.entity.SystemLog;
 import com.supermall.backend.domain.log.service.SystemLogService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "系统日志管理", description = "包括系统操作日志查询、导出等功能")
 @RestController
 @RequestMapping("/api/system/logs")
 @RequiredArgsConstructor

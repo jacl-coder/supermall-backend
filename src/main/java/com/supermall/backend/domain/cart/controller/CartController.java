@@ -4,6 +4,7 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.cart.dto.CartItemRequest;
 import com.supermall.backend.domain.cart.dto.CartItemResponse;
 import com.supermall.backend.domain.cart.service.CartService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "购物车管理", description = "包括购物车商品的添加、删除、修改数量、清空购物车、查询购物车列表等功能")
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor

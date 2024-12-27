@@ -3,12 +3,14 @@ package com.supermall.backend.domain.auth.controller;
 import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.auth.dto.*;
 import com.supermall.backend.domain.auth.service.AuthUserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "认证授权管理", description = "包括用户登录、注册、密码重置、token刷新等认证授权功能")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

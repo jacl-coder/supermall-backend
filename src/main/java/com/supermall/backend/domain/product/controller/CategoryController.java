@@ -4,6 +4,7 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.product.dto.CategoryRequest;
 import com.supermall.backend.domain.product.entity.Category;
 import com.supermall.backend.domain.product.service.CategoryService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "商品分类管理", description = "包括商品分类的增删改查、分类层级管理等功能")
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor

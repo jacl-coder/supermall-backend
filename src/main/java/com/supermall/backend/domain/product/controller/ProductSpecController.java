@@ -4,6 +4,7 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.product.dto.ProductSpecRequest;
 import com.supermall.backend.domain.product.dto.ProductSpecResponse;
 import com.supermall.backend.domain.product.service.ProductSpecService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "商品规格管理", description = "包括商品规格的增删改查、规格属性配置等功能")
 @RestController
 @RequestMapping("/api/products/{productId}/specs")
 @RequiredArgsConstructor

@@ -7,12 +7,14 @@ import com.supermall.backend.domain.product.dto.ProductRequest;
 import com.supermall.backend.domain.product.dto.ProductResponse;
 import com.supermall.backend.domain.product.entity.Product;
 import com.supermall.backend.domain.product.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "商品管理", description = "商品相关接口，包含商品的增删改查等基本操作以及商品状态管理")
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
@@ -23,7 +25,7 @@ public class ProductController {
     @PostMapping
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
-        // TODO: 从SecurityContext获取商家ID
+        // TODO: 从SecurityContext获取��家ID
         Integer merchantId = 1; // 临时写死，后续从登录用户获取
         Product product = productService.createProduct(request, merchantId);
         return Result.success(convertToResponse(product));
