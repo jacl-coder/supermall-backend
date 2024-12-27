@@ -4,6 +4,7 @@ import com.supermall.backend.common.api.CommonResult;
 import com.supermall.backend.domain.user.dto.RegisterDTO;
 import com.supermall.backend.domain.user.entity.User;
 import com.supermall.backend.domain.user.service.UserService;
+import com.supermall.backend.domain.user.service.impl.UserServiceImpl;
 import com.supermall.backend.domain.user.vo.UserVO;
 import com.supermall.backend.common.exception.ApiException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +28,7 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final PasswordEncoder passwordEncoder;
 
     @Operation(summary = "用户注册")

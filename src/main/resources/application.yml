@@ -47,24 +47,18 @@ knife4j:
   enable: true
   setting:
     language: zh-CN
-    enableSwaggerModels: true
-    enableDocumentManage: true
-    swaggerModelName: 实体类列表
-    enableVersion: false
-    enableReloadCacheParameter: false
-    enableAfterScript: false
-    enableFilterMultipartApiMethodType: POST
-    enableFilterMultipartApis: false
-    enableRequestCache: true
-    enableHost: false
-    enableHostText: 
+    [enableSwaggerModels]: true
+    [enableDocumentManage]: true
+    [swaggerModelName]: 实体类列表
+    [enableVersion]: false
+    [enableReloadCacheParameter]: false
+    [enableAfterScript]: false
+    [enableFilterMultipartApiMethodType]: POST
+    [enableFilterMultipartApis]: false
+    [enableRequestCache]: true
+    [enableHost]: false
+    [enableHostText]: 
 
 logging:
   level:
     root: INFO
-    com.supermall.backend: debug
-    org.springframework.security: DEBUG
-    org.springframework.web: info
-    org.hibernate.SQL: DEBUG
-    com.baomidou.mybatisplus: debug
-    org.springframework.jdbc.core: TRACE 

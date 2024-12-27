@@ -17,7 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.http.HttpMethod;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.supermall.backend.domain.user.service.impl.UserServiceImpl;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.supermall.backend.security.util.JwtTokenUtil;
+import com.supermall.backend.config.JwtConfig;
 
 @Configuration
 @EnableWebSecurity
@@ -25,13 +26,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public class SecurityConfig {
 
     @Autowired
-    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
-
-    @Autowired
     private UserServiceImpl userService;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter(
+            UserServiceImpl userDetailsService,
+            JwtTokenUtil jwtTokenUtil,
+            JwtConfig jwtConfig) {
+        return new JwtAuthenticationTokenFilter(userDetailsService, jwtTokenUtil, jwtConfig);
+    }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -75,10 +81,5 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return userService;
     }
 } 

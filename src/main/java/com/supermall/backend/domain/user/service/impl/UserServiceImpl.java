@@ -147,7 +147,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 log.info("生成的token: {}", token);
                 return token;
             } catch (Exception e) {
-                log.error("登录过程中发生错误", e);
+                log.error("登录过程中���生错误", e);
                 throw new ApiException("系统异常，请联系管理员");
             }
         } catch (Exception e) {
