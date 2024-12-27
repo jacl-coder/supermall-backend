@@ -3,7 +3,9 @@ package com.supermall.backend.domain.order.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.supermall.backend.domain.order.dto.OrderCreateRequest;
 import com.supermall.backend.domain.order.dto.OrderResponse;
+import com.supermall.backend.domain.order.entity.Order;
 import com.supermall.backend.domain.order.entity.OrderItem;
+import java.time.LocalDateTime;
 
 public interface OrderService {
     OrderResponse createOrder(Long userId, OrderCreateRequest request);
@@ -14,4 +16,6 @@ public interface OrderService {
     
     OrderItem getOrderItem(Long orderItemId);
     boolean isUserOrder(Long userId, Long orderId);
+    Order getOrder(Long orderId);
+    void updateOrderStatus(Long orderId, String status, LocalDateTime statusTime);
 } 

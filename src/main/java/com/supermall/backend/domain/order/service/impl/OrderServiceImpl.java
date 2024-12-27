@@ -164,6 +164,28 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         return order != null && order.getUserId().equals(userId);
     }
 
+    @Override
+    public Order getOrder(Long orderId) {
+        return getById(orderId);
+    }
+
+    @Override
+    @Transactional
+    public void updateOrderStatus(Long orderId, String status, LocalDateTime statusTime) {
+        Order order = getById(orderId);
+        if (order == null) {
+            throw new BusinessException("订单不存在");
+        }
+
+        order.setStatus(status);
+        switch (status) {
+            case "paid" -> order.setPaymentTime(statusTime);
+            case "shipped" -> order.setShippingTime(statusTime);
+            case "completed" -> order.setCompletionTime(statusTime);
+        }
+        updateById(order);
+    }
+
     private String generateOrderNo() {
         return UUID.randomUUID().toString().replace("-", "").substring(0, 16);
     }
