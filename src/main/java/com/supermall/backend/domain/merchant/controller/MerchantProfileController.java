@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "商家管理接口", description = "提供商家账户管理相关功能，包括：商家注册申请、商家信息更新、商家资料查询、商家审核状态管理、商家账户状态管理等完整的商家账户生命周期管理功能")
+@Tag(name = "商家管理", description = "商家账户管理功能，包含注册、更新、查询、审核及状态管理等操作")
 @RestController
 @RequestMapping("/api/merchants")
 @RequiredArgsConstructor

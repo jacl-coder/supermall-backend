@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Invoice Management", description = "APIs for managing invoices including creation, retrieval, updating and deletion of invoice records")
+@Tag(name = "发票管理", description = "发票相关接口")
 @RestController
 @RequestMapping("/api/v1/invoices")
 @RequiredArgsConstructor

@@ -15,7 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Stock Management", description = "APIs for managing product stock, including stock movements, inventory updates, and stock level queries")
+@Tag(name = "库存管理", description = "用于管理产品库存的API，包括库存移动、库存更新和库存水平查询")
 @RestController
 @RequestMapping("/api/v1/stock")
 @RequiredArgsConstructor
