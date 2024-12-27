@@ -2,63 +2,57 @@ server:
   port: 8080
 
 spring:
-  main:
-    allow-circular-references: true
+  application:
+    name: supermall-backend
+    
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/super_mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://localhost:3306/super_mall?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
     username: root
     password: lai20031024
+    
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      timeout: 10000
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1ms
+          max-idle: 8
+          min-idle: 0
 
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
-
-  devtools:
-    restart:
-      enabled: true
-      additional-paths: src/main/java
-      exclude: static/**,public/**
-    livereload:
-      enabled: true
-
-  security:
-    jwt:
-      secret: your-secret-key-here-must-be-at-least-32-bytes-long-for-security
-      expiration: 86400  # 24小时，以秒为单位
-      token-prefix: Bearer
-      header: Authorization
+  jwt:
+    secret: your_jwt_secret_key_must_be_very_long_and_secure_at_least_256_bits
+    expiration: 86400000  # 24小时，单位：毫秒
 
 mybatis-plus:
-  mapper-locations: classpath:mapper/**/*.xml
+  mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.supermall.backend.domain.*.entity
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    cache-enabled: false
   global-config:
     db-config:
+      id-type: auto
       logic-delete-field: deleted
       logic-delete-value: 1
       logic-not-delete-value: 0
-      id-type: auto
 
-knife4j:
-  enable: true
-  setting:
-    language: zh-CN
-    [enableSwaggerModels]: true
-    [enableDocumentManage]: true
-    [swaggerModelName]: 实体类列表
-    [enableVersion]: false
-    [enableReloadCacheParameter]: false
-    [enableAfterScript]: false
-    [enableFilterMultipartApiMethodType]: POST
-    [enableFilterMultipartApis]: false
-    [enableRequestCache]: true
-    [enableHost]: false
-    [enableHostText]: 
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  packages-to-scan: com.supermall.backend.domain
+  paths-to-match: /api/**
 
 logging:
   level:
-    root: INFO
+    root: info
+    com.supermall.backend: debug
+  file:
+    name: logs/supermall.log

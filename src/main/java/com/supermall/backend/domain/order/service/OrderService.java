@@ -1,28 +1,17 @@
 package com.supermall.backend.domain.order.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.supermall.backend.domain.order.entity.Order;
-import com.supermall.backend.domain.order.vo.OrderVO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.supermall.backend.domain.order.dto.OrderCreateRequest;
+import com.supermall.backend.domain.order.dto.OrderResponse;
+import com.supermall.backend.domain.order.entity.OrderItem;
 
-public interface OrderService extends IService<Order> {
-    /**
-     * 创建订单
-     */
-    Order createOrder(Order order);
+public interface OrderService {
+    OrderResponse createOrder(Long userId, OrderCreateRequest request);
+    OrderResponse getOrderDetail(Long userId, Long orderId);
+    Page<OrderResponse> getUserOrders(Long userId, String status, int page, int size);
+    void cancelOrder(Long userId, Long orderId);
+    void confirmReceived(Long userId, Long orderId);
     
-    /**
-     * 分页获取订单列表
-     */
-    IPage<OrderVO> listOrders(Integer pageNum, Integer pageSize);
-    
-    /**
-     * 获取订单详情
-     */
-    OrderVO getOrderDetail(Long id);
-    
-    /**
-     * 更新订单状态
-     */
-    void updateStatus(Long id, Integer status);
+    OrderItem getOrderItem(Long orderItemId);
+    boolean isUserOrder(Long userId, Long orderId);
 } 

@@ -1,213 +1,118 @@
-# supermall-backend
-企业云业务超市系统后端
+# SuperMall 超级商城系统
 
-## 项目介绍
-`supermall-backend`是一套完整的电商系统的后端部分，基于 Spring Boot 3.x + JDK 17 实现。提供稳定、高性能的后端服务支持。
+一个基于Spring Boot的电商系统，支持商家入驻、商品管理、订单处理等核心电商功能。
 
-### 项目架构
-采用经典三层架构，结构清晰，便于维护：
+## 技术栈
+
+- 核心框架：Spring Boot 3.x
+- 安全框架：Spring Security 6.x + JWT
+- ORM框架：MyBatis-Plus
+- 数据库：MySQL 8.0
+- 缓存：Redis 7.x
+- 接口文档：SpringDoc OpenAPI 2.x
+- 开发语言：Java 17
+
+## 项目结构 
 
 ```
-src/main/java/com/supermall/backend/
-├── controller/       # 控制器层：处理请求响应
-├── service/         # 服务层：业务逻辑
-│   └── impl/       # 服务实现
-├── repository/      # 数据访问层：数据库交互
-├── entity/         # 实体类：数据库映射
-├── dto/            # 数据传输对象：请求参数
-├── vo/             # 视图对象：响应结果
-├── common/         # 公共组件
-│   ├── config/    # 配置类
-│   ├── exception/ # 异常处理
-│   └── response/  # 统一响应
-└── util/          # 工具类
+src/main/java/com/supermall/backend
+├── domain/ # 业务领域
+│ ├── user/ # 用户模块
+│ ├── product/ # 商品模块
+│ ├── order/ # 订单模块
+│ └── merchant/ # 商家模块
+│ ├── controller/ # 控制器
+│ ├── service/ # 服务层
+│ ├── mapper/ # MyBatis-Plus接口
+│ └── entity/ # 实体类
+│
+├── common/ # 通用组件
+│ ├── config/ # 配置类
+│ ├── exception/ # 异常处理
+│ └── util/ # 工具类
+│
+└── SupermallBackendApplication.java
 ```
 
-技术特点：
-- 基于 Spring Boot 3.x
-- MyBatis-Plus 增强持久层
-- JWT 认证
-- 统一响应处理
-- 全局异常处理
-- 参数校验
-- 多环境配置
 
-#### 后端技术栈
-| 技术 | 说明 | 官网 |
-| --- | --- | --- |
-| Spring Boot | 容器+MVC框架 | https://spring.io/projects/spring-boot |
-| Spring Security | 认证和授权框架 | https://spring.io/projects/spring-security |
-| MyBatis-Plus | ORM框架 | https://baomidou.com/ |
-| MySQL | 关系型数据库 | https://www.mysql.com/ |
-| JWT | JWT登录支持 | https://github.com/jwtk/jjwt |
-| Lombok | 简化对象封装工具 | https://projectlombok.org/ |
-| Hibernate Validator | 验证框架 | http://hibernate.org/validator/ |
+## 核心功能
 
-### 项目结构
-```
-supermall-backend/
-  ├── config/                # 配置类
-  ├── controller/            # 控制器层
-  ├── schedule/             # 定时任务
-  ├── service/              # 服务层
-      ├── impl/             # 服务实现类
-  ├── repository/           # 数据访问层
-  ├── entity/              # 实体类
-  ├── dto/                 # 数据传输对象
-  ├── vo/                  # 视图对象
-  ├── common/              # 公共类
-      ├── exception/       # 异常处理
-      ├── response/        # 统一响应
-      └── utils/           # 工具类
-  └── security/            # 安全相关
-```
+### 用户中心
+- 用户注册登录
+- 个人信息管理
+- 收货地址管理
+- 权限角色控制
 
-### 功能模块
+### 商品系统
+- 商品分类管理
+- 商品信息管理
+- 商品库存管理
+- 商品搜索功能
 
-#### 商品模块
-- 商品管理
-  - ✅ 商品增删改查
-  - ✅ 商品分类管理
-  - ✅ 品牌管理
-  - ❌ 商品规格管理
-  - ❌ 商品参数管理
-
-#### 品牌模块
-- 品牌管理
-  - ✅ 品牌增删改查
-  - ✅ 品牌Logo上传
-  - ✅ 品牌商品统计
-  - ✅ 品牌排序管理
-
-#### 订单模块
-- 订单管理
-  - ✅ 订单创建
-  - ✅ 订单支付
-  - ✅ 订单发货
-  - ✅ 订单确认收货
-  - ✅ 订单取消
-- 订单自动化
-  - ✅ 超时未支付自动取消（30分钟）
-  - ✅ 发货后自动确认收货（15天）
-
-#### 用户模块
-- 用户管理
-  - ✅ 用户注册登录
-  - ✅ 修改密码
-  - ✅ 更新头像
-  - ❌ 会员等级管理
-  - ❌ 积分系统
-
-#### 购物车模块
+### 订单系统
 - 购物车管理
-  - ✅ 添加商品
-  - ✅ 更新数量
-  - ✅ 删除商品
-  - ✅ 清空购物车
-  - ✅ 全选/取消全选
+- 订单创建处理
+- 订单状态流转
+- 支付功能集成
 
-#### 评论模块
-- 评论管理
-  - ✅ 商品评论
-  - ✅ 评论列表
-  - ✅ 评论权限控制
+### 商家系统
+- 商家入驻
+- 店铺管理
+- 商品管理
+- 订单处理
 
-#### 支付模块
-- 支付功能
-  - ✅ 余额支付
-  - ❌ 微信支付
+## 数据库设计
 
-#### 营销模块
-- 营销功能
-  - ❌ 秒杀系统
-  - ❌ 优惠券系统
-  - ❌ 促销活动
-  - ❌ 广告系统
+主要包含以下模块的表结构：
+- 权限模块：roles, permissions, role_permissions
+- 用户模块：auth_users, user_profiles, merchant_profiles
+- 商品模块：categories, products, product_specs
+- 订单模块：orders, order_items, payments
+- 购物车模块：shopping_cart_items
+- 评价模块：product_reviews
 
-### API 接口
+详细的数据库结构见：`src/main/resources/db/super_mall.sql`
 
-#### 品牌管理接口
-- POST `/api/brands` - 创建品牌
-- GET `/api/brands` - 获取品牌列表（支持分页和关键词搜索）
-- GET `/api/brands/{id}` - 获取品牌详情
-- PUT `/api/brands/{id}` - 更新品牌
-- DELETE `/api/brands/{id}` - 删除品牌
-- POST `/api/brands/logo` - 上传品牌Logo
+## 快速开始
 
-#### 商品管理接口
-- POST `/api/products` - 创建商品（支持品牌关联）
-- GET `/api/products` - 获取商品列表（支持品牌筛选）
-- GET `/api/products/{id}` - 获取商品详情（包含品牌信息）
-- PUT `/api/products/{id}` - 更新商品（支持修改品牌）
-- DELETE `/api/products/{id}` - 删除商品
-- PUT `/api/products/{id}/status` - 更新商品状态
-- PUT `/api/products/{id}/sales` - 更新商品销量
-- POST `/api/products/upload` - 上传商品图片
-- POST `/api/products/{id}/images` - 上传商品子图
+### 环境要求
+- JDK 17+
+- MySQL 8.0+
+- Redis 7.0+
+- Maven 3.8+
+
+### 开发环境搭建
+
+1. 克隆项目
+```bash
+git clone https://github.com/jacl-coder/supermall-backend.git
+```
+
+2. 导入数据库
+```bash
+mysql -u root -p < src/main/resources/db/super_mall.sql
+```
+
+## API文档
+
+启动应用后访问：http://localhost:8080/swagger-ui.html
 
 ## 开发规范
-1. 命名规范
-   - 类名：大驼峰（如：ProductService）
-   - 方法名：小驼峰（如：getProductList）
-   - 变量名：小驼峰（如：productInfo）
-   - 常量：大写下划线（如：MAX_COUNT）
-   - 数据库表名：小写下划线（如：product_info）
 
-2. Git提交规范
-   - feat：新功能
-   - fix：修复bug
-   - docs：文档更新
-   - style：代码格式
-   - refactor：重构
-   - test：测试用例
-   - chore：构建过程或辅助工具的变动
+1. 代码规范
+   - 遵循阿里巴巴Java开发规范
+   - 每个模块按controller/service/mapper/entity组织代码
+   - 保持代码简洁清晰
 
-## 环境搭建
-
-### 开发工具
-
-| 工具 | 说明 | 官网 |
-| --- | --- | --- |
-| IDEA | 开发IDE | https://www.jetbrains.com/idea/ |
-| Navicat | 数据库管理 | http://www.navicat.com/ |
-| Postman | API测试 | https://www.postman.com/ |
-
-### 开发环境
-
-| 环境 | 版本 | 下载 |
-| --- | --- | --- |
-| JDK | 17 | https://www.oracle.com/java/technologies/downloads/ |
-| Maven | 3.8.x | https://maven.apache.org/ |
-| MySQL | 8.0 | https://www.mysql.com/ |
-
-## 项目运行
-```bash
-# 克隆项目
-git clone https://github.com/jacl-coder/supermall-backend.git
-
-# 进入项目目录
-cd supermall-backend
-
-# 编译项目
-mvn clean install
-
-# 运行项目
-java -jar target/supermall-backend-0.0.1-SNAPSHOT.jar
-```
-
-## 注意事项
-1. 遵循代码规范
-2. 保持代码整洁
-3. 编写完整的注释
-4. 注意数据安全性
-5. 编写单元测试
-6. 做好性能优化
-7. 保证接口幂等性
-
-## 相关链接
-- [项目文档](docs/index.md)
-- [接口文档](docs/api.md)
-- [常见问题](docs/faq.md)
+2. 提交规范
+   - feat: 新功能
+   - fix: 修复问题
+   - docs: 文档修改
+   - style: 代码格式化
+   - refactor: 代码重构
+   - test: 测试相关
+   - chore: 其他修改
 
 ## 许可证
-[MIT](LICENSE)
+
+[MIT License](LICENSE)

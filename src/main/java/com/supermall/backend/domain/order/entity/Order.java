@@ -1,53 +1,32 @@
 package com.supermall.backend.domain.order.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-@TableName("`order`")
+@TableName("orders")
 public class Order {
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "order_id", type = IdType.AUTO)
     private Long id;
-    
-    @TableField("order_no")
     private String orderNo;
-    
     private Long userId;
     private BigDecimal totalAmount;
-    private BigDecimal payAmount;
-    private BigDecimal freightAmount;
-    private Integer status;
+    private BigDecimal paymentAmount;
+    private BigDecimal shippingFee;
     
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @TableField("`status`")  // status是MySQL关键字，需要转义
+    private String status;
+    
     private LocalDateTime paymentTime;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime deliveryTime;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime receiveTime;
-    
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime commentTime;
-    
-    private String receiverName;
-    private String receiverPhone;
-    private String receiverAddress;
-    private String note;
+    private LocalDateTime shippingTime;
+    private LocalDateTime completionTime;
+    private String addressSnapshot;
     
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createdTime;
+    private LocalDateTime createdAt;
     
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updatedTime;
-    
-    @TableLogic
-    private Integer deleted;
-    
-    @TableField(exist = false)
-    private transient List<OrderItem> orderItems;
+    private LocalDateTime updatedAt;
 } 

@@ -2,30 +2,22 @@ package com.supermall.backend.domain.order.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("order_item")
+@TableName("order_items")
 public class OrderItem {
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "item_id", type = IdType.AUTO)
     private Long id;
-    
     private Long orderId;
-    
-    @TableField("order_no")
-    private String orderNo;
-    
     private Long productId;
-    private String productName;
-    private String productImage;
-    private BigDecimal price;
+    private Long merchantId;
+    private String productSnapshot;
     private Integer quantity;
-    private BigDecimal totalAmount;
+    private BigDecimal price;
     
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createdTime;
-    
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updatedTime;
+    private LocalDateTime createdAt;
 } 

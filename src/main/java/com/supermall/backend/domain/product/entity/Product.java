@@ -6,37 +6,26 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("product")
+@TableName("products")
 public class Product {
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "product_id", type = IdType.AUTO)
     private Long id;
-    
-    private String name;
-    private String subtitle;
-    
-    @TableField("category_id")
+    private Long merchantId;
     private Long categoryId;
-    
-    @TableField("brand_id")
-    private Long brandId;
-    
-    @TableField("main_image")
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private BigDecimal originalPrice;
+    private Integer stock;
+    private Integer sales;
     private String mainImage;
     
-    @TableField("sub_images")
-    private String subImages;
+    @TableField("`status`")
+    private String status;
     
-    private String detail;
-    private BigDecimal price;
-    private Integer stock;
-    private Integer status;
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createdAt;
     
-    @TableField("created_time")
-    private LocalDateTime createdTime;
-    
-    @TableField("updated_time")
-    private LocalDateTime updatedTime;
-    
-    @TableLogic
-    private Integer deleted;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updatedAt;
 } 

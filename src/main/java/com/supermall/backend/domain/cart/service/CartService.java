@@ -1,38 +1,18 @@
 package com.supermall.backend.domain.cart.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.supermall.backend.domain.cart.entity.Cart;
-import com.supermall.backend.domain.cart.vo.CartVO;
+import com.supermall.backend.domain.cart.dto.CartItemRequest;
+import com.supermall.backend.domain.cart.dto.CartItemResponse;
+import com.supermall.backend.domain.cart.entity.CartItem;
 import java.util.List;
 
-public interface CartService extends IService<Cart> {
-    /**
-     * 添加商品到购物车
-     */
-    CartVO addToCart(Long userId, Long productId, Integer quantity);
-    
-    /**
-     * 获取用户购物车列表
-     */
-    List<CartVO> listUserCart(Long userId);
-    
-    /**
-     * 更新购物车商品数量
-     */
-    void updateQuantity(Long id, Integer quantity);
-    
-    /**
-     * 更新购物车商品选中状态
-     */
-    void updateChecked(Long id, Boolean checked);
-    
-    /**
-     * 删除购物车商品
-     */
-    void deleteCartItem(Long id);
-    
-    /**
-     * 清空用户购物车
-     */
+public interface CartService {
+    CartItemResponse addToCart(Long userId, CartItemRequest request);
+    CartItemResponse updateQuantity(Long userId, Long itemId, Integer quantity);
+    void removeFromCart(Long userId, Long itemId);
+    void updateSelected(Long userId, Long itemId, Boolean selected);
+    void updateAllSelected(Long userId, Boolean selected);
+    List<CartItemResponse> getUserCart(Long userId);
     void clearCart(Long userId);
+    List<CartItem> getByIds(List<Long> ids);
+    void deleteByIds(List<Long> ids);
 } 

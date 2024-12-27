@@ -1,162 +1,303 @@
 -- 创建数据库
-CREATE DATABASE IF NOT EXISTS super_mall DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS super_mall DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE super_mall;
 
--- 用户表
-CREATE TABLE IF NOT EXISTS `user` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-    `username` varchar(64) NOT NULL COMMENT '用户名',
-    `password` varchar(128) NOT NULL COMMENT '密码',
-    `email` varchar(128) DEFAULT NULL COMMENT '邮箱',
-    `phone` varchar(20) DEFAULT NULL COMMENT '手机号',
-    `avatar` varchar(255) DEFAULT NULL COMMENT '头像',
-    `status` tinyint(4) DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
-    `role` varchar(20) DEFAULT 'USER' COMMENT '角色：ADMIN-管理员，USER-普通用户',
-    `created_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted` tinyint(1) DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_username` (`username`),
-    UNIQUE KEY `uk_email` (`email`),
-    UNIQUE KEY `uk_phone` (`phone`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+-- 1. 权限模块
+-- 1.1 角色表
+CREATE TABLE roles (
+    role_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
--- 商品分类表
-CREATE TABLE IF NOT EXISTS `category` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '分类ID',
-    `name` varchar(64) NOT NULL COMMENT '分类名称',
-    `parent_id` bigint(20) DEFAULT 0 COMMENT '父分类ID',
-    `level` int(11) DEFAULT 1 COMMENT '层级',
-    `sort` int(11) DEFAULT 0 COMMENT '排序',
-    `icon` varchar(255) DEFAULT NULL COMMENT '图标',
-    `status` tinyint(4) DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
-    `created_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted` tinyint(1) DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品分类表';
+-- 1.2 权限表
+CREATE TABLE permissions (
+    permission_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
--- 品牌表
-CREATE TABLE IF NOT EXISTS `brand` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '品牌ID',
-    `name` varchar(64) NOT NULL COMMENT '品牌名称',
-    `logo` varchar(255) DEFAULT NULL COMMENT '品牌logo',
-    `description` text DEFAULT NULL COMMENT '品牌描述',
-    `status` tinyint(4) DEFAULT 1 COMMENT '状态：0-禁用，1-启用',
-    `sort` int(11) DEFAULT 0 COMMENT '排序',
-    `created_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted` tinyint(1) DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='品牌表';
+-- 1.3 角色权限关联表
+CREATE TABLE role_permissions (
+    role_id INT NOT NULL,
+    permission_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (role_id, permission_id),
+    FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES permissions(permission_id) ON DELETE CASCADE
+);
 
--- 商品表
-CREATE TABLE IF NOT EXISTS `product` (
-    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '商品ID',
-    `name` varchar(100) NOT NULL COMMENT '商品名称',
-    `subtitle` varchar(200) DEFAULT NULL COMMENT '副标题',
-    `category_id` bigint NOT NULL COMMENT '分类ID',
-    `brand_id` bigint NOT NULL COMMENT '品牌ID',
-    `main_image` varchar(500) NOT NULL COMMENT '主图',
-    `sub_images` text COMMENT '子图（JSON数组）',
-    `detail` text COMMENT '商品详情',
-    `price` decimal(10,2) NOT NULL COMMENT '价格',
-    `stock` int NOT NULL COMMENT '库存',
-    `status` tinyint NOT NULL DEFAULT '1' COMMENT '状态：0-下架，1-上架',
-    `created_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted` tinyint NOT NULL DEFAULT '0' COMMENT '是否删除：0-未删除，1-已删除',
-    PRIMARY KEY (`id`),
-    KEY `idx_category_id` (`category_id`),
-    KEY `idx_brand_id` (`brand_id`),
-    KEY `idx_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='商品表';
+-- 初始化角色数据
+INSERT INTO roles (name, description) VALUES
+('ROLE_ADMIN', '系统管理员'),
+('ROLE_MERCHANT', '商家用户'),
+('ROLE_USER', '普通用户');
 
--- 购物车表
-CREATE TABLE IF NOT EXISTS `cart` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '购物车ID',
-    `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-    `product_id` bigint(20) NOT NULL COMMENT '商品ID',
-    `quantity` int(11) NOT NULL COMMENT '数量',
-    `checked` tinyint(1) DEFAULT 1 COMMENT '是否选中：0-未选中，1-已选中',
-    `created_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    KEY `idx_user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='购物车表';
+-- 初始化权限数据
+INSERT INTO permissions (name, description) VALUES
+-- 系统权限
+('system:manage', '系统管理权限'),
+('user:manage', '用户管理权限'),
+('merchant:manage', '商家管理权限'),
+('category:manage', '分类管理权限'),
 
--- 订单表
-CREATE TABLE IF NOT EXISTS `order` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '订单ID',
-    `order_no` varchar(64) NOT NULL COMMENT '订单编号',
-    `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-    `total_amount` decimal(10,2) NOT NULL COMMENT '订单总金额',
-    `pay_amount` decimal(10,2) NOT NULL COMMENT '实付金额',
-    `freight_amount` decimal(10,2) DEFAULT 0.00 COMMENT '运费',
-    `status` tinyint(4) DEFAULT 0 COMMENT '订单状态：0-待付款，1-待发货，2-已发货，3-已完成，4-已取消',
-    `payment_time` datetime DEFAULT NULL COMMENT '支付时间',
-    `delivery_time` datetime DEFAULT NULL COMMENT '发货时间',
-    `receive_time` datetime DEFAULT NULL COMMENT '确认收货时间',
-    `comment_time` datetime DEFAULT NULL COMMENT '评价时间',
-    `receiver_name` varchar(64) NOT NULL COMMENT '收货人姓名',
-    `receiver_phone` varchar(20) NOT NULL COMMENT '收货人电话',
-    `receiver_address` varchar(255) NOT NULL COMMENT '收货地址',
-    `note` varchar(500) DEFAULT NULL COMMENT '订单备注',
-    `created_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `deleted` tinyint(1) DEFAULT 0 COMMENT '是否删除：0-未删除，1-已删除',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_order_no` (`order_no`),
-    KEY `idx_user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';
+-- 商家权限
+('product:manage', '商品管理权限'),
+('order:manage', '订单管理权限'),
+('shop:manage', '店铺管理权限'),
 
--- 订单项表
-CREATE TABLE IF NOT EXISTS `order_item` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '订单项ID',
-    `order_id` bigint(20) NOT NULL COMMENT '订单ID',
-    `order_no` varchar(64) NOT NULL COMMENT '订单编号',
-    `product_id` bigint(20) NOT NULL COMMENT '商品ID',
-    `product_name` varchar(128) NOT NULL COMMENT '商品名称',
-    `product_image` varchar(255) DEFAULT NULL COMMENT '商品图片',
-    `price` decimal(10,2) NOT NULL COMMENT '商品单价',
-    `quantity` int(11) NOT NULL COMMENT '购买数量',
-    `total_amount` decimal(10,2) NOT NULL COMMENT '商品总价',
-    `created_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    KEY `idx_order` (`order_id`),
-    KEY `idx_order_no` (`order_no`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单项表';
+-- 用户权限
+('profile:edit', '个人资料编辑'),
+('order:create', '创建订单'),
+('review:create', '创建评价');
 
--- 支付信息表
-CREATE TABLE IF NOT EXISTS `payment` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '支付ID',
-    `order_no` varchar(64) NOT NULL COMMENT '订单编号',
-    `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-    `payment_no` varchar(64) DEFAULT NULL COMMENT '支付流水号',
-    `payment_method` tinyint(4) DEFAULT NULL COMMENT '支付方式：1-支付宝，2-微信',
-    `payment_amount` decimal(10,2) NOT NULL COMMENT '支付金额',
-    `status` tinyint(4) DEFAULT 0 COMMENT '支付状态：0-未支付，1-已支付，2-支付失败',
-    `created_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_order_no` (`order_no`),
-    KEY `idx_user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付信息表';
+-- 初始化角色权限关联
+INSERT INTO role_permissions (role_id, permission_id) VALUES
+-- 管理员权限
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
+-- 商家权限
+(2, 5), (2, 6), (2, 7),
+-- 用户权限
+(3, 8), (3, 9), (3, 10);
 
--- 系统配置表
-CREATE TABLE IF NOT EXISTS `system_config` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '配置ID',
-    `config_key` varchar(64) NOT NULL COMMENT '配置键',
-    `config_value` text NOT NULL COMMENT '配置值',
-    `description` varchar(255) DEFAULT NULL COMMENT '配置描述',
-    `created_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `uk_config_key` (`config_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统配置表';
+-- 1. 认证模块
+-- 1.1 统一认证表
+CREATE TABLE auth_users (
+    auth_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id INT NOT NULL,
+    status ENUM('active', 'inactive', 'locked') DEFAULT 'active',
+    last_login TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (role_id) REFERENCES roles(role_id),
+    INDEX idx_username (username),
+    INDEX idx_email (email)
+);
 
--- 初始化管理员账号
-INSERT INTO `user` (`username`, `password`, `email`, `role`, `status`)
-VALUES ('admin', '$2a$10$NZ5o7r2E.ayT2ZoxgjlI.eJ6OEYqjH7INR/F.mXDbjZJi9HF0YCVG', 'admin@example.com', 'ADMIN', 1); 
+-- 1.2 用户信息表
+CREATE TABLE user_profiles (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    auth_id INT UNIQUE,
+    full_name VARCHAR(255),
+    phone_number VARCHAR(20),
+    avatar_url VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (auth_id) REFERENCES auth_users(auth_id) ON DELETE CASCADE,
+    INDEX idx_auth_id (auth_id)
+);
+
+-- 1.3 商家信息表
+CREATE TABLE merchant_profiles (
+    merchant_id INT AUTO_INCREMENT PRIMARY KEY,
+    auth_id INT UNIQUE,
+    shop_name VARCHAR(255) NOT NULL,
+    shop_description TEXT,
+    business_license VARCHAR(255),
+    contact_phone VARCHAR(20),
+    contact_email VARCHAR(255),
+    status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (auth_id) REFERENCES auth_users(auth_id) ON DELETE CASCADE,
+    INDEX idx_auth_id (auth_id),
+    INDEX idx_shop_name (shop_name)
+);
+
+-- 1.4 用户地址表
+CREATE TABLE user_addresses (
+    address_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    receiver_name VARCHAR(255) NOT NULL,
+    receiver_phone VARCHAR(20) NOT NULL,
+    province VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    district VARCHAR(255) NOT NULL,
+    street VARCHAR(255) NOT NULL,
+    postal_code VARCHAR(20),
+    is_default BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id)
+);
+
+-- 2. 商品模块
+-- 2.1 商品分类表
+CREATE TABLE categories (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    parent_id INT DEFAULT NULL,
+    level INT NOT NULL DEFAULT 1,
+    sort_order INT DEFAULT 0,
+    status ENUM('active', 'inactive') DEFAULT 'active',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (parent_id) REFERENCES categories(category_id) ON DELETE CASCADE,
+    INDEX idx_parent_id (parent_id),
+    INDEX idx_level (level)
+);
+
+-- 2.2 商品表
+CREATE TABLE products (
+    product_id INT AUTO_INCREMENT PRIMARY KEY,
+    merchant_id INT NOT NULL,
+    category_id INT NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    original_price DECIMAL(10, 2),
+    stock INT NOT NULL DEFAULT 0,
+    sales INT NOT NULL DEFAULT 0,
+    main_image VARCHAR(255),
+    status ENUM('draft', 'pending', 'approved', 'rejected', 'on_sale', 'off_sale') DEFAULT 'draft',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (merchant_id) REFERENCES merchant_profiles(merchant_id),
+    FOREIGN KEY (category_id) REFERENCES categories(category_id),
+    INDEX idx_merchant_id (merchant_id),
+    INDEX idx_category_id (category_id),
+    INDEX idx_status (status),
+    FULLTEXT INDEX idx_product_search (name, description)
+);
+
+-- 2.3 商品图片表
+CREATE TABLE product_images (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    sort_order INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+    INDEX idx_product_id (product_id)
+);
+
+-- 2.4 商品规格表
+CREATE TABLE product_specs (
+    spec_id INT AUTO_INCREMENT PRIMARY KEY,
+    product_id INT NOT NULL,
+    spec_name VARCHAR(255) NOT NULL,
+    spec_value VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+    INDEX idx_product_id (product_id)
+);
+
+-- 3. 订单模块
+-- 3.1 订单主表
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_no VARCHAR(32) NOT NULL UNIQUE,
+    user_id INT NOT NULL,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    payment_amount DECIMAL(10, 2) NOT NULL,
+    shipping_fee DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    status ENUM('pending_payment', 'paid', 'shipped', 'delivered', 'completed', 'canceled') DEFAULT 'pending_payment',
+    payment_time TIMESTAMP NULL,
+    shipping_time TIMESTAMP NULL,
+    completion_time TIMESTAMP NULL,
+    address_snapshot TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id),
+    INDEX idx_user_id (user_id),
+    INDEX idx_order_no (order_no),
+    INDEX idx_status (status)
+);
+
+-- 3.2 订单商品表
+CREATE TABLE order_items (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    merchant_id INT NOT NULL,
+    product_snapshot TEXT NOT NULL,
+    quantity INT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (merchant_id) REFERENCES merchant_profiles(merchant_id),
+    INDEX idx_order_id (order_id),
+    INDEX idx_product_id (product_id),
+    INDEX idx_merchant_id (merchant_id)
+);
+
+-- 4. 购物车模块
+CREATE TABLE shopping_cart_items (
+    item_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    selected BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    UNIQUE KEY uk_user_product (user_id, product_id),
+    INDEX idx_user_id (user_id)
+);
+
+-- 5. 支付模块
+CREATE TABLE payments (
+    payment_id INT AUTO_INCREMENT PRIMARY KEY,
+    payment_no VARCHAR(32) NOT NULL UNIQUE,
+    order_id INT NOT NULL,
+    user_id INT NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    payment_method VARCHAR(50) NOT NULL,
+    status ENUM('pending', 'processing', 'success', 'failed', 'refunded') DEFAULT 'pending',
+    payment_time TIMESTAMP NULL,
+    callback_content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id),
+    INDEX idx_order_id (order_id),
+    INDEX idx_user_id (user_id),
+    INDEX idx_payment_no (payment_no)
+);
+
+-- 6. 评价模块
+CREATE TABLE product_reviews (
+    review_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_item_id INT NOT NULL UNIQUE,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    merchant_id INT NOT NULL,
+    rating TINYINT NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    content TEXT,
+    images TEXT,
+    status ENUM('pending', 'published', 'hidden') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_item_id) REFERENCES order_items(item_id),
+    FOREIGN KEY (user_id) REFERENCES user_profiles(user_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id),
+    FOREIGN KEY (merchant_id) REFERENCES merchant_profiles(merchant_id),
+    INDEX idx_product_id (product_id),
+    INDEX idx_merchant_id (merchant_id)
+);
+
+-- 7. 系统日志表
+CREATE TABLE system_logs (
+    log_id INT AUTO_INCREMENT PRIMARY KEY,
+    auth_id INT,
+    module VARCHAR(50) NOT NULL,
+    action VARCHAR(50) NOT NULL,
+    detail TEXT,
+    ip_address VARCHAR(50),
+    user_agent VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (auth_id) REFERENCES auth_users(auth_id),
+    INDEX idx_auth_id (auth_id),
+    INDEX idx_module (module),
+    INDEX idx_created_at (created_at)
+);

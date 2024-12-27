@@ -1,160 +1,215 @@
 package com.supermall.backend.domain.order.service.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.supermall.backend.common.exception.ApiException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.supermall.backend.domain.cart.entity.CartItem;
+import com.supermall.backend.domain.cart.service.CartService;
+import com.supermall.backend.domain.order.dto.OrderCreateRequest;
+import com.supermall.backend.domain.order.dto.OrderResponse;
 import com.supermall.backend.domain.order.entity.Order;
 import com.supermall.backend.domain.order.entity.OrderItem;
-import com.supermall.backend.domain.order.mapper.OrderItemMapper;
 import com.supermall.backend.domain.order.mapper.OrderMapper;
+import com.supermall.backend.domain.order.mapper.OrderItemMapper;
 import com.supermall.backend.domain.order.service.OrderService;
-import com.supermall.backend.domain.order.vo.OrderVO;
+import com.supermall.backend.domain.product.entity.Product;
+import com.supermall.backend.domain.product.service.ProductService;
+import com.supermall.backend.domain.order.dto.OrderItemResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.supermall.backend.common.exception.BusinessException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
-    
+
+    private final CartService cartService;
+    private final ProductService productService;
     private final OrderItemMapper orderItemMapper;
-    
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public Order createOrder(Order order) {
-        log.debug("创建订单: {}", order);
-        try {
-            // 参数校验
-            if (order.getUserId() == null) {
-                throw new ApiException("用户ID不能为空");
-            }
-            if (order.getOrderItems() == null || order.getOrderItems().isEmpty()) {
-                throw new ApiException("订单项不能为空");
-            }
-            
-            // 生成订单编号
-            String orderNo = generateOrderNo();
-            order.setOrderNo(orderNo);
-            
-            // 设置初始状态
-            if (order.getStatus() == null) {
-                order.setStatus(0);  // 默认待付款
-            }
-            
-            // 计算运费（可以根据实际业务逻辑修改）
-            if (order.getFreightAmount() == null) {
-                order.setFreightAmount(BigDecimal.ZERO);
-            }
-            
-            // 保存订单
-            boolean saved = save(order);
-            if (!saved) {
-                throw new ApiException("保存订单失败");
-            }
-            
-            // 保存订单项
-            BigDecimal totalAmount = BigDecimal.ZERO;
-            for (OrderItem item : order.getOrderItems()) {
-                if (item.getProductId() == null) {
-                    throw new ApiException("商品ID不能为空");
-                }
-                if (item.getQuantity() == null || item.getQuantity() <= 0) {
-                    throw new ApiException("商品数量必须大于0");
-                }
-                if (item.getPrice() == null || item.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
-                    throw new ApiException("商品价格必须大于0");
-                }
-                
-                // 设置订单项关联信息
-                item.setOrderId(order.getId());
-                item.setOrderNo(orderNo);
-                
-                // 计算订单项总金额
-                item.setTotalAmount(item.getPrice().multiply(new BigDecimal(item.getQuantity())));
-                totalAmount = totalAmount.add(item.getTotalAmount());
-                
-                boolean itemSaved = orderItemMapper.insert(item) > 0;
-                if (!itemSaved) {
-                    throw new ApiException("保存订单项失败");
-                }
-            }
-            
-            // 更新订单总金额
-            order.setTotalAmount(totalAmount);
-            order.setPayAmount(totalAmount.add(order.getFreightAmount()));
-            updateById(order);
-            
-            return order;
-        } catch (ApiException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("创建订单失败", e);
-            throw new ApiException("创建订单失败: " + e.getMessage());
-        }
-    }
-    
-    @Override
-    public IPage<OrderVO> listOrders(Integer pageNum, Integer pageSize) {
-        log.debug("获取订单列表: pageNum={}, pageSize={}", pageNum, pageSize);
-        try {
-            Page<OrderVO> page = new Page<>(pageNum, pageSize);
-            return baseMapper.listOrders(page);
-        } catch (Exception e) {
-            log.error("获取订单列表失败", e);
-            throw new ApiException("获取订单列表失败: " + e.getMessage());
-        }
-    }
-    
-    @Override
-    public OrderVO getOrderDetail(Long id) {
-        log.debug("获取订单详情: id={}", id);
-        try {
-            OrderVO order = baseMapper.getOrderById(id);
-            if (order == null) {
-                throw new ApiException("订单不存在");
-            }
-            return order;
-        } catch (ApiException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("获取订单详情失败", e);
-            throw new ApiException("获取订单详情失败: " + e.getMessage());
-        }
-    }
-    
+    private final ObjectMapper objectMapper;
+
     @Override
     @Transactional
-    public void updateStatus(Long id, Integer status) {
-        log.debug("更新订单状态: id={}, status={}", id, status);
-        try {
-            Order order = getById(id);
-            if (order == null) {
-                throw new ApiException("订单不存在");
-            }
+    public OrderResponse createOrder(Long userId, OrderCreateRequest request) {
+        // 1. 获取购物车商品
+        List<CartItem> cartItems = cartService.getByIds(request.getCartItemIds());
+
+        // 2. 创建订单
+        Order order = new Order();
+        order.setOrderNo(generateOrderNo());
+        order.setUserId(userId);
+        order.setStatus("pending_payment");
+        
+        // 3. 计算订单金额
+        BigDecimal totalAmount = BigDecimal.ZERO;
+        List<OrderItem> orderItems = new ArrayList<>();
+        
+        for (CartItem cartItem : cartItems) {
+            Product product = productService.getById(cartItem.getProductId());
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProductId(product.getId());
+            orderItem.setMerchantId(product.getMerchantId());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setPrice(product.getPrice());
+            orderItem.setProductSnapshot(convertToSnapshot(product));
             
-            order.setStatus(status);
+            totalAmount = totalAmount.add(product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity())));
+            orderItems.add(orderItem);
+        }
+        
+        order.setTotalAmount(totalAmount);
+        order.setPaymentAmount(totalAmount);
+        order.setShippingFee(BigDecimal.ZERO);
+        
+        // 4. 保存订单
+        save(order);
+        orderItems.forEach(item -> item.setOrderId(order.getId()));
+        orderItemMapper.insertBatch(orderItems);
+        
+        // 5. 清除购物车
+        cartService.deleteByIds(request.getCartItemIds());
+        
+        return convertToResponse(order, orderItems);
+    }
+
+    @Override
+    public OrderResponse getOrderDetail(Long userId, Long orderId) {
+        Order order = getOne(new LambdaQueryWrapper<Order>()
+                .eq(Order::getId, orderId)
+                .eq(Order::getUserId, userId));
+        
+        if (order == null) {
+            return null;
+        }
+
+        List<OrderItem> orderItems = orderItemMapper.selectList(new LambdaQueryWrapper<OrderItem>()
+                .eq(OrderItem::getOrderId, orderId));
+                
+        return convertToResponse(order, orderItems);
+    }
+
+    @Override
+    public Page<OrderResponse> getUserOrders(Long userId, String status, int page, int size) {
+        Page<Order> orderPage = page(new Page<>(page, size), new LambdaQueryWrapper<Order>()
+                .eq(Order::getUserId, userId)
+                .eq(status != null, Order::getStatus, status)
+                .orderByDesc(Order::getCreatedAt));
+
+        List<OrderResponse> responses = new ArrayList<>();
+        for (Order order : orderPage.getRecords()) {
+            List<OrderItem> orderItems = orderItemMapper.selectList(new LambdaQueryWrapper<OrderItem>()
+                    .eq(OrderItem::getOrderId, order.getId()));
+            responses.add(convertToResponse(order, orderItems));
+        }
+
+        Page<OrderResponse> responsePage = new Page<>();
+        responsePage.setRecords(responses);
+        responsePage.setTotal(orderPage.getTotal());
+        responsePage.setCurrent(orderPage.getCurrent());
+        responsePage.setSize(orderPage.getSize());
+        
+        return responsePage;
+    }
+
+    @Override
+    @Transactional
+    public void cancelOrder(Long userId, Long orderId) {
+        Order order = getOne(new LambdaQueryWrapper<Order>()
+                .eq(Order::getId, orderId)
+                .eq(Order::getUserId, userId));
+                
+        if (order != null && "pending_payment".equals(order.getStatus())) {
+            order.setStatus("canceled");
             updateById(order);
-        } catch (ApiException e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("更新订单状态失败", e);
-            throw new ApiException("更新订单状态失败: " + e.getMessage());
+        } else {
+            throw new RuntimeException("订单不存在或状态不允许取消");
         }
     }
-    
-    /**
-     * 生成订单编号
-     */
+
+    @Override
+    @Transactional
+    public void confirmReceived(Long userId, Long orderId) {
+        Order order = getOne(new LambdaQueryWrapper<Order>()
+                .eq(Order::getId, orderId)
+                .eq(Order::getUserId, userId));
+                
+        if (order != null && "shipped".equals(order.getStatus())) {
+            order.setStatus("completed");
+            order.setCompletionTime(LocalDateTime.now());
+            updateById(order);
+        } else {
+            throw new RuntimeException("订单不存在或状态不允许确认收货");
+        }
+    }
+
+    @Override
+    public OrderItem getOrderItem(Long orderItemId) {
+        return orderItemMapper.selectById(orderItemId);
+    }
+
+    @Override
+    public boolean isUserOrder(Long userId, Long orderId) {
+        Order order = getById(orderId);
+        return order != null && order.getUserId().equals(userId);
+    }
+
     private String generateOrderNo() {
-        return "O" + LocalDateTime.now().toString().replace("-", "")
-            .replace(":", "")
-            .replace(".", "")
-            + String.format("%04d", (int)(Math.random() * 10000));
+        return UUID.randomUUID().toString().replace("-", "").substring(0, 16);
+    }
+
+    @SneakyThrows
+    private String convertToSnapshot(Product product) {
+        return objectMapper.writeValueAsString(product);
+    }
+
+    @SneakyThrows
+    private OrderResponse convertToResponse(Order order, List<OrderItem> items) {
+        OrderResponse response = new OrderResponse();
+        response.setId(order.getId());
+        response.setOrderNo(order.getOrderNo());
+        response.setTotalAmount(order.getTotalAmount());
+        response.setPaymentAmount(order.getPaymentAmount());
+        response.setShippingFee(order.getShippingFee());
+        response.setStatus(order.getStatus());
+        response.setPaymentTime(order.getPaymentTime());
+        response.setShippingTime(order.getShippingTime());
+        response.setCompletionTime(order.getCompletionTime());
+        response.setAddressSnapshot(order.getAddressSnapshot());
+        response.setCreatedAt(order.getCreatedAt());
+
+        List<OrderItemResponse> itemResponses = items.stream()
+                .map(item -> {
+                    Product product;
+                    try {
+                        product = objectMapper.readValue(item.getProductSnapshot(), Product.class);
+                    } catch (JsonProcessingException e) {
+                        throw new BusinessException("订单商品数据解析失败");
+                    }
+                    OrderItemResponse itemResponse = new OrderItemResponse();
+                    itemResponse.setId(item.getId());
+                    itemResponse.setProductId(item.getProductId());
+                    itemResponse.setMerchantId(item.getMerchantId());
+                    itemResponse.setProductName(product.getName());
+                    itemResponse.setProductImage(product.getMainImage());
+                    itemResponse.setQuantity(item.getQuantity());
+                    itemResponse.setPrice(item.getPrice());
+                    itemResponse.setTotalPrice(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
+                    return itemResponse;
+                })
+                .collect(Collectors.toList());
+
+        response.setItems(itemResponses);
+        return response;
     }
 } 
