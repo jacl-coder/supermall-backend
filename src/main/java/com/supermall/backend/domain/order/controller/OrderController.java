@@ -21,13 +21,13 @@ public class OrderController {
     @PostMapping
     public Result<OrderResponse> createOrder(@Valid @RequestBody OrderCreateRequest request) {
         // TODO: 从SecurityContext获取用户ID
-        Long userId = 1L;
+        Integer userId = 1;
         return Result.success(orderService.createOrder(userId, request));
     }
 
     @GetMapping("/{orderId}")
-    public Result<OrderResponse> getOrderDetail(@PathVariable Long orderId) {
-        Long userId = 1L;
+    public Result<OrderResponse> getOrderDetail(@PathVariable Integer orderId) {
+        Integer userId = 1;
         OrderResponse order = orderService.getOrderDetail(userId, orderId);
         if (order == null) {
             return Result.fail("订单不存在");
@@ -40,20 +40,20 @@ public class OrderController {
             @RequestParam(required = false) String status,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Long userId = 1L;
+        Integer userId = 1;
         return Result.success(orderService.getUserOrders(userId, status, page, size));
     }
 
     @PostMapping("/{orderId}/cancel")
-    public Result<Void> cancelOrder(@PathVariable Long orderId) {
-        Long userId = 1L;
+    public Result<Void> cancelOrder(@PathVariable Integer orderId) {
+        Integer userId = 1;
         orderService.cancelOrder(userId, orderId);
         return Result.success(null);
     }
 
     @PostMapping("/{orderId}/confirm")
-    public Result<Void> confirmReceived(@PathVariable Long orderId) {
-        Long userId = 1L;
+    public Result<Void> confirmReceived(@PathVariable Integer orderId) {
+        Integer userId = 1;
         orderService.confirmReceived(userId, orderId);
         return Result.success(null);
     }

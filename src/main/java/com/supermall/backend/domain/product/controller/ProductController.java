@@ -24,14 +24,14 @@ public class ProductController {
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
         // TODO: 从SecurityContext获取商家ID
-        Long merchantId = 1L; // 临时写死，后续从登录用户获取
+        Integer merchantId = 1; // 临时写死，后续从登录用户获取
         Product product = productService.createProduct(request, merchantId);
         return Result.success(convertToResponse(product));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('MERCHANT')")
-    public Result<ProductResponse> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductRequest request) {
+    public Result<ProductResponse> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductRequest request) {
         Product product = productService.updateProduct(id, request);
         if (product == null) {
             return Result.fail("商品不存在");
@@ -40,7 +40,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Result<ProductResponse> getProduct(@PathVariable Long id) {
+    public Result<ProductResponse> getProduct(@PathVariable Integer id) {
         Product product = productService.getById(id);
         if (product == null) {
             return Result.fail("商品不存在");
@@ -50,7 +50,7 @@ public class ProductController {
 
     @GetMapping("/category/{categoryId}")
     public Result<PageResult<ProductResponse>> getProductsByCategory(
-            @PathVariable Long categoryId,
+            @PathVariable Integer categoryId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         Page<Product> productPage = productService.getProductsByCategory(categoryId, page, size);

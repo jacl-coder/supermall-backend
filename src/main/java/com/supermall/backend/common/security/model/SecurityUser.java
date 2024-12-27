@@ -10,8 +10,8 @@ import java.util.List;
 
 @Data
 public class SecurityUser implements UserDetails {
-    private Long id;
-    private Long roleId;
+    private Integer id;
+    private Integer roleId;
     private String username;
     private String password;
     private boolean enabled;

@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class ProductReviewRequest {
     @NotNull(message = "订单商品ID不能为空")
-    private Long orderItemId;
+    private Integer orderItemId;
     
     @NotNull(message = "评分不能为空")
     @Min(value = 1, message = "评分最小为1")

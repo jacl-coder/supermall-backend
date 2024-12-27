@@ -8,10 +8,10 @@ import lombok.Data;
 @Data
 public class ReturnOrderRequest {
     @NotNull(message = "订单ID不能为空")
-    private Long orderId;
+    private Integer orderId;
     
     @NotNull(message = "订单项ID不能为空")
-    private Long orderItemId;
+    private Integer orderItemId;
     
     @NotNull(message = "退货原因类型不能为空")
     private ReasonType reasonType;

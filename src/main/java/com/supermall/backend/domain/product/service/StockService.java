@@ -7,31 +7,31 @@ public interface StockService {
     /**
      * 创建库存变动记录
      */
-    StockMovement createMovement(Long productId, Integer quantity, MovementType type, 
-                                Long referenceId, Long operatorId, String notes);
+    StockMovement createMovement(Integer productId, Integer quantity, MovementType type, 
+                                Integer referenceId, Integer operatorId, String notes);
 
     /**
      * 检查商品库存是否足够
      */
-    boolean checkStock(Long productId, Integer quantity);
+    boolean checkStock(Integer productId, Integer quantity);
 
     /**
      * 锁定商品库存（下单时）
      */
-    boolean lockStock(Long productId, Integer quantity, Long orderId, Long operatorId);
+    boolean lockStock(Integer productId, Integer quantity, Integer orderId, Integer operatorId);
 
     /**
      * 释放商品库存（取消订单时）
      */
-    boolean releaseStock(Long productId, Integer quantity, Long orderId, Long operatorId);
+    boolean releaseStock(Integer productId, Integer quantity, Integer orderId, Integer operatorId);
 
     /**
      * 确认库存扣减（支付成功时）
      */
-    boolean confirmStockDeduction(Long orderId);
+    boolean confirmStockDeduction(Integer orderId);
 
     /**
      * 手动调整库存
      */
-    boolean adjustStock(Long productId, Integer quantity, Long operatorId, String notes);
+    boolean adjustStock(Integer productId, Integer quantity, Integer operatorId, String notes);
 } 

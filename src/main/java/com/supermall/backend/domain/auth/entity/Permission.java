@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @TableName("permissions")
 public class Permission {
     @TableId(value = "permission_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     
     private String name;
     private String description;

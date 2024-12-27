@@ -24,7 +24,7 @@ public class PermissionController {
 
     @GetMapping("/roles/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Result<List<PermissionResponse>> getPermissionsByRoleId(@PathVariable Long roleId) {
+    public Result<List<PermissionResponse>> getPermissionsByRoleId(@PathVariable Integer roleId) {
         return Result.success(permissionService.getPermissionsByRoleId(roleId));
     }
 } 

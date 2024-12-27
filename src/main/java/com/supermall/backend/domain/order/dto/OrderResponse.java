@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class OrderResponse {
-    private Long id;
+    private Integer id;
     private String orderNo;
     private BigDecimal totalAmount;
     private BigDecimal paymentAmount;

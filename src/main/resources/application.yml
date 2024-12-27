@@ -25,7 +25,7 @@ spring:
           min-idle: 0
 
   jwt:
-    secret: your_jwt_secret_key_must_be_very_long_and_secure_at_least_256_bits
+    secret: 8Zz5tw0Ionm3XPZZfN0NOml3z9FMfmpgXwovR9fp6ryDIoGRM8EPHAB6iHsc0fb
     expiration: 86400000  # 24小时，单位：毫秒
 
 mybatis-plus:

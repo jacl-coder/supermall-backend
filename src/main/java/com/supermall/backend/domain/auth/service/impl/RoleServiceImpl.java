@@ -50,7 +50,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     @Transactional
-    public RoleResponse updateRole(Long roleId, RoleRequest request) {
+    public RoleResponse updateRole(Integer roleId, RoleRequest request) {
         Role role = getById(roleId);
         if (role == null) {
             throw new BusinessException("角色不存在");
@@ -81,7 +81,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     @Transactional
-    public void deleteRole(Long roleId) {
+    public void deleteRole(Integer roleId) {
         // 删除角色权限关联
         rolePermissionMapper.delete(
                 new LambdaQueryWrapper<RolePermission>()
@@ -92,7 +92,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public RoleResponse getRole(Long roleId) {
+    public RoleResponse getRole(Integer roleId) {
         Role role = getById(roleId);
         if (role == null) {
             throw new BusinessException("角色不存在");
@@ -109,7 +109,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Override
     @Transactional
-    public void assignPermissions(Long roleId, List<Long> permissionIds) {
+    public void assignPermissions(Integer roleId, List<Integer> permissionIds) {
         // 先删除原有权限
         rolePermissionMapper.delete(
                 new LambdaQueryWrapper<RolePermission>()
@@ -133,7 +133,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public List<String> getRolePermissionCodes(Long roleId) {
+    public List<String> getRolePermissionCodes(Integer roleId) {
         return permissionService.getPermissionsByRoleId(roleId).stream()
                 .map(PermissionResponse::getName)
                 .collect(Collectors.toList());

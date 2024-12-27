@@ -32,7 +32,7 @@ public class AuthController {
     public Result<Void> logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            Long authId = Long.parseLong(authentication.getName());
+            Integer authId = Integer.parseInt(authentication.getName());
             authUserService.logout(authId);
         }
         SecurityContextHolder.clearContext();
@@ -50,7 +50,7 @@ public class AuthController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return Result.fail("未登录");
         }
-        Long authId = Long.parseLong(authentication.getName());
+        Integer authId = Integer.parseInt(authentication.getName());
         authUserService.updatePassword(authId, request.getOldPassword(), request.getNewPassword());
         return Result.success();
     }

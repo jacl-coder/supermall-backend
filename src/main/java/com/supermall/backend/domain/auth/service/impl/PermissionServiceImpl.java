@@ -29,8 +29,8 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<PermissionResponse> getPermissionsByRoleId(Long roleId) {
-        List<Long> permissionIds = rolePermissionMapper.selectList(
+    public List<PermissionResponse> getPermissionsByRoleId(Integer roleId) {
+        List<Integer> permissionIds = rolePermissionMapper.selectList(
                 new LambdaQueryWrapper<RolePermission>()
                         .eq(RolePermission::getRoleId, roleId)
         ).stream()
@@ -47,12 +47,12 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     }
 
     @Override
-    public List<Permission> getPermissionsByRoleIds(List<Long> roleIds) {
+    public List<Permission> getPermissionsByRoleIds(List<Integer> roleIds) {
         if (roleIds == null || roleIds.isEmpty()) {
             return List.of();
         }
 
-        List<Long> permissionIds = rolePermissionMapper.selectList(
+        List<Integer> permissionIds = rolePermissionMapper.selectList(
                 new LambdaQueryWrapper<RolePermission>()
                         .in(RolePermission::getRoleId, roleIds)
         ).stream()

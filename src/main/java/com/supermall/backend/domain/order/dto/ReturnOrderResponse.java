@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 
 @Data
 public class ReturnOrderResponse {
-    private Long id;
-    private Long orderId;
-    private Long orderItemId;
-    private Long userId;
-    private Long merchantId;
+    private Integer id;
+    private Integer orderId;
+    private Integer orderItemId;
+    private Integer userId;
+    private Integer merchantId;
     private BigDecimal returnAmount;
     private ReturnStatus status;
     private ReasonType reasonType;

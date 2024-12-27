@@ -36,18 +36,18 @@ public class ReturnOrderController {
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(returnOrderService.createReturnOrder(
                 request,
-                Long.valueOf(userDetails.getUsername())
+                Integer.valueOf(userDetails.getUsername())
         ));
     }
 
     @Operation(summary = "获取退货订单详情")
     @GetMapping("/{returnId}")
     public ResponseEntity<ReturnOrderResponse> getReturnOrder(
-            @PathVariable Long returnId,
+            @PathVariable Integer returnId,
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(returnOrderService.getReturnOrder(
                 returnId,
-                Long.valueOf(userDetails.getUsername())
+                Integer.valueOf(userDetails.getUsername())
         ));
     }
 
@@ -58,7 +58,7 @@ public class ReturnOrderController {
             @RequestParam(defaultValue = "10") int size,
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(returnOrderService.getUserReturnOrders(
-                Long.valueOf(userDetails.getUsername()),
+                Integer.valueOf(userDetails.getUsername()),
                 page,
                 size
         ));
@@ -72,7 +72,7 @@ public class ReturnOrderController {
             @RequestParam(defaultValue = "10") int size,
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(returnOrderService.getMerchantReturnOrders(
-                Long.valueOf(userDetails.getUsername()),
+                Integer.valueOf(userDetails.getUsername()),
                 page,
                 size
         ));
@@ -82,14 +82,14 @@ public class ReturnOrderController {
     @RequirePermission("order:manage")
     @PostMapping("/{returnId}/handle")
     public ResponseEntity<ReturnOrderResponse> handleReturnOrder(
-            @PathVariable Long returnId,
+            @PathVariable Integer returnId,
             @RequestBody @Valid HandleReturnRequest request,
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(returnOrderService.handleReturnOrder(
                 returnId,
                 request.isApproved(),
                 request.getHandlingNotes(),
-                Long.valueOf(userDetails.getUsername())
+                Integer.valueOf(userDetails.getUsername())
         ));
     }
 
@@ -97,11 +97,11 @@ public class ReturnOrderController {
     @RequirePermission("order:manage")
     @PostMapping("/{returnId}/confirm-return")
     public ResponseEntity<ReturnOrderResponse> confirmReturn(
-            @PathVariable Long returnId,
+            @PathVariable Integer returnId,
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(returnOrderService.confirmReturn(
                 returnId,
-                Long.valueOf(userDetails.getUsername())
+                Integer.valueOf(userDetails.getUsername())
         ));
     }
 
@@ -109,11 +109,11 @@ public class ReturnOrderController {
     @RequirePermission("order:manage")
     @PostMapping("/{returnId}/confirm-refund")
     public ResponseEntity<ReturnOrderResponse> confirmRefund(
-            @PathVariable Long returnId,
+            @PathVariable Integer returnId,
             @AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(returnOrderService.confirmRefund(
                 returnId,
-                Long.valueOf(userDetails.getUsername())
+                Integer.valueOf(userDetails.getUsername())
         ));
     }
 } 

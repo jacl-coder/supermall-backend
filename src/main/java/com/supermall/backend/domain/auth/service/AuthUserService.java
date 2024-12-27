@@ -14,7 +14,7 @@ public interface AuthUserService extends IService<AuthUser> {
     LoginResponse login(LoginRequest request);
     
     // 用户登出
-    void logout(Long authId);
+    void logout(Integer authId);
     
     // 检查用户名是否存在
     boolean existsByUsername(String username);
@@ -26,11 +26,11 @@ public interface AuthUserService extends IService<AuthUser> {
     AuthUser getByUsername(String username);
     
     // 更新密码
-    void updatePassword(Long authId, String oldPassword, String newPassword);
+    void updatePassword(Integer authId, String oldPassword, String newPassword);
     
     // 更新用户状态
-    void updateStatus(Long authId, String status);
+    void updateStatus(Integer authId, String status);
     
     // 更新最后登录时间
-    void updateLastLogin(Long authId);
+    void updateLastLogin(Integer authId);
 } 

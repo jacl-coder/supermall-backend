@@ -15,7 +15,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     @Transactional
-    public Product createProduct(ProductRequest request, Long merchantId) {
+    public Product createProduct(ProductRequest request, Integer merchantId) {
         Product product = new Product();
         product.setMerchantId(merchantId);
         product.setName(request.getName());
@@ -33,7 +33,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     @Transactional
-    public Product updateProduct(Long id, ProductRequest request) {
+    public Product updateProduct(Integer id, ProductRequest request) {
         Product product = getById(id);
         if (product != null) {
             product.setName(request.getName());
@@ -50,7 +50,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public Page<Product> getProductsByCategory(Long categoryId, int page, int size) {
+    public Page<Product> getProductsByCategory(Integer categoryId, int page, int size) {
         return page(new Page<>(page, size), new LambdaQueryWrapper<Product>()
                 .eq(Product::getCategoryId, categoryId)
                 .eq(Product::getStatus, Product.Status.ON_SALE)

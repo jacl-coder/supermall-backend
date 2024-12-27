@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class ProductResponse {
-    private Long id;
-    private Long merchantId;
-    private Long categoryId;
+    private Integer id;
+    private Integer merchantId;
+    private Integer categoryId;
     private String name;
     private String description;
     private BigDecimal price;

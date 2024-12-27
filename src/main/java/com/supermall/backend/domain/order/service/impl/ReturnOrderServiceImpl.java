@@ -31,7 +31,7 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
 
     @Override
     @Transactional
-    public ReturnOrderResponse createReturnOrder(ReturnOrderRequest request, Long userId) {
+    public ReturnOrderResponse createReturnOrder(ReturnOrderRequest request, Integer userId) {
         // 1. 验证订单和订单项
         OrderItem orderItem = orderItemMapper.selectById(request.getOrderItemId());
         if (orderItem == null) {
@@ -64,7 +64,7 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
     }
 
     @Override
-    public ReturnOrderResponse getReturnOrder(Long returnId, Long userId) {
+    public ReturnOrderResponse getReturnOrder(Integer returnId, Integer userId) {
         ReturnOrder returnOrder = getById(returnId);
         if (returnOrder == null || !returnOrder.getUserId().equals(userId)) {
             throw new BusinessException("退货订单不存在或无权限");
@@ -86,7 +86,7 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
     }
 
     @Override
-    public Page<ReturnOrderResponse> getUserReturnOrders(Long userId, int page, int size) {
+    public Page<ReturnOrderResponse> getUserReturnOrders(Integer userId, int page, int size) {
         Page<ReturnOrder> returnOrderPage = page(
             new Page<>(page, size),
             new LambdaQueryWrapper<ReturnOrder>()
@@ -98,7 +98,7 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
     }
 
     @Override
-    public Page<ReturnOrderResponse> getMerchantReturnOrders(Long merchantId, int page, int size) {
+    public Page<ReturnOrderResponse> getMerchantReturnOrders(Integer merchantId, int page, int size) {
         Page<ReturnOrder> returnOrderPage = page(
             new Page<>(page, size),
             new LambdaQueryWrapper<ReturnOrder>()
@@ -111,7 +111,7 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
 
     @Override
     @Transactional
-    public ReturnOrderResponse handleReturnOrder(Long returnId, boolean approved, String handlingNotes, Long operatorId) {
+    public ReturnOrderResponse handleReturnOrder(Integer returnId, boolean approved, String handlingNotes, Integer operatorId) {
         ReturnOrder returnOrder = getById(returnId);
         if (returnOrder == null) {
             throw new BusinessException("退货订单不存在");
@@ -133,7 +133,7 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
 
     @Override
     @Transactional
-    public ReturnOrderResponse confirmReturn(Long returnId, Long operatorId) {
+    public ReturnOrderResponse confirmReturn(Integer returnId, Integer operatorId) {
         ReturnOrder returnOrder = getById(returnId);
         if (returnOrder == null) {
             throw new BusinessException("退货订单不存在");
@@ -166,7 +166,7 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
 
     @Override
     @Transactional
-    public ReturnOrderResponse confirmRefund(Long returnId, Long operatorId) {
+    public ReturnOrderResponse confirmRefund(Integer returnId, Integer operatorId) {
         ReturnOrder returnOrder = getById(returnId);
         if (returnOrder == null) {
             throw new BusinessException("退货订单不存在");

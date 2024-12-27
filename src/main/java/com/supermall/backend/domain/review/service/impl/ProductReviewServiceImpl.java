@@ -34,7 +34,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
 
     @Override
     @Transactional
-    public ProductReviewResponse createReview(Long userId, ProductReviewRequest request) {
+    public ProductReviewResponse createReview(Integer userId, ProductReviewRequest request) {
         // 检查订单商品是否存在且属于当前用户
         OrderItem orderItem = orderService.getOrderItem(request.getOrderItemId());
         if (orderItem == null || !orderService.isUserOrder(userId, orderItem.getOrderId())) {
@@ -64,7 +64,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
     }
 
     @Override
-    public Page<ProductReviewResponse> getProductReviews(Long productId, int page, int size) {
+    public Page<ProductReviewResponse> getProductReviews(Integer productId, int page, int size) {
         Page<ProductReview> reviewPage = page(new Page<>(page, size),
                 new LambdaQueryWrapper<ProductReview>()
                         .eq(ProductReview::getProductId, productId)
@@ -75,7 +75,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
     }
 
     @Override
-    public Page<ProductReviewResponse> getUserReviews(Long userId, int page, int size) {
+    public Page<ProductReviewResponse> getUserReviews(Integer userId, int page, int size) {
         Page<ProductReview> reviewPage = page(new Page<>(page, size),
                 new LambdaQueryWrapper<ProductReview>()
                         .eq(ProductReview::getUserId, userId)
@@ -85,7 +85,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
     }
 
     @Override
-    public Page<ProductReviewResponse> getMerchantReviews(Long merchantId, int page, int size) {
+    public Page<ProductReviewResponse> getMerchantReviews(Integer merchantId, int page, int size) {
         Page<ProductReview> reviewPage = page(new Page<>(page, size),
                 new LambdaQueryWrapper<ProductReview>()
                         .eq(ProductReview::getMerchantId, merchantId)
@@ -96,7 +96,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
 
     @Override
     @Transactional
-    public void deleteReview(Long userId, Long reviewId) {
+    public void deleteReview(Integer userId, Integer reviewId) {
         ProductReview review = getById(reviewId);
         if (review == null || !review.getUserId().equals(userId)) {
             throw new BusinessException("评价不存在或无权删除");

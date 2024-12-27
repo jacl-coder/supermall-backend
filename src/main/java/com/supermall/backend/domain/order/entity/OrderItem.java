@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 @TableName("order_items")
 public class OrderItem {
     @TableId(value = "item_id", type = IdType.AUTO)
-    private Long id;
-    private Long orderId;
-    private Long productId;
-    private Long merchantId;
+    private Integer id;
+    private Integer orderId;
+    private Integer productId;
+    private Integer merchantId;
     @TableField(value = "product_snapshot")
     private String productSnapshot;
     private Integer quantity;

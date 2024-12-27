@@ -6,9 +6,9 @@ import com.supermall.backend.domain.review.dto.ProductReviewResponse;
 import com.supermall.backend.domain.review.entity.ProductReview;
 
 public interface ProductReviewService {
-    ProductReviewResponse createReview(Long userId, ProductReviewRequest request);
-    Page<ProductReviewResponse> getProductReviews(Long productId, int page, int size);
-    Page<ProductReviewResponse> getUserReviews(Long userId, int page, int size);
-    Page<ProductReviewResponse> getMerchantReviews(Long merchantId, int page, int size);
-    void deleteReview(Long userId, Long reviewId);
+    ProductReviewResponse createReview(Integer userId, ProductReviewRequest request);
+    Page<ProductReviewResponse> getProductReviews(Integer productId, int page, int size);
+    Page<ProductReviewResponse> getUserReviews(Integer userId, int page, int size);
+    Page<ProductReviewResponse> getMerchantReviews(Integer merchantId, int page, int size);
+    void deleteReview(Integer userId, Integer reviewId);
 } 

@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @TableName("user_profiles")
 public class UserProfile {
     @TableId(value = "user_id", type = IdType.AUTO)
-    private Long id;
-    private Long authId;
+    private Integer id;
+    private Integer authId;
     private String fullName;
     private String phoneNumber;
     private String avatarUrl;

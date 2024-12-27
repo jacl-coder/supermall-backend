@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 @TableName("role_permissions")
 public class RolePermission {
     @TableId(value = "role_id")
-    private Long roleId;
+    private Integer roleId;
     
-    private Long permissionId;
+    private Integer permissionId;
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;

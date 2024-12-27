@@ -8,16 +8,16 @@ import java.time.LocalDateTime;
 @TableName("stock_movements")
 public class StockMovement {
     @TableId(value = "movement_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     
-    private Long productId;
+    private Integer productId;
     private Integer quantity;
     
     @TableField(value = "type")
     private MovementType type;
     
-    private Long referenceId;
-    private Long operatorId;
+    private Integer referenceId;
+    private Integer operatorId;
     private String notes;
     
     @TableField(fill = FieldFill.INSERT)

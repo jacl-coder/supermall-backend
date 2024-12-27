@@ -48,14 +48,10 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         authUser.setEmail(request.getEmail());
         authUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         authUser.setStatus("active");
-        authUser.setRoleId(3L); // ROLE_USER 的 ID
+        authUser.setRoleId(3); // ROLE_USER 的 ID
         save(authUser);
 
         // 创建用户信息
-        UserProfile userProfile = new UserProfile();
-        userProfile.setAuthId(authUser.getId());
-        userProfile.setFullName(request.getFullName());
-        userProfile.setPhoneNumber(request.getPhoneNumber());
         UserProfileRequest profileRequest = new UserProfileRequest();
         profileRequest.setFullName(request.getFullName());
         profileRequest.setPhoneNumber(request.getPhoneNumber());
@@ -64,8 +60,12 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         // 更新最后登录时间
         updateLastLogin(authUser.getId());
 
+        // 获取最新的用户信息
+        authUser = getById(authUser.getId());
+        UserProfileResponse profile = userProfileService.getProfileByAuthId(authUser.getId());
+        UserInfoResponse userInfo = convertToUserInfoResponse(authUser, profile);
+
         // 生成 token 并返回登录响应
-        UserInfoResponse userInfo = convertToUserInfoResponse(authUser);
         String token = jwtUtil.generateToken(authUser.getUsername(), authUser.getId(), authUser.getRoleId());
 
         LoginResponse response = new LoginResponse();
@@ -128,7 +128,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
 
     @Override
     @Transactional
-    public void updatePassword(Long authId, String oldPassword, String newPassword) {
+    public void updatePassword(Integer authId, String oldPassword, String newPassword) {
         AuthUser authUser = getById(authId);
         if (authUser == null) {
             throw new BusinessException("用户不存在");
@@ -143,7 +143,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     }
 
     @Override
-    public void updateStatus(Long authId, String status) {
+    public void updateStatus(Integer authId, String status) {
         AuthUser authUser = getById(authId);
         if (authUser == null) {
             throw new BusinessException("用户不存在");
@@ -154,7 +154,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     }
 
     @Override
-    public void updateLastLogin(Long authId) {
+    public void updateLastLogin(Integer authId) {
         AuthUser authUser = getById(authId);
         if (authUser != null) {
             authUser.setLastLogin(LocalDateTime.now());
@@ -163,8 +163,8 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     }
 
     @Override
-    public void logout(Long authId) {
-        // 可���在这里添加登出相关的业务逻辑
+    public void logout(Integer authId) {
+        // 可在这里添加登出相关的业务逻辑
         // 比如记录登出时间、清除用户token等
         // 目前数据库表中没有相关字段，所以暂时不做处理
     }

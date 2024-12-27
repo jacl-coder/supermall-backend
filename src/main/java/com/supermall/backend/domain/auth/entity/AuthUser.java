@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 @TableName("auth_users")
 public class AuthUser {
     @TableId(value = "auth_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     
     private String username;
     private String email;
     private String passwordHash;
-    private Long roleId;
+    private Integer roleId;
     
     @TableField("status")
     private String status; // active, inactive, locked

@@ -18,9 +18,9 @@ public class Product {
     }
 
     @TableId(value = "product_id", type = IdType.AUTO)
-    private Long id;
-    private Long merchantId;
-    private Long categoryId;
+    private Integer id;
+    private Integer merchantId;
+    private Integer categoryId;
     private String name;
     private String description;
     private BigDecimal price;

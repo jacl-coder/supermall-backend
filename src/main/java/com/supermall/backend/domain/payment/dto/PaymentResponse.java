@@ -6,10 +6,10 @@ import java.time.LocalDateTime;
 
 @Data
 public class PaymentResponse {
-    private Long id;
+    private Integer id;
     private String paymentNo;
-    private Long orderId;
-    private Long userId;
+    private Integer orderId;
+    private Integer userId;
     private BigDecimal amount;
     private String paymentMethod;
     private String transactionId;

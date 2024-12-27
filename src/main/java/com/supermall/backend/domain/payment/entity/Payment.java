@@ -9,11 +9,11 @@ import java.time.LocalDateTime;
 @TableName("payments")
 public class Payment {
     @TableId(value = "payment_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     
     private String paymentNo;
-    private Long orderId;
-    private Long userId;
+    private Integer orderId;
+    private Integer userId;
     private BigDecimal amount;
     private String paymentMethod;
     private String transactionId;

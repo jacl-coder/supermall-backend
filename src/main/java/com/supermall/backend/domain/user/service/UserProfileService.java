@@ -4,9 +4,9 @@ import com.supermall.backend.domain.user.dto.UserProfileRequest;
 import com.supermall.backend.domain.user.dto.UserProfileResponse;
 
 public interface UserProfileService {
-    UserProfileResponse createProfile(Long authId, UserProfileRequest request);
-    UserProfileResponse updateProfile(Long userId, UserProfileRequest request);
-    UserProfileResponse getProfile(Long userId);
-    UserProfileResponse getProfileByAuthId(Long authId);
-    void deleteProfile(Long userId);
+    UserProfileResponse createProfile(Integer authId, UserProfileRequest request);
+    UserProfileResponse updateProfile(Integer userId, UserProfileRequest request);
+    UserProfileResponse getProfile(Integer userId);
+    UserProfileResponse getProfileByAuthId(Integer authId);
+    void deleteProfile(Integer userId);
 } 

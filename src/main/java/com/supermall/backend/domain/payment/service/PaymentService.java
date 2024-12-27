@@ -5,8 +5,8 @@ import com.supermall.backend.domain.payment.dto.PaymentRequest;
 import com.supermall.backend.domain.payment.dto.PaymentResponse;
 
 public interface PaymentService {
-    PaymentResponse createPayment(Long userId, PaymentRequest request);
-    PaymentResponse getPayment(Long userId, Long paymentId);
-    Page<PaymentResponse> getUserPayments(Long userId, int page, int size);
+    PaymentResponse createPayment(Integer userId, PaymentRequest request);
+    PaymentResponse getPayment(Integer userId, Integer paymentId);
+    Page<PaymentResponse> getUserPayments(Integer userId, int page, int size);
     void handlePaymentCallback(String paymentNo, String transactionId, String status, String failureReason);
 } 

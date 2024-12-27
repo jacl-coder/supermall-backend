@@ -8,14 +8,14 @@ import com.supermall.backend.domain.order.entity.OrderItem;
 import java.time.LocalDateTime;
 
 public interface OrderService {
-    OrderResponse createOrder(Long userId, OrderCreateRequest request);
-    OrderResponse getOrderDetail(Long userId, Long orderId);
-    Page<OrderResponse> getUserOrders(Long userId, String status, int page, int size);
-    void cancelOrder(Long userId, Long orderId);
-    void confirmReceived(Long userId, Long orderId);
+    OrderResponse createOrder(Integer userId, OrderCreateRequest request);
+    OrderResponse getOrderDetail(Integer userId, Integer orderId);
+    Page<OrderResponse> getUserOrders(Integer userId, String status, int page, int size);
+    void cancelOrder(Integer userId, Integer orderId);
+    void confirmReceived(Integer userId, Integer orderId);
     
-    OrderItem getOrderItem(Long orderItemId);
-    boolean isUserOrder(Long userId, Long orderId);
-    Order getOrder(Long orderId);
-    void updateOrderStatus(Long orderId, String status, LocalDateTime statusTime);
+    OrderItem getOrderItem(Integer orderItemId);
+    boolean isUserOrder(Integer userId, Integer orderId);
+    Order getOrder(Integer orderId);
+    void updateOrderStatus(Integer orderId, String status, LocalDateTime statusTime);
 } 

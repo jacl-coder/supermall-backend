@@ -20,7 +20,7 @@ public class UserProfileController {
     @PreAuthorize("hasRole('USER')")
     public Result<UserProfileResponse> createProfile(@Valid @RequestBody UserProfileRequest request) {
         // TODO: 从SecurityContext获取authId
-        Long authId = 1L;
+        Integer authId = 1;
         return Result.success(userProfileService.createProfile(authId, request));
     }
 
@@ -28,7 +28,7 @@ public class UserProfileController {
     @PreAuthorize("hasRole('USER')")
     public Result<UserProfileResponse> updateProfile(@Valid @RequestBody UserProfileRequest request) {
         // TODO: 从SecurityContext获取userId
-        Long userId = 1L;
+        Integer userId = 1;
         return Result.success(userProfileService.updateProfile(userId, request));
     }
 
@@ -36,7 +36,7 @@ public class UserProfileController {
     @PreAuthorize("hasRole('USER')")
     public Result<UserProfileResponse> getProfile() {
         // TODO: 从SecurityContext获取userId
-        Long userId = 1L;
+        Integer userId = 1;
         return Result.success(userProfileService.getProfile(userId));
     }
 
@@ -44,7 +44,7 @@ public class UserProfileController {
     @PreAuthorize("hasRole('USER')")
     public Result<Void> deleteProfile() {
         // TODO: 从SecurityContext获取userId
-        Long userId = 1L;
+        Integer userId = 1;
         userProfileService.deleteProfile(userId);
         return Result.success();
     }

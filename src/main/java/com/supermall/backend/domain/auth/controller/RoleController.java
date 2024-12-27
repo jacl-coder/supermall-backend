@@ -27,21 +27,21 @@ public class RoleController {
     @PutMapping("/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
     public Result<RoleResponse> updateRole(
-            @PathVariable Long roleId,
+            @PathVariable Integer roleId,
             @Valid @RequestBody RoleRequest request) {
         return Result.success(roleService.updateRole(roleId, request));
     }
 
     @DeleteMapping("/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Result<Void> deleteRole(@PathVariable Long roleId) {
+    public Result<Void> deleteRole(@PathVariable Integer roleId) {
         roleService.deleteRole(roleId);
         return Result.success();
     }
 
     @GetMapping("/{roleId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public Result<RoleResponse> getRole(@PathVariable Long roleId) {
+    public Result<RoleResponse> getRole(@PathVariable Integer roleId) {
         return Result.success(roleService.getRole(roleId));
     }
 
@@ -54,8 +54,8 @@ public class RoleController {
     @PostMapping("/{roleId}/permissions")
     @PreAuthorize("hasRole('ADMIN')")
     public Result<Void> assignPermissions(
-            @PathVariable Long roleId,
-            @RequestBody List<Long> permissionIds) {
+            @PathVariable Integer roleId,
+            @RequestBody List<Integer> permissionIds) {
         roleService.assignPermissions(roleId, permissionIds);
         return Result.success();
     }

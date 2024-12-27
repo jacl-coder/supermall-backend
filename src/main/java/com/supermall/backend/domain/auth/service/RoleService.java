@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface RoleService {
     RoleResponse createRole(RoleRequest request);
-    RoleResponse updateRole(Long roleId, RoleRequest request);
-    void deleteRole(Long roleId);
-    RoleResponse getRole(Long roleId);
+    RoleResponse updateRole(Integer roleId, RoleRequest request);
+    void deleteRole(Integer roleId);
+    RoleResponse getRole(Integer roleId);
     List<RoleResponse> getAllRoles();
-    void assignPermissions(Long roleId, List<Long> permissionIds);
-    List<String> getRolePermissionCodes(Long roleId);
+    void assignPermissions(Integer roleId, List<Integer> permissionIds);
+    List<String> getRolePermissionCodes(Integer roleId);
 } 

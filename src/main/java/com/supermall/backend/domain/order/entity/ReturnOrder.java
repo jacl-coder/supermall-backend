@@ -9,12 +9,12 @@ import java.time.LocalDateTime;
 @TableName("return_orders")
 public class ReturnOrder {
     @TableId(value = "return_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     
-    private Long orderId;
-    private Long orderItemId;
-    private Long userId;
-    private Long merchantId;
+    private Integer orderId;
+    private Integer orderItemId;
+    private Integer userId;
+    private Integer merchantId;
     private BigDecimal returnAmount;
     
     @TableField(value = "status")

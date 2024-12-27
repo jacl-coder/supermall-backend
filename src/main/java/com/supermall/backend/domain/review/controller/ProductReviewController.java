@@ -21,13 +21,13 @@ public class ProductReviewController {
     @PreAuthorize("hasRole('USER')")
     public Result<ProductReviewResponse> createReview(@Valid @RequestBody ProductReviewRequest request) {
         // TODO: 从SecurityContext获取用户ID
-        Long userId = 1L;
+        Integer userId = 1;
         return Result.success(productReviewService.createReview(userId, request));
     }
 
     @GetMapping("/product/{productId}")
     public Result<Page<ProductReviewResponse>> getProductReviews(
-            @PathVariable Long productId,
+            @PathVariable Integer productId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return Result.success(productReviewService.getProductReviews(productId, page, size));
@@ -39,13 +39,13 @@ public class ProductReviewController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         // TODO: 从SecurityContext获取用户ID
-        Long userId = 1L;
+        Integer userId = 1;
         return Result.success(productReviewService.getUserReviews(userId, page, size));
     }
 
     @GetMapping("/merchant/{merchantId}")
     public Result<Page<ProductReviewResponse>> getMerchantReviews(
-            @PathVariable Long merchantId,
+            @PathVariable Integer merchantId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return Result.success(productReviewService.getMerchantReviews(merchantId, page, size));
@@ -53,9 +53,9 @@ public class ProductReviewController {
 
     @DeleteMapping("/{reviewId}")
     @PreAuthorize("hasRole('USER')")
-    public Result<Void> deleteReview(@PathVariable Long reviewId) {
+    public Result<Void> deleteReview(@PathVariable Integer reviewId) {
         // TODO: 从SecurityContext获取用户ID
-        Long userId = 1L;
+        Integer userId = 1;
         productReviewService.deleteReview(userId, reviewId);
         return Result.success(null);
     }

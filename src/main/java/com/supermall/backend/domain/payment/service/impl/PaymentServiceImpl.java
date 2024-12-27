@@ -27,7 +27,7 @@ public class PaymentServiceImpl extends ServiceImpl<PaymentMapper, Payment> impl
 
     @Override
     @Transactional
-    public PaymentResponse createPayment(Long userId, PaymentRequest request) {
+    public PaymentResponse createPayment(Integer userId, PaymentRequest request) {
         // 检查订单是否存在且属于当前用户
         Order order = orderService.getOrder(request.getOrderId());
         if (order == null || !orderService.isUserOrder(userId, order.getId())) {
@@ -61,7 +61,7 @@ public class PaymentServiceImpl extends ServiceImpl<PaymentMapper, Payment> impl
     }
 
     @Override
-    public PaymentResponse getPayment(Long userId, Long paymentId) {
+    public PaymentResponse getPayment(Integer userId, Integer paymentId) {
         Payment payment = getOne(new LambdaQueryWrapper<Payment>()
                 .eq(Payment::getId, paymentId)
                 .eq(Payment::getUserId, userId));
@@ -75,7 +75,7 @@ public class PaymentServiceImpl extends ServiceImpl<PaymentMapper, Payment> impl
     }
 
     @Override
-    public Page<PaymentResponse> getUserPayments(Long userId, int page, int size) {
+    public Page<PaymentResponse> getUserPayments(Integer userId, int page, int size) {
         Page<Payment> paymentPage = page(new Page<>(page, size),
                 new LambdaQueryWrapper<Payment>()
                         .eq(Payment::getUserId, userId)

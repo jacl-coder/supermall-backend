@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class UserInfoResponse {
-    private Long id;
+    private Integer id;
     private String username;
     private String email;
     private String fullName;

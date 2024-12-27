@@ -41,7 +41,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     @Transactional
-    public OrderResponse createOrder(Long userId, OrderCreateRequest request) {
+    public OrderResponse createOrder(Integer userId, OrderCreateRequest request) {
         // 1. 获取购物车商品
         List<CartItem> cartItems = cartService.getByIds(request.getCartItemIds());
 
@@ -84,7 +84,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public OrderResponse getOrderDetail(Long userId, Long orderId) {
+    public OrderResponse getOrderDetail(Integer userId, Integer orderId) {
         Order order = getOne(new LambdaQueryWrapper<Order>()
                 .eq(Order::getId, orderId)
                 .eq(Order::getUserId, userId));
@@ -100,7 +100,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Page<OrderResponse> getUserOrders(Long userId, String status, int page, int size) {
+    public Page<OrderResponse> getUserOrders(Integer userId, String status, int page, int size) {
         Page<Order> orderPage = page(new Page<>(page, size), new LambdaQueryWrapper<Order>()
                 .eq(Order::getUserId, userId)
                 .eq(status != null, Order::getStatus, status)
@@ -124,7 +124,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     @Transactional
-    public void cancelOrder(Long userId, Long orderId) {
+    public void cancelOrder(Integer userId, Integer orderId) {
         Order order = getOne(new LambdaQueryWrapper<Order>()
                 .eq(Order::getId, orderId)
                 .eq(Order::getUserId, userId));
@@ -139,7 +139,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     @Transactional
-    public void confirmReceived(Long userId, Long orderId) {
+    public void confirmReceived(Integer userId, Integer orderId) {
         Order order = getOne(new LambdaQueryWrapper<Order>()
                 .eq(Order::getId, orderId)
                 .eq(Order::getUserId, userId));
@@ -154,24 +154,24 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public OrderItem getOrderItem(Long orderItemId) {
+    public OrderItem getOrderItem(Integer orderItemId) {
         return orderItemMapper.selectById(orderItemId);
     }
 
     @Override
-    public boolean isUserOrder(Long userId, Long orderId) {
+    public boolean isUserOrder(Integer userId, Integer orderId) {
         Order order = getById(orderId);
         return order != null && order.getUserId().equals(userId);
     }
 
     @Override
-    public Order getOrder(Long orderId) {
+    public Order getOrder(Integer orderId) {
         return getById(orderId);
     }
 
     @Override
     @Transactional
-    public void updateOrderStatus(Long orderId, String status, LocalDateTime statusTime) {
+    public void updateOrderStatus(Integer orderId, String status, LocalDateTime statusTime) {
         Order order = getById(orderId);
         if (order == null) {
             throw new BusinessException("订单不存在");

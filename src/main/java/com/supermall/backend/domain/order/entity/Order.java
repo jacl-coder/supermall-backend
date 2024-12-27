@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 @TableName("orders")
 public class Order {
     @TableId(value = "order_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     private String orderNo;
-    private Long userId;
+    private Integer userId;
     private BigDecimal totalAmount;
     private BigDecimal paymentAmount;
     private BigDecimal shippingFee;

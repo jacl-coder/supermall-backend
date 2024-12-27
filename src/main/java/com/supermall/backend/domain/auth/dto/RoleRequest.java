@@ -10,5 +10,5 @@ public class RoleRequest {
     private String name;
     
     private String description;
-    private List<Long> permissionIds;
+    private List<Integer> permissionIds;
 } 

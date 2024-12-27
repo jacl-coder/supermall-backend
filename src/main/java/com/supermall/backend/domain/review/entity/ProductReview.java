@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 @TableName("product_reviews")
 public class ProductReview {
     @TableId(value = "review_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     
-    private Long orderItemId;
-    private Long userId;
-    private Long productId;
-    private Long merchantId;
+    private Integer orderItemId;
+    private Integer userId;
+    private Integer productId;
+    private Integer merchantId;
     private Integer rating;
     private String content;
     private String images;

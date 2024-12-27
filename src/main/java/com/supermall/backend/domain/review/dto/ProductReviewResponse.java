@@ -6,11 +6,11 @@ import java.util.List;
 
 @Data
 public class ProductReviewResponse {
-    private Long id;
-    private Long orderItemId;
-    private Long userId;
-    private Long productId;
-    private Long merchantId;
+    private Integer id;
+    private Integer orderItemId;
+    private Integer userId;
+    private Integer productId;
+    private Integer merchantId;
     private Integer rating;
     private String content;
     private List<String> images;

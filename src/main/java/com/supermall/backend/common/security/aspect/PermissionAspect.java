@@ -27,7 +27,7 @@ public class PermissionAspect {
             throw new BusinessException("未登录");
         }
 
-        Long roleId = getRoleIdFromAuthentication(authentication);
+        Integer roleId = getRoleIdFromAuthentication(authentication);
         if (roleId == null) {
             throw new BusinessException("用户角色信息不存在");
         }
@@ -38,7 +38,7 @@ public class PermissionAspect {
         }
     }
 
-    private Long getRoleIdFromAuthentication(Authentication authentication) {
+    private Integer getRoleIdFromAuthentication(Authentication authentication) {
         if (authentication.getPrincipal() instanceof SecurityUser) {
             return ((SecurityUser) authentication.getPrincipal()).getRoleId();
         }

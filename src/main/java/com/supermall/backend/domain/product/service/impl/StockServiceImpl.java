@@ -20,8 +20,8 @@ public class StockServiceImpl extends ServiceImpl<StockMovementMapper, StockMove
 
     @Override
     @Transactional
-    public StockMovement createMovement(Long productId, Integer quantity, MovementType type,
-                                      Long referenceId, Long operatorId, String notes) {
+    public StockMovement createMovement(Integer productId, Integer quantity, MovementType type,
+                                      Integer referenceId, Integer operatorId, String notes) {
         StockMovement movement = new StockMovement();
         movement.setProductId(productId);
         movement.setQuantity(quantity);
@@ -35,7 +35,7 @@ public class StockServiceImpl extends ServiceImpl<StockMovementMapper, StockMove
     }
 
     @Override
-    public boolean checkStock(Long productId, Integer quantity) {
+    public boolean checkStock(Integer productId, Integer quantity) {
         Product product = productMapper.selectById(productId);
         if (product == null) {
             throw new BusinessException("商品不存在");
@@ -45,7 +45,7 @@ public class StockServiceImpl extends ServiceImpl<StockMovementMapper, StockMove
 
     @Override
     @Transactional
-    public boolean lockStock(Long productId, Integer quantity, Long orderId, Long operatorId) {
+    public boolean lockStock(Integer productId, Integer quantity, Integer orderId, Integer operatorId) {
         Product product = productMapper.selectById(productId);
         if (product == null) {
             throw new BusinessException("商品不存在");
@@ -67,7 +67,7 @@ public class StockServiceImpl extends ServiceImpl<StockMovementMapper, StockMove
 
     @Override
     @Transactional
-    public boolean releaseStock(Long productId, Integer quantity, Long orderId, Long operatorId) {
+    public boolean releaseStock(Integer productId, Integer quantity, Integer orderId, Integer operatorId) {
         Product product = productMapper.selectById(productId);
         if (product == null) {
             throw new BusinessException("商品不存在");
@@ -85,14 +85,14 @@ public class StockServiceImpl extends ServiceImpl<StockMovementMapper, StockMove
 
     @Override
     @Transactional
-    public boolean confirmStockDeduction(Long orderId) {
+    public boolean confirmStockDeduction(Integer orderId) {
         // 订单支付成功后，库存已经扣减，只需要修改库存变动记录的状态
         return true;
     }
 
     @Override
     @Transactional
-    public boolean adjustStock(Long productId, Integer quantity, Long operatorId, String notes) {
+    public boolean adjustStock(Integer productId, Integer quantity, Integer operatorId, String notes) {
         Product product = productMapper.selectById(productId);
         if (product == null) {
             throw new BusinessException("商品不存在");

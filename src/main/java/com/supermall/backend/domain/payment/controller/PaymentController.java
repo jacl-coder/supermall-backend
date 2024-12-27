@@ -21,15 +21,15 @@ public class PaymentController {
     @PreAuthorize("hasRole('USER')")
     public Result<PaymentResponse> createPayment(@Valid @RequestBody PaymentRequest request) {
         // TODO: 从SecurityContext获取用户ID
-        Long userId = 1L;
+        Integer userId = 1;
         return Result.success(paymentService.createPayment(userId, request));
     }
 
     @GetMapping("/{paymentId}")
     @PreAuthorize("hasRole('USER')")
-    public Result<PaymentResponse> getPayment(@PathVariable Long paymentId) {
+    public Result<PaymentResponse> getPayment(@PathVariable Integer paymentId) {
         // TODO: 从SecurityContext获取用户ID
-        Long userId = 1L;
+        Integer userId = 1;
         PaymentResponse payment = paymentService.getPayment(userId, paymentId);
         if (payment == null) {
             return Result.fail("支付记录不存在");
@@ -43,7 +43,7 @@ public class PaymentController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         // TODO: 从SecurityContext获取用户ID
-        Long userId = 1L;
+        Integer userId = 1;
         return Result.success(paymentService.getUserPayments(userId, page, size));
     }
 

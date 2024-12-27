@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class PermissionResponse {
-    private Long id;
+    private Integer id;
     private String name;
     private String description;
     private LocalDateTime createdAt;

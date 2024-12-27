@@ -26,7 +26,7 @@ public class StockController {
     @Data
     public static class StockAdjustRequest {
         @NotNull(message = "商品ID不能为空")
-        private Long productId;
+        private Integer productId;
         
         @NotNull(message = "调整数量不能为空")
         private Integer quantity;
@@ -37,7 +37,7 @@ public class StockController {
     @Operation(summary = "检查库存")
     @GetMapping("/check")
     public ResponseEntity<Boolean> checkStock(
-            @RequestParam @NotNull Long productId,
+            @RequestParam @NotNull Integer productId,
             @RequestParam @Min(1) Integer quantity) {
         return ResponseEntity.ok(stockService.checkStock(productId, quantity));
     }
@@ -51,7 +51,7 @@ public class StockController {
         return ResponseEntity.ok(stockService.adjustStock(
                 request.getProductId(),
                 request.getQuantity(),
-                Long.valueOf(userDetails.getUsername()),
+                Integer.valueOf(userDetails.getUsername()),
                 request.getNotes()
         ));
     }
