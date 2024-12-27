@@ -1,118 +1,200 @@
-# SuperMall 超级商城系统
+# SuperMall 电商系统后端
 
-一个基于Spring Boot的电商系统，支持商家入驻、商品管理、订单处理等核心电商功能。
+SuperMall是一个基于Spring Boot的现代电商系统后端，提供完整的电商功能支持。
 
 ## 技术栈
 
-- 核心框架：Spring Boot 3.x
-- 安全框架：Spring Security 6.x + JWT
-- ORM框架：MyBatis-Plus
-- 数据库：MySQL 8.0
-- 缓存：Redis 7.x
-- 接口文档：SpringDoc OpenAPI 2.x
-- 开发语言：Java 17
+- **核心框架：** Spring Boot 3.1.5
+- **安全框架：** Spring Security + JWT
+- **数据库：** MySQL 8.0
+- **ORM：** MyBatis-Plus 3.5.5
+- **API文档：** SpringDoc OpenAPI 2.3.0
+- **其他工具：** Lombok, Spring AOP
 
-## 项目结构 
+## 系统功能
 
-```
-src/main/java/com/supermall/backend
-├── domain/ # 业务领域
-│ ├── user/ # 用户模块
-│ ├── product/ # 商品模块
-│ ├── order/ # 订单模块
-│ └── merchant/ # 商家模块
-│ ├── controller/ # 控制器
-│ ├── service/ # 服务层
-│ ├── mapper/ # MyBatis-Plus接口
-│ └── entity/ # 实体类
-│
-├── common/ # 通用组件
-│ ├── config/ # 配置类
-│ ├── exception/ # 异常处理
-│ └── util/ # 工具类
-│
-└── SupermallBackendApplication.java
-```
-
-
-## 核心功能
-
-### 用户中心
-- 用户注册登录
+### 1. 用户中心
+- 用户注册/登录
 - 个人信息管理
-- 收货地址管理
-- 权限角色控制
+- 地址管理
+- 安全认证
 
-### 商品系统
-- 商品分类管理
-- 商品信息管理
-- 商品库存管理
-- 商品搜索功能
-
-### 订单系统
-- 购物车管理
-- 订单创建处理
-- 订单状态流转
-- 支付功能集成
-
-### 商家系统
-- 商家入驻
-- 店铺管理
+### 2. 商品系统
 - 商品管理
+- 分类管理
+- 库存管理
+- 商品搜索
+- 商品评价
+
+### 3. 订单系统
+- 购物车管理
+- 订单创建与管理
+- 支付集成
+- 订单状态追踪
+- 退货/退款处理
+
+### 4. 商家系统
+- 商家入驻
+- 商品上架/下架
 - 订单处理
+- 销售统计
+
+### 5. 收藏系统
+- 商品收藏
+- 收藏列表管理
+- 收藏状态查询
+- 收藏数量统计
+
+### 6. 评价系统
+- 商品评价
+- 评价管理
+- 评分统计
+- 图片评价
+
+### 7. 通知系统
+- 系统通知
+- 订单通知
+- 促销通知
+- 消息管理
+
+### 8. 系统功能
+- 日志记录
+- 权限控制
+- 数据统计
+- 系统监控
+
+## API 接口
+
+### 用户接口
+- POST `/api/v1/auth/register` - 用户注册
+- POST `/api/v1/auth/login` - 用户登录
+- GET `/api/v1/users/profile` - 获取用户信息
+- PUT `/api/v1/users/profile` - 更新用户信息
+
+### 商品接口
+- GET `/api/v1/products` - 获取商品列表
+- GET `/api/v1/products/{id}` - 获取商品详情
+- POST `/api/v1/products` - 创建商品
+- PUT `/api/v1/products/{id}` - 更新商品
+- DELETE `/api/v1/products/{id}` - 删除商品
+
+### 订单接口
+- POST `/api/v1/orders` - 创建订单
+- GET `/api/v1/orders` - 获取订单列表
+- GET `/api/v1/orders/{id}` - 获取订单详情
+- PUT `/api/v1/orders/{id}/status` - 更新订单状态
+- POST `/api/v1/orders/{id}/pay` - 订单支付
+
+### 购物车接口
+- POST `/api/v1/cart` - 添加购物车
+- GET `/api/v1/cart` - 获取购物车列表
+- PUT `/api/v1/cart/{id}` - 更新购物车
+- DELETE `/api/v1/cart/{id}` - 删除购物车项
+
+### 收藏接口
+- POST `/api/v1/favorites/{productId}` - 添加收藏
+- DELETE `/api/v1/favorites/{productId}` - 取消收藏
+- GET `/api/v1/favorites` - 获取收藏列表
+- GET `/api/v1/favorites/{productId}/check` - 检查是否已收藏
+- GET `/api/v1/favorites/count` - 获取收藏数量
+
+### 评价接口
+- POST `/api/v1/reviews` - 发表评价
+- GET `/api/v1/reviews/product/{productId}` - 获取商品评价
+- GET `/api/v1/reviews/user` - 获取用户评价
+- DELETE `/api/v1/reviews/{id}` - 删除评价
+
+### 通知接口
+- GET `/api/v1/notifications` - 获取通知列表
+- PUT `/api/v1/notifications/{id}/read` - 标记通知已读
+- DELETE `/api/v1/notifications/{id}` - 删除通知
 
 ## 数据库设计
 
-主要包含以下模块的表结构：
-- 权限模块：roles, permissions, role_permissions
-- 用户模块：auth_users, user_profiles, merchant_profiles
-- 商品模块：categories, products, product_specs
-- 订单模块：orders, order_items, payments
-- 购物车模块：shopping_cart_items
-- 评价模块：product_reviews
+系统包含以下主要数据表：
 
-详细的数据库结构见：`src/main/resources/db/super_mall.sql`
+- `user` - 用户表
+- `merchant` - 商家表
+- `category` - 商品分类表
+- `product` - 商品表
+- `product_image` - 商品图片表
+- `cart` - 购物车表
+- `order` - 订单表
+- `order_item` - 订单明细表
+- `product_review` - 商品评价表
+- `favorite` - 收藏表
+- `payment` - 支付记录表
+- `notification` - 系统通知表
+- `system_logs` - 系统日志表
 
-## 快速开始
+## 项目结构
 
-### 环境要求
-- JDK 17+
-- MySQL 8.0+
-- Redis 7.0+
-- Maven 3.8+
-
-### 开发环境搭建
-
-1. 克隆项目
-```bash
-git clone https://github.com/jacl-coder/supermall-backend.git
+```
+src/main/java/com/supermall/backend/
+├── common/                 # 公共组件
+│   ├── config/            # 配置类
+│   ├── exception/         # 异常处理
+│   ├── security/          # 安全相关
+│   └── util/              # 工具类
+├── domain/                # 业务领域模块
+│   ├── user/             # 用户模块
+│   ├── product/          # 商品模块
+│   ├── order/            # 订单模块
+│   ├── cart/             # 购物车模块
+│   ├── favorite/         # 收藏模块
+│   ├── review/           # 评价模块
+│   ├── payment/          # 支付模块
+│   └── notification/     # 通知模块
+└── SupermallBackendApplication.java
 ```
 
-2. 导入数据库
-```bash
-mysql -u root -p < src/main/resources/db/super_mall.sql
-```
+## 安装部署
 
-## API文档
+1. 环境要求
+   - JDK 17+
+   - MySQL 8.0+
+   - Redis 6.0+
+   - Maven 3.6+
 
-启动应用后访问：http://localhost:8080/swagger-ui.html
+2. 配置数据库
+   ```sql
+   source /src/main/resources/db/super_mall.sql
+   ```
 
-## 开发规范
+3. 修改配置
+   - 配置文件位置：`src/main/resources/application.yml`
+   - 修改数据库连接信息
+   - 配置JWT密钥
 
-1. 代码规范
-   - 遵循阿里巴巴Java开发规范
-   - 每个模块按controller/service/mapper/entity组织代码
-   - 保持代码简洁清晰
+4. 编译运行
+   ```bash
+   mvn clean package
+   java -jar target/supermall-backend-0.0.1-SNAPSHOT.jar
+   ```
 
-2. 提交规范
-   - feat: 新功能
-   - fix: 修复问题
-   - docs: 文档修改
-   - style: 代码格式化
-   - refactor: 代码重构
-   - test: 测试相关
-   - chore: 其他修改
+## 安全说明
 
-## 许可证
+- 使用Spring Security进行安全控制
+- JWT用于用户认证
+- 密码加密存储
+- 接口权限控制
+- 防SQL注入
+- XSS防护
+- CORS配置
 
-[MIT License](LICENSE)
+## 性能优化
+
+- Redis缓存
+- 数据库索引优化
+- 连接池配置
+- 分页查询
+- 延迟加载
+
+## 开发团队
+
+- 开发人员：[团队成员]
+- 联系方式：[联系信息]
+
+## 版权说明
+
+Copyright © 2024 SuperMall Team
