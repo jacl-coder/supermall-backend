@@ -13,10 +13,10 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     
-    @Value("${jwt.secret}")
+    @Value("${spring.jwt.secret}")
     private String secret;
     
-    @Value("${jwt.expiration}")
+    @Value("${spring.jwt.expiration}")
     private Long expiration;
 
     private SecretKey getSigningKey() {

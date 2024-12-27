@@ -6,11 +6,13 @@ import com.supermall.backend.common.exception.BusinessException;
 import com.supermall.backend.common.security.util.JwtUtil;
 import com.supermall.backend.domain.auth.dto.*;
 import com.supermall.backend.domain.auth.entity.AuthUser;
-import com.supermall.backend.domain.auth.entity.UserProfile;
 import com.supermall.backend.domain.auth.mapper.AuthUserMapper;
 import com.supermall.backend.domain.auth.service.AuthUserService;
 import com.supermall.backend.domain.auth.service.RoleService;
-import com.supermall.backend.domain.auth.service.UserProfileService;
+import com.supermall.backend.domain.user.entity.UserProfile;
+import com.supermall.backend.domain.user.service.UserProfileService;
+import com.supermall.backend.domain.user.dto.UserProfileRequest;
+import com.supermall.backend.domain.user.dto.UserProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,13 +56,16 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         userProfile.setAuthId(authUser.getId());
         userProfile.setFullName(request.getFullName());
         userProfile.setPhoneNumber(request.getPhoneNumber());
-        userProfileService.save(userProfile);
+        UserProfileRequest profileRequest = new UserProfileRequest();
+        profileRequest.setFullName(request.getFullName());
+        profileRequest.setPhoneNumber(request.getPhoneNumber());
+        userProfileService.createProfile(authUser.getId(), profileRequest);
 
         // 更新最后登录时间
         updateLastLogin(authUser.getId());
 
         // 生成 token 并返回登录响应
-        UserInfoResponse userInfo = convertToUserInfoResponse(authUser, userProfile);
+        UserInfoResponse userInfo = convertToUserInfoResponse(authUser);
         String token = jwtUtil.generateToken(authUser.getUsername(), authUser.getId(), authUser.getRoleId());
 
         LoginResponse response = new LoginResponse();
@@ -85,8 +90,14 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         updateLastLogin(authUser.getId());
 
         // 获取用户信息
-        UserProfile userProfile = userProfileService.getByAuthId(authUser.getId());
-        UserInfoResponse userInfo = convertToUserInfoResponse(authUser, userProfile);
+        UserInfoResponse userInfo;
+        try {
+            var profile = userProfileService.getProfileByAuthId(authUser.getId());
+            userInfo = convertToUserInfoResponse(authUser, profile);
+        } catch (BusinessException e) {
+            // 如果用户资料不存在，只返回基本信息
+            userInfo = convertToUserInfoResponse(authUser, null);
+        }
 
         // 生成 token
         String token = jwtUtil.generateToken(authUser.getUsername(), authUser.getId(), authUser.getRoleId());
@@ -153,12 +164,16 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
 
     @Override
     public void logout(Long authId) {
-        // 可以在这里添加登出相关的业务逻辑
+        // 可���在这里添加登出相关的业务逻辑
         // 比如记录登出时间、清除用户token等
         // 目前数据库表中没有相关字段，所以暂时不做处理
     }
 
-    private UserInfoResponse convertToUserInfoResponse(AuthUser authUser, UserProfile userProfile) {
+    private UserInfoResponse convertToUserInfoResponse(AuthUser authUser) {
+        return convertToUserInfoResponse(authUser, null);
+    }
+
+    private UserInfoResponse convertToUserInfoResponse(AuthUser authUser, UserProfileResponse userProfile) {
         UserInfoResponse response = new UserInfoResponse();
         response.setId(authUser.getId());
         response.setUsername(authUser.getUsername());

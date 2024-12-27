@@ -1,0 +1,365 @@
+2024-12-27T15:51:39.078+08:00  INFO 12224 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 12224 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:51:39.079+08:00 DEBUG 12224 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:51:39.081+08:00  INFO 12224 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T15:51:39.315+08:00  WARN 12224 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to parse configuration class [com.supermall.backend.SupermallBackendApplication]
+2024-12-27T15:51:39.445+08:00 ERROR 12224 --- [supermall-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to parse configuration class [com.supermall.backend.SupermallBackendApplication]
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:179) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:416) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:289) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:606) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.supermall.backend.SupermallBackendApplication.main(SupermallBackendApplication.java:16) ~[classes/:na]
+Caused by: org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name 'userProfileServiceImpl' for bean class [com.supermall.backend.domain.user.service.impl.UserProfileServiceImpl] conflicts with existing, non-compatible bean definition of same name and class [com.supermall.backend.domain.auth.service.impl.UserProfileServiceImpl]
+	at org.springframework.context.annotation.ClassPathBeanDefinitionScanner.checkCandidate(ClassPathBeanDefinitionScanner.java:361) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ClassPathBeanDefinitionScanner.doScan(ClassPathBeanDefinitionScanner.java:288) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ComponentScanAnnotationParser.parse(ComponentScanAnnotationParser.java:128) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:306) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:246) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:165) ~[spring-context-6.1.2.jar:6.1.2]
+	... 13 common frames omitted
+
+2024-12-27T15:53:58.784+08:00  INFO 24664 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 24664 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:53:58.787+08:00 DEBUG 24664 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:53:58.789+08:00  INFO 24664 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T15:53:59.047+08:00  WARN 24664 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanDefinitionStoreException: Failed to parse configuration class [com.supermall.backend.SupermallBackendApplication]
+2024-12-27T15:53:59.171+08:00 ERROR 24664 --- [supermall-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanDefinitionStoreException: Failed to parse configuration class [com.supermall.backend.SupermallBackendApplication]
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:179) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:416) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:289) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:606) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.supermall.backend.SupermallBackendApplication.main(SupermallBackendApplication.java:16) ~[classes/:na]
+Caused by: org.springframework.context.annotation.ConflictingBeanDefinitionException: Annotation-specified bean name 'jwtUtil' for bean class [com.supermall.backend.utils.JwtUtil] conflicts with existing, non-compatible bean definition of same name and class [com.supermall.backend.common.security.util.JwtUtil]
+	at org.springframework.context.annotation.ClassPathBeanDefinitionScanner.checkCandidate(ClassPathBeanDefinitionScanner.java:361) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ClassPathBeanDefinitionScanner.doScan(ClassPathBeanDefinitionScanner.java:288) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ComponentScanAnnotationParser.parse(ComponentScanAnnotationParser.java:128) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassParser.doProcessConfigurationClass(ConfigurationClassParser.java:306) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassParser.processConfigurationClass(ConfigurationClassParser.java:246) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:197) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:165) ~[spring-context-6.1.2.jar:6.1.2]
+	... 13 common frames omitted
+
+2024-12-27T15:54:55.260+08:00  INFO 9896 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 9896 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:54:55.262+08:00 DEBUG 9896 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:54:55.263+08:00  INFO 9896 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T15:54:56.120+08:00  INFO 9896 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T15:54:56.123+08:00  INFO 9896 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T15:54:56.159+08:00  INFO 9896 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 0 Redis repository interfaces.
+2024-12-27T15:54:56.263+08:00  WARN 9896 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalArgumentException: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+2024-12-27T15:54:56.272+08:00  INFO 9896 --- [supermall-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-27T15:54:56.285+08:00 ERROR 9896 --- [supermall-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+java.lang.IllegalArgumentException: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.getTypeForFactoryBeanFromAttributes(FactoryBeanRegistrySupport.java:86) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.getTypeForFactoryBean(AbstractAutowireCapableBeanFactory.java:836) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.isTypeMatch(AbstractBeanFactory.java:620) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doGetBeanNamesForType(DefaultListableBeanFactory.java:575) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanNamesForType(DefaultListableBeanFactory.java:534) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:138) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:606) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.supermall.backend.SupermallBackendApplication.main(SupermallBackendApplication.java:16) ~[classes/:na]
+
+2024-12-27T15:54:59.602+08:00  INFO 3736 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 3736 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:54:59.604+08:00 DEBUG 3736 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:54:59.605+08:00  INFO 3736 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T15:55:00.492+08:00  INFO 3736 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T15:55:00.494+08:00  INFO 3736 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T15:55:00.527+08:00  INFO 3736 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 Redis repository interfaces.
+2024-12-27T15:55:00.652+08:00  WARN 3736 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalArgumentException: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+2024-12-27T15:55:00.661+08:00  INFO 3736 --- [supermall-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-27T15:55:00.687+08:00 ERROR 3736 --- [supermall-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+java.lang.IllegalArgumentException: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.getTypeForFactoryBeanFromAttributes(FactoryBeanRegistrySupport.java:86) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.getTypeForFactoryBean(AbstractAutowireCapableBeanFactory.java:836) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.isTypeMatch(AbstractBeanFactory.java:620) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doGetBeanNamesForType(DefaultListableBeanFactory.java:575) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanNamesForType(DefaultListableBeanFactory.java:534) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:138) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:606) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.supermall.backend.SupermallBackendApplication.main(SupermallBackendApplication.java:16) ~[classes/:na]
+
+2024-12-27T15:56:18.324+08:00  INFO 16136 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 16136 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:56:18.326+08:00 DEBUG 16136 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:56:18.328+08:00  INFO 16136 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T15:56:19.152+08:00  INFO 16136 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T15:56:19.155+08:00  INFO 16136 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T15:56:19.203+08:00  INFO 16136 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 30 ms. Found 0 Redis repository interfaces.
+2024-12-27T15:56:19.338+08:00  WARN 16136 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalArgumentException: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+2024-12-27T15:56:19.350+08:00  INFO 16136 --- [supermall-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-27T15:56:19.367+08:00 ERROR 16136 --- [supermall-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+java.lang.IllegalArgumentException: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.getTypeForFactoryBeanFromAttributes(FactoryBeanRegistrySupport.java:86) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.getTypeForFactoryBean(AbstractAutowireCapableBeanFactory.java:836) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.isTypeMatch(AbstractBeanFactory.java:620) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doGetBeanNamesForType(DefaultListableBeanFactory.java:575) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanNamesForType(DefaultListableBeanFactory.java:534) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:138) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:606) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.supermall.backend.SupermallBackendApplication.main(SupermallBackendApplication.java:16) ~[classes/:na]
+
+2024-12-27T15:57:07.937+08:00  INFO 19640 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 19640 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:57:07.939+08:00 DEBUG 19640 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:57:07.940+08:00  INFO 19640 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T15:57:08.813+08:00  INFO 19640 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T15:57:08.815+08:00  INFO 19640 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T15:57:08.850+08:00  INFO 19640 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 23 ms. Found 0 Redis repository interfaces.
+2024-12-27T15:57:08.980+08:00  WARN 19640 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalArgumentException: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+2024-12-27T15:57:08.990+08:00  INFO 19640 --- [supermall-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-27T15:57:09.011+08:00 ERROR 19640 --- [supermall-backend] [main] o.s.boot.SpringApplication               : Application run failed
+
+java.lang.IllegalArgumentException: Invalid value type for attribute 'factoryBeanObjectType': java.lang.String
+	at org.springframework.beans.factory.support.FactoryBeanRegistrySupport.getTypeForFactoryBeanFromAttributes(FactoryBeanRegistrySupport.java:86) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.getTypeForFactoryBean(AbstractAutowireCapableBeanFactory.java:836) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.isTypeMatch(AbstractBeanFactory.java:620) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doGetBeanNamesForType(DefaultListableBeanFactory.java:575) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeanNamesForType(DefaultListableBeanFactory.java:534) ~[spring-beans-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:138) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:789) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:606) ~[spring-context-6.1.2.jar:6.1.2]
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:146) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:762) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:464) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1358) ~[spring-boot-3.2.1.jar:3.2.1]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1347) ~[spring-boot-3.2.1.jar:3.2.1]
+	at com.supermall.backend.SupermallBackendApplication.main(SupermallBackendApplication.java:16) ~[classes/:na]
+
+2024-12-27T15:58:04.113+08:00  INFO 28912 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 28912 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:58:04.115+08:00 DEBUG 28912 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:58:04.116+08:00  INFO 28912 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T15:58:04.965+08:00  INFO 28912 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T15:58:04.967+08:00  INFO 28912 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T15:58:05.013+08:00  INFO 28912 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 26 ms. Found 0 Redis repository interfaces.
+2024-12-27T15:58:05.817+08:00  INFO 28912 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-12-27T15:58:05.826+08:00  INFO 28912 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-27T15:58:05.828+08:00  INFO 28912 --- [supermall-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-12-27T15:58:05.881+08:00  INFO 28912 --- [supermall-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-27T15:58:05.882+08:00  INFO 28912 --- [supermall-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1718 ms
+2024-12-27T15:58:05.919+08:00 ERROR 28912 --- [supermall-backend] [main] o.s.b.web.embedded.tomcat.TomcatStarter  : Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'jwtAuthenticationFilter' defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\common\security\JwtAuthenticationFilter.class]: Unsatisfied dependency expressed through constructor parameter 1: Error creating bean with name 'customUserDetailsService' defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\domain\auth\service\CustomUserDetailsService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'authUserServiceImpl' defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\domain\auth\service\impl\AuthUserServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'securityConfig' defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\common\config\SecurityConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'jwtAuthenticationFilter': Requested bean is currently in creation: Is there an unresolvable circular reference?
+2024-12-27T15:58:05.960+08:00  INFO 28912 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-12-27T15:58:05.973+08:00  WARN 28912 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2024-12-27T15:58:05.983+08:00  INFO 28912 --- [supermall-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-27T15:58:06.011+08:00 ERROR 28912 --- [supermall-backend] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The dependencies of some of the beans in the application context form a cycle:
+
+©°©¤©¤©¤©¤©¤©´
+|  jwtAuthenticationFilter defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\common\security\JwtAuthenticationFilter.class]
+¡ü     ¡ý
+|  customUserDetailsService defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\domain\auth\service\CustomUserDetailsService.class]
+¡ü     ¡ý
+|  authUserServiceImpl defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\domain\auth\service\impl\AuthUserServiceImpl.class]
+¡ü     ¡ý
+|  securityConfig defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\common\config\SecurityConfig.class]
+©¸©¤©¤©¤©¤©¤©¼
+
+
+Action:
+
+Relying upon circular references is discouraged and they are prohibited by default. Update your application to remove the dependency cycle between beans. As a last resort, it may be possible to break the cycle automatically by setting spring.main.allow-circular-references to true.
+
+2024-12-27T15:59:05.771+08:00  INFO 16800 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 16800 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:59:05.774+08:00 DEBUG 16800 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:59:05.775+08:00  INFO 16800 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T15:59:06.598+08:00  INFO 16800 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T15:59:06.600+08:00  INFO 16800 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T15:59:06.645+08:00  INFO 16800 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 26 ms. Found 0 Redis repository interfaces.
+2024-12-27T15:59:07.418+08:00  INFO 16800 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-12-27T15:59:07.427+08:00  INFO 16800 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-27T15:59:07.428+08:00  INFO 16800 --- [supermall-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-12-27T15:59:07.486+08:00  INFO 16800 --- [supermall-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-27T15:59:07.487+08:00  INFO 16800 --- [supermall-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1665 ms
+2024-12-27T15:59:07.514+08:00 ERROR 16800 --- [supermall-backend] [main] o.s.b.web.embedded.tomcat.TomcatStarter  : Error starting Tomcat context. Exception: org.springframework.beans.factory.UnsatisfiedDependencyException. Message: Error creating bean with name 'securityConfig' defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\common\config\SecurityConfig.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'customUserDetailsService' defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\domain\auth\service\CustomUserDetailsService.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'authUserServiceImpl' defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\domain\auth\service\impl\AuthUserServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'securityConfig': Requested bean is currently in creation: Is there an unresolvable circular reference?
+2024-12-27T15:59:07.551+08:00  INFO 16800 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2024-12-27T15:59:07.564+08:00  WARN 16800 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2024-12-27T15:59:07.575+08:00  INFO 16800 --- [supermall-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-27T15:59:07.602+08:00 ERROR 16800 --- [supermall-backend] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The dependencies of some of the beans in the application context form a cycle:
+
+©°©¤©¤©¤©¤©¤©´
+|  securityConfig defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\common\config\SecurityConfig.class]
+¡ü     ¡ý
+|  customUserDetailsService defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\domain\auth\service\CustomUserDetailsService.class]
+¡ü     ¡ý
+|  authUserServiceImpl defined in file [D:\Code\Java\supermall-backend\target\classes\com\supermall\backend\domain\auth\service\impl\AuthUserServiceImpl.class]
+©¸©¤©¤©¤©¤©¤©¼
+
+
+Action:
+
+Relying upon circular references is discouraged and they are prohibited by default. Update your application to remove the dependency cycle between beans. As a last resort, it may be possible to break the cycle automatically by setting spring.main.allow-circular-references to true.
+
+2024-12-27T15:59:59.462+08:00  INFO 16012 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 16012 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T15:59:59.464+08:00 DEBUG 16012 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T15:59:59.465+08:00  INFO 16012 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T16:00:00.319+08:00  INFO 16012 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T16:00:00.322+08:00  INFO 16012 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T16:00:00.369+08:00  INFO 16012 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 29 ms. Found 0 Redis repository interfaces.
+2024-12-27T16:00:01.151+08:00  INFO 16012 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-12-27T16:00:01.162+08:00  INFO 16012 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-27T16:00:01.162+08:00  INFO 16012 --- [supermall-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-12-27T16:00:01.218+08:00  INFO 16012 --- [supermall-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-27T16:00:01.220+08:00  INFO 16012 --- [supermall-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1705 ms
+2024-12-27T16:00:01.954+08:00 DEBUG 16012 --- [supermall-backend] [main] c.s.b.c.s.JwtAuthenticationFilter        : Filter 'jwtAuthenticationFilter' configured for use
+2024-12-27T16:00:03.265+08:00  INFO 16012 --- [supermall-backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@70592729, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2fdf7da2, org.springframework.security.web.context.SecurityContextHolderFilter@35fb3209, org.springframework.security.web.header.HeaderWriterFilter@1efcba00, org.springframework.web.filter.CorsFilter@43b172e3, org.springframework.security.web.authentication.logout.LogoutFilter@2d0f548a, com.supermall.backend.common.security.JwtAuthenticationFilter@44384b4a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@92fd091, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6b0325d0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@39695803, org.springframework.security.web.session.SessionManagementFilter@347b370c, org.springframework.security.web.access.ExceptionTranslationFilter@24f177f5, org.springframework.security.web.access.intercept.AuthorizationFilter@74431832]
+2024-12-27T16:00:04.170+08:00  WARN 16012 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-12-27T16:00:04.212+08:00  INFO 16012 --- [supermall-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-27T16:00:04.253+08:00 ERROR 16012 --- [supermall-backend] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2024-12-27T16:00:42.696+08:00  INFO 26136 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 26136 (D:\Code\Java\supermall-backend\target\classes started by 18897 in D:\Code\Java\supermall-backend)
+2024-12-27T16:00:42.698+08:00 DEBUG 26136 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T16:00:42.698+08:00  INFO 26136 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T16:00:43.187+08:00  INFO 26136 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T16:00:43.188+08:00  INFO 26136 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T16:00:43.213+08:00  INFO 26136 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 0 Redis repository interfaces.
+2024-12-27T16:00:43.606+08:00  INFO 26136 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-12-27T16:00:43.611+08:00  INFO 26136 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-27T16:00:43.611+08:00  INFO 26136 --- [supermall-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-12-27T16:00:43.641+08:00  INFO 26136 --- [supermall-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-27T16:00:43.641+08:00  INFO 26136 --- [supermall-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 921 ms
+2024-12-27T16:00:43.962+08:00 DEBUG 26136 --- [supermall-backend] [main] c.s.b.c.s.JwtAuthenticationFilter        : Filter 'jwtAuthenticationFilter' configured for use
+2024-12-27T16:00:44.414+08:00  INFO 26136 --- [supermall-backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@71f29d91, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6143b2b1, org.springframework.security.web.context.SecurityContextHolderFilter@2c154508, org.springframework.security.web.header.HeaderWriterFilter@377e90b0, org.springframework.web.filter.CorsFilter@a63643e, org.springframework.security.web.authentication.logout.LogoutFilter@47eae91d, com.supermall.backend.common.security.JwtAuthenticationFilter@27bb74e1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1e194966, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@160546b1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@43294e9b, org.springframework.security.web.session.SessionManagementFilter@11309dd4, org.springframework.security.web.access.ExceptionTranslationFilter@5178345d, org.springframework.security.web.access.intercept.AuthorizationFilter@5ec6a1b6]
+2024-12-27T16:00:44.725+08:00  WARN 26136 --- [supermall-backend] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2024-12-27T16:00:44.741+08:00  INFO 26136 --- [supermall-backend] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-12-27T16:00:44.748+08:00 ERROR 26136 --- [supermall-backend] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2024-12-27T16:01:30.818+08:00  INFO 11216 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 11216 (D:\Code\Java\supermall-backend\target\classes started by 18897 in D:\Code\Java\supermall-backend)
+2024-12-27T16:01:30.818+08:00 DEBUG 11216 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T16:01:30.820+08:00  INFO 11216 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T16:01:31.263+08:00  INFO 11216 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T16:01:31.265+08:00  INFO 11216 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T16:01:31.290+08:00  INFO 11216 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 19 ms. Found 0 Redis repository interfaces.
+2024-12-27T16:01:31.668+08:00  INFO 11216 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-12-27T16:01:31.674+08:00  INFO 11216 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-27T16:01:31.674+08:00  INFO 11216 --- [supermall-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-12-27T16:01:31.700+08:00  INFO 11216 --- [supermall-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-27T16:01:31.702+08:00  INFO 11216 --- [supermall-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 862 ms
+2024-12-27T16:01:32.013+08:00 DEBUG 11216 --- [supermall-backend] [main] c.s.b.c.s.JwtAuthenticationFilter        : Filter 'jwtAuthenticationFilter' configured for use
+2024-12-27T16:01:32.440+08:00  INFO 11216 --- [supermall-backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@f42336c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6b3b4f37, org.springframework.security.web.context.SecurityContextHolderFilter@5bf7f15f, org.springframework.security.web.header.HeaderWriterFilter@5c1dd18, org.springframework.web.filter.CorsFilter@3b25709e, org.springframework.security.web.authentication.logout.LogoutFilter@69c1ea07, com.supermall.backend.common.security.JwtAuthenticationFilter@74b97416, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@11309dd4, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4f4d05b3, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5ec6a1b6, org.springframework.security.web.session.SessionManagementFilter@34bf66af, org.springframework.security.web.access.ExceptionTranslationFilter@5eee3da9, org.springframework.security.web.access.intercept.AuthorizationFilter@f2becb2]
+2024-12-27T16:01:32.735+08:00  INFO 11216 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-12-27T16:01:32.741+08:00  INFO 11216 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Started SupermallBackendApplication in 2.158 seconds (process running for 2.501)
+2024-12-27T16:01:44.814+08:00  INFO 28640 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 28640 (D:\Code\Java\supermall-backend\target\classes started by 18897 in d:\Code\Java\supermall-backend)
+2024-12-27T16:01:44.816+08:00 DEBUG 28640 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T16:01:44.818+08:00  INFO 28640 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T16:01:45.653+08:00  INFO 28640 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T16:01:45.655+08:00  INFO 28640 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T16:01:45.692+08:00  INFO 28640 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 23 ms. Found 0 Redis repository interfaces.
+2024-12-27T16:01:46.540+08:00  INFO 28640 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-12-27T16:01:46.548+08:00  INFO 28640 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-27T16:01:46.550+08:00  INFO 28640 --- [supermall-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-12-27T16:01:46.607+08:00  INFO 28640 --- [supermall-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-27T16:01:46.607+08:00  INFO 28640 --- [supermall-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1745 ms
+2024-12-27T16:01:47.285+08:00 DEBUG 28640 --- [supermall-backend] [main] c.s.b.c.s.JwtAuthenticationFilter        : Filter 'jwtAuthenticationFilter' configured for use
+2024-12-27T16:01:48.575+08:00  INFO 28640 --- [supermall-backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@35554635, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@70f5f59d, org.springframework.security.web.context.SecurityContextHolderFilter@32a4ea4e, org.springframework.security.web.header.HeaderWriterFilter@3578a45b, org.springframework.web.filter.CorsFilter@74431832, org.springframework.security.web.authentication.logout.LogoutFilter@6cc56b32, com.supermall.backend.common.security.JwtAuthenticationFilter@7e58f697, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@26aee0a6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@20184ade, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6fa2a006, org.springframework.security.web.session.SessionManagementFilter@6f4d2294, org.springframework.security.web.access.ExceptionTranslationFilter@20f63ddc, org.springframework.security.web.access.intercept.AuthorizationFilter@4ab9d160]
+2024-12-27T16:01:49.657+08:00  INFO 28640 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2024-12-27T16:01:49.670+08:00  INFO 28640 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Started SupermallBackendApplication in 5.193 seconds (process running for 5.442)
+2024-12-27T16:01:54.265+08:00  INFO 24784 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Starting SupermallBackendApplication using Java 17.0.10 with PID 24784 (D:\Code\Java\supermall-backend\target\classes started by 18897 in D:\Code\Java\supermall-backend)
+2024-12-27T16:01:54.267+08:00 DEBUG 24784 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : Running with Spring Boot v3.2.1, Spring v6.1.2
+2024-12-27T16:01:54.269+08:00  INFO 24784 --- [supermall-backend] [main] c.s.backend.SupermallBackendApplication  : No active profile set, falling back to 1 default profile: "default"
+2024-12-27T16:01:55.195+08:00  INFO 24784 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-27T16:01:55.196+08:00  INFO 24784 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-27T16:01:55.241+08:00  INFO 24784 --- [supermall-backend] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 0 Redis repository interfaces.
+2024-12-27T16:01:56.097+08:00  INFO 24784 --- [supermall-backend] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-12-27T16:01:56.106+08:00  INFO 24784 --- [supermall-backend] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-27T16:01:56.107+08:00  INFO 24784 --- [supermall-backend] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2024-12-27T16:01:56.162+08:00  INFO 24784 --- [supermall-backend] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-27T16:01:56.163+08:00  INFO 24784 --- [supermall-backend] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1843 ms
+2024-12-27T16:01:56.973+08:00 DEBUG 24784 --- [supermall-backend] [main] c.s.b.c.s.JwtAuthenticationFilter        : Filter 'jwtAuthenticationFilter' configured for use
+2024-12-27T16:01:58.370+08:00  INFO 24784 --- [supermall-backend] [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@43b172e3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@39695803, org.springframework.security.web.context.SecurityContextHolderFilter@92fd091, org.springframework.security.web.header.HeaderWriterFilter@569a26ab, org.springframework.web.filter.CorsFilter@304068, org.springframework.security.web.authentication.logout.LogoutFilter@15130002, com.supermall.backend.common.security.JwtAuthenticationFilter@3eac2e8a, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@70439c3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@72a33316, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@54d60fa1, org.springframework.security.web.session.SessionManagementFilter@20184ade, org.springframework.security.web.access.ExceptionTranslationFilter@6ed691fd, org.springframework.security.web.access.intercept.AuthorizationFilter@70592729]

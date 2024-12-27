@@ -29,17 +29,20 @@ spring:
     expiration: 86400000  # 24小时，单位：毫秒
 
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath*:mapper/**/*.xml
   type-aliases-package: com.supermall.backend.domain.*.entity
+  type-handlers-package: com.supermall.backend.common.handler
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
   global-config:
     db-config:
       id-type: auto
       logic-delete-field: deleted
       logic-delete-value: 1
       logic-not-delete-value: 0
+    banner: false
 
 springdoc:
   api-docs:

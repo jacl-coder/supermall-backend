@@ -13,8 +13,8 @@ import com.supermall.backend.domain.review.dto.ProductReviewResponse;
 import com.supermall.backend.domain.review.entity.ProductReview;
 import com.supermall.backend.domain.review.mapper.ProductReviewMapper;
 import com.supermall.backend.domain.review.service.ProductReviewService;
-import com.supermall.backend.domain.auth.entity.UserProfile;
-import com.supermall.backend.domain.auth.service.UserProfileService;
+import com.supermall.backend.domain.user.entity.UserProfile;
+import com.supermall.backend.domain.user.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -115,10 +115,14 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
         }
 
         // 设置用户信息
-        UserProfile userProfile = userProfileService.getByUserId(review.getUserId());
-        if (userProfile != null) {
+        try {
+            var userProfile = userProfileService.getProfile(review.getUserId());
             response.setUserName(userProfile.getFullName());
             response.setUserAvatar(userProfile.getAvatarUrl());
+        } catch (BusinessException e) {
+            // 用户资料不存在，使用默认值
+            response.setUserName("未知用户");
+            response.setUserAvatar(null);
         }
 
         // 设置商品信息
