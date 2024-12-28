@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 @TableName("system_logs")
 public class SystemLog {
     @TableId(value = "log_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     
-    private Long authId;
+    private Integer authId;
     private String module;
     private String action;
     private String detail;

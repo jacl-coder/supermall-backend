@@ -1,2 +1,0 @@
-ALTER TABLE order_items
-ADD COLUMN is_refunded TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否已退款'; 

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class SystemLogServiceImpl extends ServiceImpl<SystemLogMapper, SystemLog> implements SystemLogService {
 
     @Override
-    public void log(Long authId, String module, String action, String detail, String ipAddress, String userAgent) {
+    public void log(Integer authId, String module, String action, String detail, String ipAddress, String userAgent) {
         SystemLog log = new SystemLog();
         log.setAuthId(authId);
         log.setModule(module);
@@ -27,7 +27,7 @@ public class SystemLogServiceImpl extends ServiceImpl<SystemLogMapper, SystemLog
     }
 
     @Override
-    public Page<SystemLog> getUserLogs(Long authId, int page, int size) {
+    public Page<SystemLog> getUserLogs(Integer authId, int page, int size) {
         return page(new Page<>(page, size),
                 new LambdaQueryWrapper<SystemLog>()
                         .eq(SystemLog::getAuthId, authId)

@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @TableName("product_specs")
 public class ProductSpec {
     @TableId(value = "spec_id", type = IdType.AUTO)
-    private Long id;
-    private Long productId;
+    private Integer id;
+    private Integer productId;
     private String specName;
     private String specValue;
     

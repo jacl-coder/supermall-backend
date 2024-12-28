@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface CategoryService extends IService<Category> {
     Category createCategory(CategoryRequest request);
-    Category updateCategory(Long id, CategoryRequest request);
-    List<Category> getSubCategories(Long parentId);
+    Category updateCategory(Integer id, CategoryRequest request);
+    List<Category> getSubCategories(Integer parentId);
     List<Category> getAllCategories();
-    boolean deleteCategory(Long id);
+    boolean deleteCategory(Integer id);
 } 

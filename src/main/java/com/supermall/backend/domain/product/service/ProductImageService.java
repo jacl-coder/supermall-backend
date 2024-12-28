@@ -5,10 +5,10 @@ import com.supermall.backend.domain.product.dto.ProductImageResponse;
 import java.util.List;
 
 public interface ProductImageService {
-    ProductImageResponse addImage(Long productId, ProductImageRequest request);
-    void deleteImage(Long productId, Long imageId);
-    void updateImageSort(Long productId, Long imageId, Integer sortOrder);
-    List<ProductImageResponse> getProductImages(Long productId);
-    void batchAddImages(Long productId, List<ProductImageRequest> requests);
-    void batchDeleteImages(Long productId, List<Long> imageIds);
+    ProductImageResponse addImage(Integer productId, ProductImageRequest request);
+    void deleteImage(Integer productId, Integer imageId);
+    void updateImageSort(Integer productId, Integer imageId, Integer sortOrder);
+    List<ProductImageResponse> getProductImages(Integer productId);
+    void batchAddImages(Integer productId, List<ProductImageRequest> requests);
+    void batchDeleteImages(Integer productId, List<Integer> imageIds);
 } 

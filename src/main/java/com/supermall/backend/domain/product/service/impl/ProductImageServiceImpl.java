@@ -23,7 +23,7 @@ public class ProductImageServiceImpl extends ServiceImpl<ProductImageMapper, Pro
 
     @Override
     @Transactional
-    public ProductImageResponse addImage(Long productId, ProductImageRequest request) {
+    public ProductImageResponse addImage(Integer productId, ProductImageRequest request) {
         ProductImage image = new ProductImage();
         image.setProductId(productId);
         image.setImageUrl(request.getImageUrl());
@@ -35,7 +35,7 @@ public class ProductImageServiceImpl extends ServiceImpl<ProductImageMapper, Pro
 
     @Override
     @Transactional
-    public void deleteImage(Long productId, Long imageId) {
+    public void deleteImage(Integer productId, Integer imageId) {
         remove(new LambdaQueryWrapper<ProductImage>()
                 .eq(ProductImage::getProductId, productId)
                 .eq(ProductImage::getId, imageId));
@@ -43,7 +43,7 @@ public class ProductImageServiceImpl extends ServiceImpl<ProductImageMapper, Pro
 
     @Override
     @Transactional
-    public void updateImageSort(Long productId, Long imageId, Integer sortOrder) {
+    public void updateImageSort(Integer productId, Integer imageId, Integer sortOrder) {
         ProductImage image = getOne(new LambdaQueryWrapper<ProductImage>()
                 .eq(ProductImage::getProductId, productId)
                 .eq(ProductImage::getId, imageId));
@@ -57,7 +57,7 @@ public class ProductImageServiceImpl extends ServiceImpl<ProductImageMapper, Pro
     }
 
     @Override
-    public List<ProductImageResponse> getProductImages(Long productId) {
+    public List<ProductImageResponse> getProductImages(Integer productId) {
         List<ProductImage> images = list(new LambdaQueryWrapper<ProductImage>()
                 .eq(ProductImage::getProductId, productId)
                 .orderByAsc(ProductImage::getSortOrder));
@@ -69,7 +69,7 @@ public class ProductImageServiceImpl extends ServiceImpl<ProductImageMapper, Pro
 
     @Override
     @Transactional
-    public void batchAddImages(Long productId, List<ProductImageRequest> requests) {
+    public void batchAddImages(Integer productId, List<ProductImageRequest> requests) {
         List<ProductImage> images = new ArrayList<>();
         for (ProductImageRequest request : requests) {
             ProductImage image = new ProductImage();
@@ -83,7 +83,7 @@ public class ProductImageServiceImpl extends ServiceImpl<ProductImageMapper, Pro
 
     @Override
     @Transactional
-    public void batchDeleteImages(Long productId, List<Long> imageIds) {
+    public void batchDeleteImages(Integer productId, List<Integer> imageIds) {
         remove(new LambdaQueryWrapper<ProductImage>()
                 .eq(ProductImage::getProductId, productId)
                 .in(ProductImage::getId, imageIds));

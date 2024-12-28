@@ -1,4 +1,4 @@
-package com.supermall.backend.config;
+package com.supermall.backend.domain.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

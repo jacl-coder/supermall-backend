@@ -17,4 +17,6 @@ public class PaymentResponse {
     private String failureReason;
     private LocalDateTime paidAt;
     private LocalDateTime createdAt;
+    private LocalDateTime expireTime;
+    private String channelConfig;
 } 

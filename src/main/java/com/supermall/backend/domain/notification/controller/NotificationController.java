@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "消息通知管理", description = "包括系统消息推送、用户通知查询、消息状态更新等功能")
+@Tag(name = "通知管理", description = "包括系统通知、订单通知等功能")
 @RestController
-@RequestMapping("/api/v1/notifications")
+@RequestMapping("/api/notifications")
 @RequiredArgsConstructor
 public class NotificationController {
 

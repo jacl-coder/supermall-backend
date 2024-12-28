@@ -20,7 +20,7 @@ public class SystemLogController {
     @GetMapping("/user/{authId}")
     @PreAuthorize("hasRole('ADMIN')")
     public Result<Page<SystemLog>> getUserLogs(
-            @PathVariable Long authId,
+            @PathVariable Integer authId,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return Result.success(systemLogService.getUserLogs(authId, page, size));

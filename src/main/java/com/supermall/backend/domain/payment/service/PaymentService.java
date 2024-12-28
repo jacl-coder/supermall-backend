@@ -34,4 +34,10 @@ public interface PaymentService extends IService<Payment> {
      * 处理退款
      */
     void handleRefund(Integer returnId, BigDecimal amount);
+    
+    // 模拟支付成功
+    void mockPaymentSuccess(Integer userId, Integer paymentId);
+    
+    // 模拟支付失败
+    void mockPaymentFailure(Integer userId, Integer paymentId, String reason);
 } 

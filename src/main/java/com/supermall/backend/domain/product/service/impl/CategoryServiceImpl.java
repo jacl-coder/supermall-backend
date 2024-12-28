@@ -39,7 +39,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     @Transactional
-    public Category updateCategory(Long id, CategoryRequest request) {
+    public Category updateCategory(Integer id, CategoryRequest request) {
         Category category = getById(id);
         if (category == null) {
             throw new BusinessException("分类不存在");
@@ -66,7 +66,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     }
 
     @Override
-    public List<Category> getSubCategories(Long parentId) {
+    public List<Category> getSubCategories(Integer parentId) {
         return list(new LambdaQueryWrapper<Category>()
                 .eq(Category::getParentId, parentId)
                 .eq(Category::getStatus, Category.Status.ACTIVE)
@@ -82,7 +82,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     @Transactional
-    public boolean deleteCategory(Long id) {
+    public boolean deleteCategory(Integer id) {
         Category category = getById(id);
         if (category == null) {
             throw new BusinessException("分类不存在");

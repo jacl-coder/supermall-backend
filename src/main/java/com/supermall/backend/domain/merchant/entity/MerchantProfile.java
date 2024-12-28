@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @TableName("merchant_profiles")
 public class MerchantProfile {
     @TableId(value = "merchant_id", type = IdType.AUTO)
-    private Long id;
-    private Long authId;
+    private Integer id;
+    private Integer authId;
     private String shopName;
     private String shopDescription;
     private String businessLicense;

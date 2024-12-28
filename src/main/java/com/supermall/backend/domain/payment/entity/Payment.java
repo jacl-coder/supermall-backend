@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @TableName("payments")
@@ -31,6 +32,12 @@ public class Payment {
     private Integer refundForPaymentId;  // 原支付记录ID（仅退款时使用）
     private Boolean isRefund;            // 是否为退款记录
     
+    // 新增字段
+    private LocalDateTime expireTime;    // 支付超时时间
+    private String channelConfig;        // 支付渠道配置（JSON格式）
+    private Integer retryCount;          // 重试次数
+    private String notifyUrl;            // 支付回调通知地址
+    
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
     
@@ -57,6 +64,16 @@ public class Payment {
         public String getDescription() {
             return description;
         }
+        
+        public boolean canTransitionTo(Status nextStatus) {
+            return switch (this) {
+                case PENDING -> List.of(PROCESSING, FAILED, CLOSED).contains(nextStatus);
+                case PROCESSING -> List.of(SUCCESS, FAILED).contains(nextStatus);
+                case SUCCESS -> List.of(REFUND_PENDING).contains(nextStatus);
+                case REFUND_PENDING -> List.of(REFUNDED, FAILED).contains(nextStatus);
+                case FAILED, CLOSED, REFUNDED -> false;
+            };
+        }
     }
     
     public enum PaymentMethod {
@@ -73,5 +90,33 @@ public class Payment {
         public String getDescription() {
             return description;
         }
+    }
+    
+    // 金额验证
+    public void validateAmount() {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("支付金额必须大于0");
+        }
+        if (isRefund != null && isRefund && amount.compareTo(BigDecimal.ZERO) >= 0) {
+            throw new IllegalArgumentException("退款金额必须小于0");
+        }
+    }
+    
+    // 检查是否已超时
+    public boolean isExpired() {
+        return expireTime != null && LocalDateTime.now().isAfter(expireTime);
+    }
+    
+    // 检查是否可以重试
+    public boolean canRetry() {
+        return retryCount != null && retryCount < 3;  // 最多重试3次
+    }
+    
+    // 增加重试次数
+    public void incrementRetryCount() {
+        if (retryCount == null) {
+            retryCount = 0;
+        }
+        retryCount++;
     }
 } 

@@ -28,7 +28,7 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     @RequirePermission(role = "ADMIN")
-    public Result<Category> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
+    public Result<Category> updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryRequest request) {
         Category category = categoryService.updateCategory(id, request);
         if (category == null) {
             return Result.fail("分类不存在");
@@ -38,7 +38,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     @RequirePermission(role = "ADMIN")
-    public Result<Boolean> deleteCategory(@PathVariable Long id) {
+    public Result<Boolean> deleteCategory(@PathVariable Integer id) {
         if (!categoryService.deleteCategory(id)) {
             return Result.fail("删除失败，可能存在子分类");
         }
@@ -46,7 +46,7 @@ public class CategoryController {
     }
 
     @GetMapping("/sub/{parentId}")
-    public Result<List<Category>> getSubCategories(@PathVariable Long parentId) {
+    public Result<List<Category>> getSubCategories(@PathVariable Integer parentId) {
         return Result.success(categoryService.getSubCategories(parentId));
     }
 

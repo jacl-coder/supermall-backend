@@ -15,9 +15,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "退货订单管理", description = "退货订单相关接口")
+@Tag(name = "退货管理", description = "包括退货申请、审核等功能")
 @RestController
-@RequestMapping("/api/v1/returns")
+@RequestMapping("/api/returns")
 @RequiredArgsConstructor
 public class ReturnOrderController {
 

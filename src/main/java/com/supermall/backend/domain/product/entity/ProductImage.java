@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @TableName("product_images")
 public class ProductImage {
     @TableId(value = "image_id", type = IdType.AUTO)
-    private Long id;
-    private Long productId;
+    private Integer id;
+    private Integer productId;
     private String imageUrl;
     private Integer sortOrder;
     

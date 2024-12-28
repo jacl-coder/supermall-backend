@@ -23,7 +23,7 @@ public class ProductSpecServiceImpl extends ServiceImpl<ProductSpecMapper, Produ
 
     @Override
     @Transactional
-    public ProductSpecResponse addSpec(Long productId, ProductSpecRequest request) {
+    public ProductSpecResponse addSpec(Integer productId, ProductSpecRequest request) {
         // 检查是否已存在相同规格名称
         if (exists(new LambdaQueryWrapper<ProductSpec>()
                 .eq(ProductSpec::getProductId, productId)
@@ -42,7 +42,7 @@ public class ProductSpecServiceImpl extends ServiceImpl<ProductSpecMapper, Produ
 
     @Override
     @Transactional
-    public void deleteSpec(Long productId, Long specId) {
+    public void deleteSpec(Integer productId, Integer specId) {
         remove(new LambdaQueryWrapper<ProductSpec>()
                 .eq(ProductSpec::getProductId, productId)
                 .eq(ProductSpec::getId, specId));
@@ -50,7 +50,7 @@ public class ProductSpecServiceImpl extends ServiceImpl<ProductSpecMapper, Produ
 
     @Override
     @Transactional
-    public void updateSpec(Long productId, Long specId, ProductSpecRequest request) {
+    public void updateSpec(Integer productId, Integer specId, ProductSpecRequest request) {
         ProductSpec spec = getOne(new LambdaQueryWrapper<ProductSpec>()
                 .eq(ProductSpec::getProductId, productId)
                 .eq(ProductSpec::getId, specId));
@@ -73,7 +73,7 @@ public class ProductSpecServiceImpl extends ServiceImpl<ProductSpecMapper, Produ
     }
 
     @Override
-    public List<ProductSpecResponse> getProductSpecs(Long productId) {
+    public List<ProductSpecResponse> getProductSpecs(Integer productId) {
         List<ProductSpec> specs = list(new LambdaQueryWrapper<ProductSpec>()
                 .eq(ProductSpec::getProductId, productId)
                 .orderByAsc(ProductSpec::getCreatedAt));
@@ -85,7 +85,7 @@ public class ProductSpecServiceImpl extends ServiceImpl<ProductSpecMapper, Produ
 
     @Override
     @Transactional
-    public void batchAddSpecs(Long productId, List<ProductSpecRequest> requests) {
+    public void batchAddSpecs(Integer productId, List<ProductSpecRequest> requests) {
         // 检查是否有重复的规格名称
         List<String> specNames = requests.stream()
                 .map(ProductSpecRequest::getSpecName)
@@ -117,7 +117,7 @@ public class ProductSpecServiceImpl extends ServiceImpl<ProductSpecMapper, Produ
 
     @Override
     @Transactional
-    public void batchDeleteSpecs(Long productId, List<Long> specIds) {
+    public void batchDeleteSpecs(Integer productId, List<Integer> specIds) {
         remove(new LambdaQueryWrapper<ProductSpec>()
                 .eq(ProductSpec::getProductId, productId)
                 .in(ProductSpec::getId, specIds));

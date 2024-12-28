@@ -1,4 +1,4 @@
-package com.supermall.backend.config;
+package com.supermall.backend.domain.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

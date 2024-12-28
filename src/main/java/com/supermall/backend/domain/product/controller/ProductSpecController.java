@@ -23,7 +23,7 @@ public class ProductSpecController {
     @PostMapping
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<ProductSpecResponse> addSpec(
-            @PathVariable Long productId,
+            @PathVariable Integer productId,
             @Valid @RequestBody ProductSpecRequest request) {
         return Result.success(specService.addSpec(productId, request));
     }
@@ -31,8 +31,8 @@ public class ProductSpecController {
     @DeleteMapping("/{specId}")
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<Void> deleteSpec(
-            @PathVariable Long productId,
-            @PathVariable Long specId) {
+            @PathVariable Integer productId,
+            @PathVariable Integer specId) {
         specService.deleteSpec(productId, specId);
         return Result.success();
     }
@@ -40,8 +40,8 @@ public class ProductSpecController {
     @PutMapping("/{specId}")
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<Void> updateSpec(
-            @PathVariable Long productId,
-            @PathVariable Long specId,
+            @PathVariable Integer productId,
+            @PathVariable Integer specId,
             @Valid @RequestBody ProductSpecRequest request) {
         specService.updateSpec(productId, specId, request);
         return Result.success();
@@ -49,14 +49,14 @@ public class ProductSpecController {
 
     @GetMapping
     public Result<List<ProductSpecResponse>> getProductSpecs(
-            @PathVariable Long productId) {
+            @PathVariable Integer productId) {
         return Result.success(specService.getProductSpecs(productId));
     }
 
     @PostMapping("/batch")
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<Void> batchAddSpecs(
-            @PathVariable Long productId,
+            @PathVariable Integer productId,
             @Valid @RequestBody List<ProductSpecRequest> requests) {
         specService.batchAddSpecs(productId, requests);
         return Result.success();
@@ -65,8 +65,8 @@ public class ProductSpecController {
     @DeleteMapping("/batch")
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<Void> batchDeleteSpecs(
-            @PathVariable Long productId,
-            @RequestBody List<Long> specIds) {
+            @PathVariable Integer productId,
+            @RequestBody List<Integer> specIds) {
         specService.batchDeleteSpecs(productId, specIds);
         return Result.success();
     }

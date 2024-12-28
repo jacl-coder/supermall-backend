@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "购物车管理", description = "购物车的增删改查接口")
+@Tag(name = "购物车管理", description = "包括购物车商品的增删改查等功能")
 @RestController
-@RequestMapping("/api/cart")
+@RequestMapping("/api/carts")
 @RequiredArgsConstructor
 public class CartController {
 

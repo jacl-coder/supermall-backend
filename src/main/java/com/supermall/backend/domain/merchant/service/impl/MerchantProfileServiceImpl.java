@@ -39,7 +39,7 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
 
         MerchantProfile merchant = new MerchantProfile();
         BeanUtils.copyProperties(request, merchant);
-        merchant.setAuthId(authId.longValue());
+        merchant.setAuthId(authId);
         merchant.setStatus(MerchantProfile.Status.PENDING);
 
         save(merchant);

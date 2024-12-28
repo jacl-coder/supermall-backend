@@ -9,7 +9,7 @@ public class CategoryRequest {
     @NotBlank(message = "分类名称不能为空")
     private String name;
     
-    private Long parentId;
+    private Integer parentId;
     
     @NotNull(message = "分类层级不能为空")
     private Integer level;

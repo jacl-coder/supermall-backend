@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 @TableName("categories")
 public class Category {
     @TableId(value = "category_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     private String name;
-    private Long parentId;
+    private Integer parentId;
     private Integer level;
     private Integer sortOrder;
     

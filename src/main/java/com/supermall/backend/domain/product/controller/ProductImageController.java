@@ -23,7 +23,7 @@ public class ProductImageController {
     @PostMapping
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<ProductImageResponse> addImage(
-            @PathVariable Long productId,
+            @PathVariable Integer productId,
             @Valid @RequestBody ProductImageRequest request) {
         return Result.success(imageService.addImage(productId, request));
     }
@@ -31,8 +31,8 @@ public class ProductImageController {
     @DeleteMapping("/{imageId}")
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<Void> deleteImage(
-            @PathVariable Long productId,
-            @PathVariable Long imageId) {
+            @PathVariable Integer productId,
+            @PathVariable Integer imageId) {
         imageService.deleteImage(productId, imageId);
         return Result.success();
     }
@@ -40,8 +40,8 @@ public class ProductImageController {
     @PutMapping("/{imageId}/sort")
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<Void> updateImageSort(
-            @PathVariable Long productId,
-            @PathVariable Long imageId,
+            @PathVariable Integer productId,
+            @PathVariable Integer imageId,
             @RequestParam Integer sortOrder) {
         imageService.updateImageSort(productId, imageId, sortOrder);
         return Result.success();
@@ -49,14 +49,14 @@ public class ProductImageController {
 
     @GetMapping
     public Result<List<ProductImageResponse>> getProductImages(
-            @PathVariable Long productId) {
+            @PathVariable Integer productId) {
         return Result.success(imageService.getProductImages(productId));
     }
 
     @PostMapping("/batch")
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<Void> batchAddImages(
-            @PathVariable Long productId,
+            @PathVariable Integer productId,
             @Valid @RequestBody List<ProductImageRequest> requests) {
         imageService.batchAddImages(productId, requests);
         return Result.success();
@@ -65,8 +65,8 @@ public class ProductImageController {
     @DeleteMapping("/batch")
     @PreAuthorize("hasRole('MERCHANT')")
     public Result<Void> batchDeleteImages(
-            @PathVariable Long productId,
-            @RequestBody List<Long> imageIds) {
+            @PathVariable Integer productId,
+            @RequestBody List<Integer> imageIds) {
         imageService.batchDeleteImages(productId, imageIds);
         return Result.success();
     }
