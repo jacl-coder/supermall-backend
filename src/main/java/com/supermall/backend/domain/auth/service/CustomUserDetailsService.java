@@ -2,6 +2,7 @@ package com.supermall.backend.domain.auth.service;
 
 import com.supermall.backend.domain.auth.entity.AuthUser;
 import com.supermall.backend.common.security.model.SecurityUser;
+import com.supermall.backend.domain.merchant.service.MerchantProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private final AuthUserService authUserService;
     private final RoleService roleService;
+    private final MerchantProfileService merchantProfileService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -26,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在");
         }
 
-        // 获取用户权���
+        // 获取用户权限
         List<String> permissions = roleService.getRolePermissionCodes(authUser.getRoleId());
         List<SimpleGrantedAuthority> authorities = permissions.stream()
                 .map(SimpleGrantedAuthority::new)
@@ -40,6 +42,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         securityUser.setRole("ROLE_" + roleService.getRole(authUser.getRoleId()).getName().toUpperCase());
         securityUser.setEnabled("ACTIVE".equalsIgnoreCase(authUser.getStatus()));
         securityUser.setAccountNonLocked(!"LOCKED".equalsIgnoreCase(authUser.getStatus()));
+
+        // 如果是商家角色，设置商家ID
+        if ("MERCHANT".equals(roleService.getRole(authUser.getRoleId()).getName())) {
+            try {
+                var merchant = merchantProfileService.getByAuthId(authUser.getId());
+                securityUser.setMerchantId(merchant.getId());
+            } catch (Exception e) {
+                // 如果商家信息不存在或未审核通过，不设置商家ID
+            }
+        }
 
         return securityUser;
     }

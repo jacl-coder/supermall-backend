@@ -94,8 +94,44 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
             throw new BusinessException("商家信息不存在");
         }
 
+        // 验证状态转换的合法性
+        validateStatusTransition(merchant.getStatus(), status);
+
         merchant.setStatus(status);
         updateById(merchant);
+    }
+
+    private void validateStatusTransition(MerchantProfile.Status currentStatus, MerchantProfile.Status newStatus) {
+        if (currentStatus == newStatus) {
+            return;
+        }
+
+        switch (currentStatus) {
+            case PENDING -> {
+                if (newStatus != MerchantProfile.Status.APPROVED && newStatus != MerchantProfile.Status.REJECTED) {
+                    throw new BusinessException("待审核的商家只能审核通过或拒绝");
+                }
+            }
+            case APPROVED -> {
+                if (newStatus != MerchantProfile.Status.SUSPENDED && newStatus != MerchantProfile.Status.TERMINATED) {
+                    throw new BusinessException("已审核的商家只能暂停或终止");
+                }
+            }
+            case REJECTED -> {
+                if (newStatus != MerchantProfile.Status.PENDING) {
+                    throw new BusinessException("被拒绝的商家需要重新提交审核");
+                }
+            }
+            case SUSPENDED -> {
+                if (newStatus != MerchantProfile.Status.APPROVED && newStatus != MerchantProfile.Status.TERMINATED) {
+                    throw new BusinessException("已暂停的商家只能恢复营业或终止合作");
+                }
+            }
+            case TERMINATED -> {
+                throw new BusinessException("已终止的商家不能更改状态");
+            }
+            default -> throw new BusinessException("非法的商家状态");
+        }
     }
 
     @Override
@@ -118,6 +154,22 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
         responsePage.setSize(merchantPage.getSize());
 
         return responsePage;
+    }
+
+    @Override
+    public MerchantProfile getByAuthId(Integer authId) {
+        MerchantProfile merchant = getOne(new LambdaQueryWrapper<MerchantProfile>()
+                .eq(MerchantProfile::getAuthId, authId));
+        
+        if (merchant == null) {
+            throw new BusinessException("商家信息不存在");
+        }
+        
+        if (merchant.getStatus() != MerchantProfile.Status.APPROVED) {
+            throw new BusinessException("商家未审核通过，无法执行此操作");
+        }
+        
+        return merchant;
     }
 
     private MerchantResponse convertToResponse(MerchantProfile merchant) {

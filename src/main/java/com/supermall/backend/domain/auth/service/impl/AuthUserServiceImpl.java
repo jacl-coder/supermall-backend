@@ -9,6 +9,8 @@ import com.supermall.backend.domain.auth.entity.AuthUser;
 import com.supermall.backend.domain.auth.mapper.AuthUserMapper;
 import com.supermall.backend.domain.auth.service.AuthUserService;
 import com.supermall.backend.domain.auth.service.RoleService;
+import com.supermall.backend.domain.merchant.entity.MerchantProfile;
+import com.supermall.backend.domain.merchant.service.MerchantProfileService;
 import com.supermall.backend.domain.user.entity.UserProfile;
 import com.supermall.backend.domain.user.service.UserProfileService;
 import com.supermall.backend.domain.user.dto.UserProfileRequest;
@@ -28,6 +30,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     private final JwtUtil jwtUtil;
     private final RoleService roleService;
     private final UserProfileService userProfileService;
+    private final MerchantProfileService merchantProfileService;
 
     @Override
     @Transactional
@@ -98,16 +101,28 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
 
         // 获取用户信息
         UserInfoResponse userInfo;
+        Integer merchantId = null;
+
         try {
             var profile = userProfileService.getProfileByAuthId(authUser.getId());
             userInfo = convertToUserInfoResponse(authUser, profile);
+
+            // 如果是商家角色，获取商家ID
+            if ("MERCHANT".equals(roleService.getRole(authUser.getRoleId()).getName())) {
+                try {
+                    MerchantProfile merchant = merchantProfileService.getByAuthId(authUser.getId());
+                    merchantId = merchant.getId();
+                } catch (Exception e) {
+                    // 如果商家信息不存在或未审核通过，不设置商家ID
+                }
+            }
         } catch (BusinessException e) {
             // 如果用户资料不存在，只返回基本信息
             userInfo = convertToUserInfoResponse(authUser, null);
         }
 
         // 生成 token
-        String token = jwtUtil.generateToken(authUser.getUsername(), authUser.getId(), authUser.getRoleId());
+        String token = jwtUtil.generateToken(authUser.getUsername(), authUser.getId(), authUser.getRoleId(), merchantId);
 
         LoginResponse response = new LoginResponse();
         response.setToken(token);
@@ -173,7 +188,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
     public void logout(Integer authId) {
         // 可在这里添加出相关的业务逻辑
         // 比如记录登出时间、清除用户token等
-        // 目前数据库表中没有相关字段，所以暂时不做处理
+        // 目前数据库表中没有相���字段，所以暂时不做处理
     }
 
     @Override

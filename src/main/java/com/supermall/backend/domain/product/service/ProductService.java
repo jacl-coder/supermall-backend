@@ -17,4 +17,8 @@ public interface ProductService extends IService<Product> {
     Page<Product> getProductsByCategory(Integer categoryId, int page, int size);
     
     Page<Product> searchProducts(String keyword, int page, int size);
+
+    Page<Product> getProductsByMerchant(Integer merchantId, int page, int size);
+    
+    Page<Product> getProducts(int page, int size);
 } 

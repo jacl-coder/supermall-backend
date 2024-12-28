@@ -17,7 +17,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "商品管理", description = "商品相关接口，包含商品的增删改查等基本操作以及商品状态管理")
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Tag(name = "商品管理", description = "商品相关接口，包含商品的增删改查等基本操作以及���品状态管理")
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
@@ -106,6 +109,41 @@ public class ProductController {
         return Result.success(convertToResponse(product));
     }
 
+    @GetMapping("/merchant/{merchantId}")
+    @RequirePermission(role = "ROLE_MERCHANT", requireMerchant = true)
+    public Result<PageResult<ProductResponse>> getProductsByMerchant(
+            @PathVariable Integer merchantId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal SecurityUser user) {
+        // 验证用户身份
+        if (user == null || user.getMerchantId() == null) {
+            throw new BusinessException("未登录或非商家用户");
+        }
+        
+        // 验证merchantId参数
+        if (merchantId == null) {
+            throw new BusinessException("商家ID不能为空");
+        }
+        
+        // 验证商家身份匹配
+        if (!user.getMerchantId().equals(merchantId)) {
+            throw new BusinessException("无权查看其他商家的商品");
+        }
+        
+        // 获取商品列表
+        Page<Product> productPage = productService.getProductsByMerchant(merchantId, page, size);
+        return Result.success(convertToPageResult(productPage));
+    }
+
+    @GetMapping
+    public Result<PageResult<ProductResponse>> getProducts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<Product> productPage = productService.getProducts(page, size);
+        return Result.success(convertToPageResult(productPage));
+    }
+
     private ProductResponse convertToResponse(Product product) {
         ProductResponse response = new ProductResponse();
         BeanUtils.copyProperties(product, response);
@@ -116,11 +154,10 @@ public class ProductController {
         Page<ProductResponse> responsePage = new Page<>();
         responsePage.setRecords(page.getRecords().stream()
                 .map(this::convertToResponse)
-                .toList());
+                .collect(Collectors.toList()));
         responsePage.setTotal(page.getTotal());
         responsePage.setCurrent(page.getCurrent());
         responsePage.setSize(page.getSize());
-        
         return PageResult.from(responsePage);
     }
 } 

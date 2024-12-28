@@ -12,4 +12,5 @@ public interface MerchantProfileService {
     MerchantResponse getProfile(Integer merchantId);
     void updateStatus(Integer merchantId, MerchantProfile.Status status);
     Page<MerchantResponse> listMerchants(MerchantProfile.Status status, int page, int size);
+    MerchantProfile getByAuthId(Integer authId);
 } 

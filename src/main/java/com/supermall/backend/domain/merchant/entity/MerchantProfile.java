@@ -26,12 +26,13 @@ public class MerchantProfile {
     private LocalDateTime updatedAt;
 
     public enum Status {
-        PENDING("待审核", "等待管理员审核"),
-        APPROVED("已审核", "审核通过，可以正常经营"),
-        REJECTED("已拒绝", "审核未通过"),
-        SUSPENDED("已暂停", "暂停营业"),
-        TERMINATED("已终止", "终止合作");
+        PENDING("PENDING", "待审核"),
+        APPROVED("APPROVED", "已审核"),
+        REJECTED("REJECTED", "已拒绝"),
+        SUSPENDED("SUSPENDED", "已暂停"),
+        TERMINATED("TERMINATED", "已终止");
 
+        @EnumValue
         private final String value;
         private final String description;
 
@@ -41,20 +42,11 @@ public class MerchantProfile {
         }
 
         public String getValue() {
-            return value;
+            return this.value;
         }
 
         public String getDescription() {
-            return description;
-        }
-
-        public static Status fromValue(String value) {
-            for (Status status : Status.values()) {
-                if (status.getValue().equals(value)) {
-                    return status;
-                }
-            }
-            throw new IllegalArgumentException("无效的商家状态: " + value);
+            return this.description;
         }
     }
 } 

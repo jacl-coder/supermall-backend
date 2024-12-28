@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `auth_users` (
     `password_hash` VARCHAR(100) NOT NULL COMMENT '密码哈希',
     `email` VARCHAR(100) COMMENT '邮箱',
     `role_id` INT COMMENT '角色ID',
-    `status` VARCHAR(20) NOT NULL DEFAULT 'active' COMMENT '状态：active-活跃, inactive-未激活, locked-锁定',
+    `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' COMMENT '状态：ACTIVE-活跃, INACTIVE-未激活, LOCKED-锁定',
     `last_login` DATETIME COMMENT '最后登录时间',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -280,22 +280,56 @@ CREATE TABLE IF NOT EXISTS `system_logs` (
     KEY `idx_created_at` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统日志表';
 
--- 插入一些基础数据
-INSERT INTO `roles` (`name`, `description`) VALUES
-('超级管理员', '系统超级管理员'),
-('普通用户', '普通用户'),
-('商家', '商城商家用户');
+-- 初始化角色数据
+INSERT INTO roles (name, description) VALUES 
+('ADMIN', '系统管理员'),
+('USER', '普通用户'),
+('MERCHANT', '商城商家用户');
 
-INSERT INTO `permissions` (`name`, `description`) VALUES
-('用户管理', '用户管理模块'),
-('用户查询', '查询用户列表'),
-('用户创建', '创建新用户'),
-('商家管理', '商家管理模块'),
-('商家查询', '查询商家列表'),
-('商家创建', '创建新商家');
+-- 初始化权限数据
+INSERT INTO permissions (name, description) VALUES 
+('product:create', '创建商品'),
+('product:update', '更新商品'),
+('product:delete', '删除商品'),
+('product:manage', '管理商品状态'),
+('product:view', '查看商品'),
+('product:list', '商品列表'),
+('merchant:approve', '审核商家'),
+('merchant:manage', '管理商家'),
+('user:manage', '管理用户'),
+('order:manage', '管理订单'),
+('system:manage', '系统管理');
+
+-- 为角色分配权限
+-- 管理员拥有所有权限
+INSERT INTO role_permissions (role_id, permission_id)
+SELECT 1, permission_id FROM permissions;
+
+-- 商家拥有商品相关权限
+INSERT INTO role_permissions (role_id, permission_id)
+SELECT 3, permission_id 
+FROM permissions 
+WHERE name IN (
+    'product:create',
+    'product:update',
+    'product:delete',
+    'product:manage',
+    'product:view',
+    'product:list'
+);
+
+-- 初始化管理员账户
+INSERT INTO auth_users (username, password_hash, email, role_id, status) VALUES 
+('admin', '$2a$10$fXaBEAS5nYX/DIyg81buge861IG//56/2E2KVFZIu1QA2rgK8Qwsy', 'admin@supermall.com', 1, 'ACTIVE');
+
+-- 初始化管理员用户资料
+INSERT INTO user_profiles (auth_id, full_name, phone_number)
+SELECT auth_id, '系统管理员', '13800000000'
+FROM auth_users
+WHERE username = 'admin';
 
 -- 插入一些基础的商品分类数据
-INSERT INTO `categories` (`name`, `parent_id`, `level`, `sort_order`, `status`) VALUES
+INSERT INTO categories (name, parent_id, level, sort_order, status) VALUES
 ('电子产品', NULL, 1, 1, 'ACTIVE'),
 ('服装', NULL, 1, 2, 'ACTIVE'),
 ('食品', NULL, 1, 3, 'ACTIVE'),
@@ -427,7 +461,7 @@ CREATE TABLE IF NOT EXISTS `payments` (
     `is_refund` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否为退款记录：0-否，1-是',
     `expire_time` DATETIME COMMENT '支付超时时间',
     `channel_config` TEXT COMMENT '支付渠道配置（JSON格式）',
-    `retry_count` INT NOT NULL DEFAULT 0 COMMENT '重试次数',
+    `retry_count` INT NOT NULL DEFAULT 0 COMMENT '重试��数',
     `notify_url` VARCHAR(255) COMMENT '支付回调通知地址',
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

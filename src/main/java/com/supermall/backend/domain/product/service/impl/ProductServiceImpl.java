@@ -9,6 +9,7 @@ import com.supermall.backend.domain.product.dto.ProductRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
 import java.util.List;
 
@@ -138,5 +139,22 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             }
             default -> throw new BusinessException("非法的商品状态");
         }
+    }
+
+    @Override
+    public Page<Product> getProductsByMerchant(Integer merchantId, int page, int size) {
+        Page<Product> productPage = page(
+            new Page<>(page, size),
+            new LambdaQueryWrapper<Product>()
+                .eq(Product::getMerchantId, merchantId)
+                .orderByDesc(Product::getCreatedAt)
+        );
+        return productPage;
+    }
+
+    @Override
+    public Page<Product> getProducts(int page, int size) {
+        Page<Product> productPage = new Page<>(page, size);
+        return this.page(productPage);
     }
 } 

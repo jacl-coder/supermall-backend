@@ -26,7 +26,7 @@ public class MerchantProfileController {
 
     @Operation(summary = "商家注册")
     @PostMapping("/register")
-    @RequirePermission(role = "USER")
+    @RequirePermission(role = "MERCHANT")
     public Result<MerchantResponse> register(
             @Valid @RequestBody MerchantRegisterRequest request,
             @AuthenticationPrincipal SecurityUser user) {

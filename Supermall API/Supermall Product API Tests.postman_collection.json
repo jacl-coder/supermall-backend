@@ -1,0 +1,656 @@
+{
+	"info": {
+		"_postman_id": "78334f8e-e53b-4a8a-9388-74ff22ad0db8",
+		"name": "Supermall Product API Tests",
+		"description": "超级商城商品管理接口测试集合",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33064293"
+	},
+	"item": [
+		{
+			"name": "商家登录",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// 设置默认的商家用户名（如果没有注册过的话）",
+							"const defaultMerchantUsername = 'merchant5994685';",
+							"const savedMerchantUsername = pm.environment.get('lastRegisteredMerchantUsername');",
+							"",
+							"if (savedMerchantUsername) {",
+							"    pm.environment.set('loginMerchantUsername', savedMerchantUsername);",
+							"    console.log('Using saved merchant username for login:', savedMerchantUsername);",
+							"} else {",
+							"    pm.environment.set('loginMerchantUsername', defaultMerchantUsername);",
+							"    console.log('Using default merchant username:', defaultMerchantUsername);",
+							"}"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"// 打印完整的响应内容",
+							"console.log('Login Response:', JSON.stringify(jsonData, null, 2));",
+							"",
+							"pm.test('商家登录响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.token).to.be.a('string');",
+							"    pm.expect(jsonData.data.id).to.be.a('number');",
+							"    pm.expect(jsonData.data.username).to.be.a('string');",
+							"    pm.expect(jsonData.data.role).to.be.a('string');",
+							"});",
+							"",
+							"if (jsonData.success && jsonData.data) {",
+							"    // 从auth_users表获取用户ID",
+							"    const authId = jsonData.data.id;",
+							"",
+							"    // 保存认证信息",
+							"    pm.environment.set('merchantToken', jsonData.data.token);",
+							"    pm.environment.set('authId', authId);",
+							"",
+							"    // 发送请求获取商家信息",
+							"    pm.sendRequest({",
+							"        url: pm.environment.get('baseUrl') + '/api/merchants/profile',",
+							"        method: 'GET',",
+							"        header: {",
+							"            'Authorization': 'Bearer ' + jsonData.data.token",
+							"        }",
+							"    }, function (err, res) {",
+							"        if (err) {",
+							"            console.error('Failed to get merchant profile:', err);",
+							"            throw new Error('Failed to get merchant profile');",
+							"        }",
+							"",
+							"        const profileData = res.json();",
+							"        console.log('Merchant Profile:', profileData);",
+							"",
+							"        if (profileData.success && profileData.data) {",
+							"            pm.environment.set('merchantId', profileData.data.id);",
+							"            console.log('Merchant login successful. Info:', {",
+							"                authId: authId,",
+							"                merchantId: profileData.data.id,",
+							"                username: jsonData.data.username,",
+							"                role: jsonData.data.role",
+							"            });",
+							"        } else {",
+							"            console.error('Failed to get merchant profile:', profileData.message);",
+							"            throw new Error('Failed to get merchant profile: ' + profileData.message);",
+							"        }",
+							"    });",
+							"} else {",
+							"    console.error('Login failed:', jsonData.message);",
+							"    throw new Error('Login failed: ' + jsonData.message);",
+							"}",
+							"",
+							"// 验证所有必需的环境变量",
+							"const requiredVars = ['merchantToken', 'authId'];",
+							"const missingVars = requiredVars.filter(varName => !pm.environment.get(varName));",
+							"",
+							"if (missingVars.length > 0) {",
+							"    console.error('Missing required environment variables:', missingVars);",
+							"    throw new Error('Missing required environment variables: ' + missingVars.join(', '));",
+							"}",
+							"",
+							"// 输出环境变量状态",
+							"console.log('Environment variables after login:', {",
+							"    merchantToken: pm.environment.get('merchantToken') ? '***' : null,",
+							"    authId: pm.environment.get('authId'),",
+							"    merchantId: pm.environment.get('merchantId')",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{loginMerchantUsername}}\",\n    \"password\": \"Test123456\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				},
+				"description": "商家登录接口"
+			},
+			"response": []
+		},
+		{
+			"name": "创建商品",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// 检查商家认证信息",
+							"const merchantToken = pm.environment.get('merchantToken');",
+							"const merchantId = pm.environment.get('merchantId');",
+							"const merchantRoleId = pm.environment.get('merchantRoleId');",
+							"",
+							"if (!merchantToken || !merchantId || merchantRoleId !== 3) {",
+							"    console.error('Missing merchant authentication info or invalid role');",
+							"    postman.setNextRequest(null);",
+							"}",
+							"",
+							"console.log('Current merchant token:', merchantToken ? merchantToken.substring(0, 20) + '...' : 'null');",
+							"console.log('Current merchant ID:', merchantId);"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('创建商品响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.id).to.be.a('number');",
+							"    pm.expect(jsonData.data.name).to.be.a('string');",
+							"    pm.expect(jsonData.data.description).to.be.a('string');",
+							"    pm.expect(jsonData.data.price).to.be.a('number');",
+							"    pm.expect(jsonData.data.originalPrice).to.be.a('number');",
+							"    pm.expect(jsonData.data.stock).to.be.a('number');",
+							"    pm.expect(jsonData.data.mainImage).to.be.a('string');",
+							"    pm.expect(jsonData.data.status).to.be.a('string');",
+							"    pm.expect(jsonData.data.merchantId).to.equal(Number(pm.environment.get('merchantId')));",
+							"});",
+							"",
+							"// 保存商品ID到环境变量",
+							"if (jsonData.success && jsonData.data && jsonData.data.id) {",
+							"    pm.environment.set('productId', jsonData.data.id);",
+							"    console.log('Saved product ID:', jsonData.data.id);",
+							"}",
+							"",
+							"// 验证环境变量是否正确设置",
+							"const savedProductId = pm.environment.get('productId');",
+							"console.log('Verified saved product ID:', savedProductId);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{merchantToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"测试商品\",\n    \"description\": \"这是一个测试商品\",\n    \"categoryId\": 1,\n    \"price\": 99.99,\n    \"originalPrice\": 199.99,\n    \"stock\": 100,\n    \"mainImage\": \"https://example.com/image.jpg\",\n    \"status\": \"ON_SALE\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				},
+				"description": "创建新商品"
+			},
+			"response": []
+		},
+		{
+			"name": "获取商品详情",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// 从Local环境获取变量",
+							"const productId = pm.environment.get('productId');",
+							"const merchantToken = pm.environment.get('merchantToken');",
+							"",
+							"console.log('=== Pre-request Check ===');",
+							"console.log('Environment:', pm.environment.name);",
+							"console.log('Product ID:', productId);",
+							"console.log('Merchant Token:', merchantToken ? merchantToken.substring(0, 20) + '...' : 'null');",
+							"",
+							"if (!productId) {",
+							"    console.error('Missing product ID in Local environment - Please run create product test first');",
+							"    postman.setNextRequest(null);",
+							"}",
+							"",
+							"if (!merchantToken) {",
+							"    console.error('Missing merchant token in Local environment - Please run merchant login test first');",
+							"    postman.setNextRequest(null);",
+							"}",
+							"",
+							"// 手动构建请求URL",
+							"const baseUrl = pm.environment.get('baseUrl');",
+							"const requestUrl = baseUrl + '/api/products/' + productId;",
+							"pm.environment.set('currentRequestUrl', requestUrl);",
+							"",
+							"console.log('Base URL:', baseUrl);",
+							"console.log('Request URL:', requestUrl);",
+							"console.log('=====================');"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"console.log('=== Response Check ===');",
+							"console.log('Response status:', pm.response.status);",
+							"console.log('Response body:', JSON.stringify(jsonData, null, 2));",
+							"",
+							"pm.test('获取商品详情响应格式正确', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    ",
+							"    const expectedProductId = Number(pm.environment.get('productId'));",
+							"    console.log('Expected product ID:', expectedProductId);",
+							"    console.log('Actual product ID:', jsonData.data.id);",
+							"    ",
+							"    pm.expect(jsonData.data.id).to.equal(expectedProductId);",
+							"    pm.expect(jsonData.data.name).to.be.a('string');",
+							"    pm.expect(jsonData.data.description).to.be.a('string');",
+							"    pm.expect(jsonData.data.price).to.be.a('number');",
+							"    pm.expect(jsonData.data.originalPrice).to.be.a('number');",
+							"    pm.expect(jsonData.data.stock).to.be.a('number');",
+							"    pm.expect(jsonData.data.mainImage).to.be.a('string');",
+							"    pm.expect(jsonData.data.status).to.be.a('string');",
+							"    pm.expect(jsonData.data.merchantId).to.equal(Number(pm.environment.get('merchantId')));",
+							"});",
+							"",
+							"console.log('=====================');"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{merchantToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{productId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{productId}}"
+					]
+				},
+				"description": "获取商品详情"
+			},
+			"response": []
+		},
+		{
+			"name": "更新商品",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('更新商品响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.id).to.equal(Number(pm.environment.get('productId')));",
+							"    pm.expect(jsonData.data.name).to.equal('更新后的商品');",
+							"    pm.expect(jsonData.data.merchantId).to.equal(Number(pm.environment.get('merchantId')));",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{merchantToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"更新后的商品\",\n    \"description\": \"这是更新后的商品描述\",\n    \"categoryId\": 1,\n    \"price\": 88.88,\n    \"originalPrice\": 188.88,\n    \"stock\": 200,\n    \"mainImage\": \"https://example.com/new-image.jpg\",\n    \"status\": \"ON_SALE\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{productId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{productId}}"
+					]
+				},
+				"description": "更新商品信息"
+			},
+			"response": []
+		},
+		{
+			"name": "更新商品状态",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('更新商品状态响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.id).to.equal(Number(pm.environment.get('productId')));",
+							"    pm.expect(jsonData.data.status).to.equal('OFF_SALE');",
+							"    pm.expect(jsonData.data.merchantId).to.equal(Number(pm.environment.get('merchantId')));",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{merchantToken}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{productId}}/status?status=OFF_SALE",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{productId}}",
+						"status"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "OFF_SALE"
+						}
+					]
+				},
+				"description": "更新商品状态"
+			},
+			"response": []
+		},
+		{
+			"name": "获取商家商品列表",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"// 检查商家认证信息",
+							"const merchantToken = pm.environment.get('merchantToken');",
+							"const merchantId = pm.environment.get('merchantId');",
+							"",
+							"console.log('=== Pre-request Check ===');",
+							"console.log('Environment:', pm.environment.name);",
+							"console.log('Merchant ID:', merchantId);",
+							"console.log('Merchant Token:', merchantToken ? merchantToken.substring(0, 20) + '...' : 'null');",
+							"",
+							"if (!merchantToken || !merchantId) {",
+							"    console.error('Missing merchant authentication info - Please run merchant login test first');",
+							"    postman.setNextRequest(null);",
+							"}",
+							"",
+							"console.log('=====================');"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"console.log('=== Response Check ===');",
+							"console.log('Response status:', pm.response.status);",
+							"console.log('Response body:', JSON.stringify(jsonData, null, 2));",
+							"",
+							"pm.test('获取商品列表响应格式正确', function() {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.records).to.be.an('array');",
+							"    pm.expect(jsonData.data.total).to.be.a('number');",
+							"    pm.expect(jsonData.data.size).to.be.a('number');",
+							"    pm.expect(jsonData.data.current).to.be.a('number');",
+							"",
+							"    // 如果有商品，验证第一个商品的格式",
+							"    if (jsonData.data.records.length > 0) {",
+							"        const firstProduct = jsonData.data.records[0];",
+							"        pm.expect(firstProduct.id).to.be.a('number');",
+							"        pm.expect(firstProduct.name).to.be.a('string');",
+							"        pm.expect(firstProduct.description).to.be.a('string');",
+							"        pm.expect(firstProduct.price).to.be.a('number');",
+							"        pm.expect(firstProduct.originalPrice).to.be.a('number');",
+							"        pm.expect(firstProduct.stock).to.be.a('number');",
+							"        pm.expect(firstProduct.mainImage).to.be.a('string');",
+							"        pm.expect(firstProduct.status).to.be.a('string');",
+							"        pm.expect(firstProduct.merchantId).to.equal(Number(pm.environment.get('merchantId')));",
+							"",
+							"        // 保存第一个商品的ID供后续测试使用",
+							"        pm.environment.set('productId', firstProduct.id);",
+							"        console.log('Saved first product ID:', firstProduct.id);",
+							"    }",
+							"});",
+							"",
+							"console.log('=====================');"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{merchantToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/merchant/{{merchantId}}?page=1&size=10",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"merchant",
+						"{{merchantId}}"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				},
+				"description": "获取商家的商品列表"
+			},
+			"response": []
+		},
+		{
+			"name": "获取产品列表",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has products array\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data.records).to.be.an('array');",
+							"    if (jsonData.data.records.length > 0) {",
+							"        pm.environment.set('productId', jsonData.data.records[0].id);",
+							"    }",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products?page=1&size=10",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "获取产品详情",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response has product details\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.id).to.eql(parseInt(pm.environment.get('productId')));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{adminToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/products/{{productId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"products",
+						"{{productId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// 检查必要的环境变量",
+					"const requiredVars = ['baseUrl', 'merchantToken', 'merchantId'];",
+					"const missingVars = requiredVars.filter(varName => !pm.environment.get(varName));",
+					"",
+					"if (missingVars.length > 0) {",
+					"    console.warn('Missing environment variables:', missingVars.join(', '));",
+					"}",
+					"",
+					"console.log('=== Request Info ===');",
+					"console.log('Request URL:', pm.request.url.toString());",
+					"console.log('Request Method:', pm.request.method);",
+					"console.log('Current merchant token:', pm.environment.get('merchantToken') ? pm.environment.get('merchantToken').substring(0, 20) + '...' : 'null');",
+					"console.log('Current merchant ID:', pm.environment.get('merchantId') || 'null');",
+					"console.log('==================');"
+				]
+			}
+		}
+	]
+}

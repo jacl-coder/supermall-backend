@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "9d271475-6ef2-4a7d-95d8-125c57e7433f",
+		"_postman_id": "2cb557bf-b9a9-4e7f-ac01-9febe3306433",
 		"name": "Supermall Auth API Tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "33064293"
@@ -183,7 +183,7 @@
 						"exec": [
 							"const jsonData = pm.response.json();",
 							"",
-							"pm.test('修改密码响应格式正确', function() {",
+							"pm.test('修���密码响应格式正确', function() {",
 							"    pm.expect(jsonData.success).to.be.true;",
 							"    pm.expect(jsonData.data).to.be.null;",
 							"});"
@@ -231,7 +231,7 @@
 						"exec": [
 							"const jsonData = pm.response.json();",
 							"",
-							"pm.test('使用新密码登录成功', function() {",
+							"pm.test('使用���密码登录成功', function() {",
 							"    pm.expect(jsonData.success).to.be.true;",
 							"    pm.expect(jsonData.data).to.be.an('object');",
 							"    pm.expect(jsonData.data.token).to.be.a('string');",
@@ -318,6 +318,255 @@
 						"api",
 						"auth",
 						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商家注册-步骤1：用户注册",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('商家用户注册响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.token).to.be.a('string');",
+							"    pm.expect(jsonData.data.username).to.equal(pm.variables.get('testMerchantUsername'));",
+							"});",
+							"",
+							"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+							"    pm.environment.set('merchantToken', jsonData.data.token);",
+							"    pm.environment.set('lastRegisteredMerchantUsername', jsonData.data.username);",
+							"    console.log('Merchant user registration successful. Username:', jsonData.data.username);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// 生成测试商家用户名",
+							"const timestamp = new Date().getTime().toString().slice(-4);",
+							"const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');",
+							"const testMerchantUsername = `merchant${timestamp}${randomNum}`;",
+							"const testMerchantEmail = `${testMerchantUsername}@example.com`;",
+							"",
+							"pm.environment.set('testMerchantUsername', testMerchantUsername);",
+							"pm.environment.set('testMerchantEmail', testMerchantEmail);",
+							"console.log('Generated test merchant:', testMerchantUsername);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{testMerchantUsername}}\",\n    \"email\": \"{{testMerchantEmail}}\",\n    \"password\": \"Test123456\",\n    \"fullName\": \"测试商家\",\n    \"phoneNumber\": \"13800138000\",\n    \"userType\": \"MERCHANT\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商家注册-步骤2：提交商家信��",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('商家信息注册响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.merchantId).to.be.a('number');",
+							"    pm.expect(jsonData.data.shopName).to.equal('测试商家店铺');",
+							"});",
+							"",
+							"if (jsonData.success && jsonData.data && jsonData.data.merchantId) {",
+							"    pm.environment.set('merchantId', jsonData.data.merchantId);",
+							"    console.log('Merchant profile registration successful. MerchantId:', jsonData.data.merchantId);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{merchantToken}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"shopName\": \"测试商家店铺{{testMerchantUsername}}\",\n    \"shopDescription\": \"这是一个测试商家店铺{{testMerchantUsername}}\",\n    \"businessLicense\": \"123456789012345\",\n    \"contactPhone\": \"13800138000\",\n    \"contactEmail\": \"{{testMerchantEmail}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/merchants/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"merchants",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "商家登录",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('商家登录响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.token).to.be.a('string');",
+							"    pm.expect(jsonData.data.username).to.be.a('string');",
+							"    pm.expect(jsonData.data.merchantId).to.be.a('number');",
+							"    pm.expect(jsonData.data.roleId).to.equal(3);",
+							"    pm.expect(jsonData.data.permissions).to.be.an('array');",
+							"});",
+							"",
+							"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+							"    pm.environment.set('merchantToken', jsonData.data.token);",
+							"    pm.environment.set('merchantId', jsonData.data.merchantId);",
+							"    console.log('Merchant login successful');",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// 获取注册时保存的商家用户名",
+							"const savedUsername = pm.environment.get('lastRegisteredMerchantUsername');",
+							"if (savedUsername) {",
+							"    pm.environment.set('loginMerchantUsername', savedUsername);",
+							"    console.log('Using saved merchant username for login:', savedUsername);",
+							"} else {",
+							"    console.error('No saved merchant username found for login');",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{loginMerchantUsername}}\",\n    \"password\": \"Test123456\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "管理员登录",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('管理员登录响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.token).to.be.a('string');",
+							"    pm.expect(jsonData.data.username).to.equal('admin');",
+							"    pm.expect(jsonData.data.role).to.equal('ADMIN');",
+							"});",
+							"",
+							"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+							"    pm.environment.set('adminToken', jsonData.data.token);",
+							"    pm.environment.set('adminId', jsonData.data.id);",
+							"    console.log('Admin token saved to environment');",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"Admin123456\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
 					]
 				}
 			},

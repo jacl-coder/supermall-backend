@@ -1,7 +1,9 @@
 package com.supermall.backend.common.security;
 
-import com.supermall.backend.common.security.util.JwtUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.supermall.backend.common.api.Result;
 import com.supermall.backend.common.security.model.SecurityUser;
+import com.supermall.backend.common.security.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,26 +27,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                  HttpServletResponse response, 
-                                  FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         try {
-            final String authHeader = request.getHeader("Authorization");
+            String jwt = getJwtFromRequest(request);
             log.debug("Processing request for path: {}", request.getRequestURI());
-            
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                log.debug("No Bearer token found in request");
+
+            if (jwt == null) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            final String jwt = authHeader.substring(7);
             log.debug("Found JWT token: {}", jwt);
-            
-            // 首先验证 token
+
+            // 验证 token 是否有效
             if (!jwtUtil.validateToken(jwt)) {
                 log.warn("Invalid JWT token");
-                sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "无效的认证令牌");
+                sendErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "无效的token");
                 return;
             }
 
@@ -53,8 +52,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username = claims.getSubject();
             Integer userId = claims.get("userId", Integer.class);
             Integer roleId = claims.get("roleId", Integer.class);
+            Integer merchantId = claims.get("merchantId", Integer.class);
             
-            log.debug("Extracted from token - username: {}, userId: {}, roleId: {}", username, userId, roleId);
+            log.debug("Extracted from token - username: {}, userId: {}, roleId: {}, merchantId: {}", 
+                    username, userId, roleId, merchantId);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 try {
@@ -75,8 +76,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         return;
                     }
 
-                    // 设置用户ID
+                    // 设置用户ID和商家ID
                     securityUser.setId(userId);
+                    if (merchantId != null) {
+                        securityUser.setMerchantId(merchantId);
+                    }
 
                     // 设置认证信息
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -102,9 +106,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
+    private String getJwtFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);
+        }
+        log.debug("No Bearer token found in request");
+        return null;
+    }
+
     private void sendErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
         response.setStatus(status);
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(String.format("{\"success\":false,\"message\":\"%s\",\"data\":null}", message));
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(Result.fail(message));
+        response.getWriter().write(json);
     }
 } 
