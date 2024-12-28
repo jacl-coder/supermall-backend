@@ -13,7 +13,7 @@ public class SystemLog {
     private Integer authId;
     private String module;
     private String action;
-    private String detail;
+    private String description;
     private String ipAddress;
     private String userAgent;
     

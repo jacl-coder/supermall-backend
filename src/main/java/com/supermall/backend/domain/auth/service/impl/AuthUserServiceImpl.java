@@ -48,7 +48,14 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         authUser.setEmail(request.getEmail());
         authUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
         authUser.setStatus("ACTIVE");
-        authUser.setRoleId(3); // ROLE_USER 的 ID
+        
+        // 根据用户类型设置角色ID
+        if ("MERCHANT".equals(request.getUserType())) {
+            authUser.setRoleId(3); // 商家角色ID
+        } else {
+            authUser.setRoleId(2); // 普通用户角色ID
+        }
+        
         save(authUser);
 
         // 创建用户信息
@@ -79,7 +86,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         AuthUser authUser = getByUsername(request.getUsername());
 
         if (authUser == null || !passwordEncoder.matches(request.getPassword(), authUser.getPasswordHash())) {
-            throw new BusinessException("用户名或密码错误");
+            throw new BusinessException("用户���或密码错误");
         }
 
         if (!"ACTIVE".equals(authUser.getStatus())) {
@@ -164,7 +171,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
 
     @Override
     public void logout(Integer authId) {
-        // 可在这里添加登出相关的业务逻辑
+        // 可在这里添加���出相关的业务逻辑
         // 比如记录登出时间、清除用户token等
         // 目前数据库表中没有相关字段，所以暂时不做处理
     }

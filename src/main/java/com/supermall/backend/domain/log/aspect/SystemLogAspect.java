@@ -25,35 +25,7 @@ public class SystemLogAspect {
             "@annotation(org.springframework.web.bind.annotation.PutMapping) || " +
             "@annotation(org.springframework.web.bind.annotation.DeleteMapping)")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        // 获取当前登录用户
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Integer authId = null;
-        
-        if (authentication != null && authentication.isAuthenticated() 
-                && !"anonymousUser".equals(authentication.getPrincipal())) {
-            try {
-                authId = Integer.parseInt(authentication.getName());
-            } catch (NumberFormatException e) {
-                // 如果转换失败，保持authId为null
-            }
-        }
-
-        // 获取请求信息
-        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes != null) {
-            HttpServletRequest request = attributes.getRequest();
-            
-            // 记录系统日志
-            systemLogService.log(
-                    authId,
-                    joinPoint.getSignature().getDeclaringTypeName(),
-                    joinPoint.getSignature().getName(),
-                    request.getRequestURI(),
-                    request.getRemoteAddr(),
-                    request.getHeader("User-Agent")
-            );
-        }
-
+        // 暂时禁用日志记录功能
         return joinPoint.proceed();
     }
 } 

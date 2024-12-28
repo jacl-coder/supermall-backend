@@ -283,12 +283,16 @@ CREATE TABLE IF NOT EXISTS `system_logs` (
 -- 插入一些基础数据
 INSERT INTO `roles` (`name`, `description`) VALUES
 ('超级管理员', '系统超级管理员'),
-('普通用户', '普通用户');
+('普通用户', '普通用户'),
+('商家', '商城商家用户');
 
 INSERT INTO `permissions` (`name`, `description`) VALUES
 ('用户管理', '用户管理模块'),
 ('用户查询', '查询用户列表'),
-('用户创建', '创建新用户');
+('用户创建', '创建新用户'),
+('商家管理', '商家管理模块'),
+('商家查询', '查询商家列表'),
+('商家创建', '创建新商家');
 
 -- 插入一些基础的商品分类数据
 INSERT INTO `categories` (`name`, `parent_id`, `level`, `sort_order`, `status`) VALUES

@@ -27,4 +27,8 @@ public class RegisterRequest {
     @NotBlank(message = "手机号不能为空")
     @Pattern(regexp = "^1[3-9]\\d{9}$", message = "手机号格式不正确")
     private String phoneNumber;
+
+    @NotBlank(message = "用户类型不能为空")
+    @Pattern(regexp = "^(USER|MERCHANT)$", message = "用户类型只能是 USER 或 MERCHANT")
+    private String userType;
 } 
