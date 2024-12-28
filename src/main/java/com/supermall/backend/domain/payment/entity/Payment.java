@@ -15,14 +15,21 @@ public class Payment {
     private Integer orderId;
     private Integer userId;
     private BigDecimal amount;
+    
+    @TableField(value = "payment_method")
     private PaymentMethod paymentMethod;
+    
     private String transactionId;
     
-    @TableField("`status`")
+    @TableField(value = "`status`")
     private Status status;
     
     private String failureReason;
     private String callbackContent;
+    
+    // 退款相关字段
+    private Integer refundForPaymentId;  // 原支付记录ID（仅退款时使用）
+    private Boolean isRefund;            // 是否为退款记录
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
@@ -31,7 +38,7 @@ public class Payment {
     private LocalDateTime updatedAt;
     
     private LocalDateTime paidAt;
-
+    
     public enum Status {
         PENDING("待支付"),
         PROCESSING("处理中"),
@@ -40,29 +47,29 @@ public class Payment {
         REFUND_PENDING("退款中"),
         REFUNDED("已退款"),
         CLOSED("已关闭");
-
+        
         private final String description;
-
+        
         Status(String description) {
             this.description = description;
         }
-
+        
         public String getDescription() {
             return description;
         }
     }
-
+    
     public enum PaymentMethod {
         ALIPAY("支付宝"),
         WECHAT("微信支付"),
         BANK_CARD("银行卡");
-
+        
         private final String description;
-
+        
         PaymentMethod(String description) {
             this.description = description;
         }
-
+        
         public String getDescription() {
             return description;
         }

@@ -1,11 +1,12 @@
 package com.supermall.backend.domain.order.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.supermall.backend.domain.order.entity.ReturnOrder;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.supermall.backend.domain.order.dto.ReturnOrderRequest;
 import com.supermall.backend.domain.order.dto.ReturnOrderResponse;
+import com.supermall.backend.domain.order.entity.ReturnOrder;
 
-public interface ReturnOrderService {
+public interface ReturnOrderService extends IService<ReturnOrder> {
     /**
      * 创建退货订单
      */
@@ -40,4 +41,14 @@ public interface ReturnOrderService {
      * 确认退款完成
      */
     ReturnOrderResponse confirmRefund(Integer returnId, Integer operatorId);
+    
+    /**
+     * 更新退货物流信息
+     */
+    void updateReturnLogistics(Integer returnId, String logisticsInfo, String logisticsRemark);
+    
+    /**
+     * 更新退货物流状态
+     */
+    void updateReturnLogisticsStatus(Integer returnId, String status, String remark);
 } 

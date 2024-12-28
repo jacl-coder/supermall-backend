@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.supermall.backend.common.exception.BusinessException;
+import com.supermall.backend.domain.notification.service.NotificationService;
 import com.supermall.backend.domain.order.entity.Order;
+import com.supermall.backend.domain.order.entity.ReturnOrder;
 import com.supermall.backend.domain.order.enums.OrderStatus;
 import com.supermall.backend.domain.order.service.OrderService;
+import com.supermall.backend.domain.payment.dto.PaymentCallback;
 import com.supermall.backend.domain.payment.dto.PaymentRequest;
 import com.supermall.backend.domain.payment.dto.PaymentResponse;
 import com.supermall.backend.domain.payment.entity.Payment;
@@ -14,10 +17,13 @@ import com.supermall.backend.domain.payment.mapper.PaymentMapper;
 import com.supermall.backend.domain.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -26,6 +32,7 @@ import java.util.UUID;
 public class PaymentServiceImpl extends ServiceImpl<PaymentMapper, Payment> implements PaymentService {
 
     private final OrderService orderService;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -39,7 +46,7 @@ public class PaymentServiceImpl extends ServiceImpl<PaymentMapper, Payment> impl
             throw new BusinessException("无权操作此订单");
         }
 
-        // 检查是否已存在支付记录
+        // 检查否已存在支付记录
         Payment existingPayment = getOne(new LambdaQueryWrapper<Payment>()
                 .eq(Payment::getOrderId, request.getOrderId())
                 .ne(Payment::getStatus, Payment.Status.FAILED)
@@ -85,66 +92,134 @@ public class PaymentServiceImpl extends ServiceImpl<PaymentMapper, Payment> impl
 
     @Override
     @Transactional
-    public void handlePaymentCallback(String paymentNo, String transactionId, Payment.Status status, String failureReason) {
+    public void handlePaymentCallback(PaymentCallback callback) {
         Payment payment = getOne(new LambdaQueryWrapper<Payment>()
-                .eq(Payment::getPaymentNo, paymentNo));
+                .eq(Payment::getPaymentNo, callback.getPaymentNo()));
                 
         if (payment == null) {
             throw new BusinessException("支付记录不存在");
         }
 
-        payment.setTransactionId(transactionId);
-        payment.setStatus(status);
-        payment.setFailureReason(failureReason);
+        payment.setTransactionId(callback.getTransactionId());
         
-        if (status == Payment.Status.SUCCESS) {
+        if (callback.isSuccess()) {
+            payment.setStatus(Payment.Status.SUCCESS);
             payment.setPaidAt(LocalDateTime.now());
+            
             // 更新订单状态
             orderService.updateOrderStatus(payment.getOrderId(), OrderStatus.PAID, LocalDateTime.now());
+            
+            // 发送支付成功通知
+            notificationService.sendPaymentStatusNotification(
+                payment.getOrderId(),
+                true,
+                String.format("订单支付成功，支付金额：%.2f元", payment.getAmount())
+            );
+        } else {
+            payment.setStatus(Payment.Status.FAILED);
+            payment.setFailureReason(callback.getFailureReason());
+            
+            // 发送支付失败通知
+            notificationService.sendPaymentStatusNotification(
+                payment.getOrderId(),
+                false,
+                "支付失败：" + callback.getFailureReason()
+            );
         }
         
         updateById(payment);
-        log.info("支付回调处理成功，支付单号: {}, 状态: {}", paymentNo, status);
+        log.info("支付回调处理成功，支付单号: {}, 状态: {}", callback.getPaymentNo(), payment.getStatus());
     }
 
     @Override
     @Transactional
-    public PaymentResponse requestRefund(Integer userId, Integer paymentId) {
-        Payment payment = getOne(new LambdaQueryWrapper<Payment>()
-                .eq(Payment::getId, paymentId)
-                .eq(Payment::getUserId, userId));
-                
-        if (payment == null) {
-            throw new BusinessException("支付记录不存在");
+    public void handleRefund(Integer returnId, BigDecimal amount) {
+        ReturnOrder returnOrder = orderService.getReturnOrder(returnId);
+        if (returnOrder == null) {
+            throw new BusinessException("退货单不存在");
         }
         
-        if (payment.getStatus() != Payment.Status.SUCCESS) {
-            throw new BusinessException("只有支付成功的订单可以申请退款");
+        try {
+            // 处理退款逻辑
+            // 1. 查找原支付记录
+            Payment originalPayment = getOne(new LambdaQueryWrapper<Payment>()
+                    .eq(Payment::getOrderId, returnOrder.getOrderId())
+                    .eq(Payment::getStatus, Payment.Status.SUCCESS));
+                    
+            if (originalPayment == null) {
+                throw new BusinessException("原支付记录不存在");
+            }
+            
+            // 2. 创建退款记录
+            Payment refundPayment = new Payment();
+            refundPayment.setPaymentNo("RF" + generatePaymentNo());
+            refundPayment.setOrderId(returnOrder.getOrderId());
+            refundPayment.setUserId(returnOrder.getUserId());
+            refundPayment.setAmount(amount.negate());  // 使用负数表示退款
+            refundPayment.setPaymentMethod(originalPayment.getPaymentMethod());
+            refundPayment.setStatus(Payment.Status.REFUND_PENDING);
+            refundPayment.setRefundForPaymentId(originalPayment.getId());
+            refundPayment.setIsRefund(true);
+            
+            save(refundPayment);
+            
+            // 3. 调用实际的退款接口（这里需要集成具体的支付平台）
+            // processRefund(refundPayment, originalPayment);
+            
+            // 4. 更新退款状态（实际项目中应该通过回调更新）
+            refundPayment.setStatus(Payment.Status.REFUNDED);
+            refundPayment.setPaidAt(LocalDateTime.now());
+            updateById(refundPayment);
+            
+            // 5. 更新订单项退款状态
+            orderService.updateOrderItemRefundStatus(returnOrder.getOrderItemId(), true);
+            
+            // 6. 发送退款成功通知
+            notificationService.sendRefundStatusNotification(
+                returnId,
+                true,
+                String.format("退款成功，退款金额：%.2f元", amount)
+            );
+            
+            log.info("退款处理成功，退款单号: {}, 金额: {}", refundPayment.getPaymentNo(), amount);
+            
+        } catch (Exception e) {
+            log.error("退款处理失败", e);
+            // 发送退款失败通知
+            notificationService.sendRefundStatusNotification(
+                returnId,
+                false,
+                "退款失败：" + e.getMessage()
+            );
+            throw new BusinessException("退款处理失败：" + e.getMessage());
         }
-
-        payment.setStatus(Payment.Status.REFUND_PENDING);
-        updateById(payment);
-        log.info("申请退款成功，支付单号: {}", payment.getPaymentNo());
-        
-        return convertToResponse(payment);
     }
 
-    @Override
-    public PaymentResponse getRefundStatus(Integer userId, Integer paymentId) {
-        Payment payment = getOne(new LambdaQueryWrapper<Payment>()
-                .eq(Payment::getId, paymentId)
-                .eq(Payment::getUserId, userId));
-                
-        if (payment == null) {
-            throw new BusinessException("支付记录不存在");
-        }
+    @Scheduled(fixedRate = 300000) // 每5分钟检查一次
+    @Transactional
+    public void checkPaymentTimeout() {
+        LocalDateTime timeoutThreshold = LocalDateTime.now().minusMinutes(30);  // 30分钟超时
         
-        if (payment.getStatus() != Payment.Status.REFUND_PENDING 
-            && payment.getStatus() != Payment.Status.REFUNDED) {
-            throw new BusinessException("订单未申请退款");
+        List<Payment> timeoutPayments = list(new LambdaQueryWrapper<Payment>()
+            .eq(Payment::getStatus, Payment.Status.PENDING)
+            .lt(Payment::getCreatedAt, timeoutThreshold));
+
+        for (Payment payment : timeoutPayments) {
+            payment.setStatus(Payment.Status.CLOSED);
+            updateById(payment);
+            
+            // 更新订单状态为已取消
+            orderService.updateOrderStatus(payment.getOrderId(), OrderStatus.CANCELED, LocalDateTime.now());
+            
+            // 发送支付超时通知
+            notificationService.sendPaymentStatusNotification(
+                payment.getOrderId(),
+                false,
+                "支付超时，订单已自动取消"
+            );
+            
+            log.info("支付超时处理，支付单号: {}, 订单号: {}", payment.getPaymentNo(), payment.getOrderId());
         }
-        
-        return convertToResponse(payment);
     }
 
     private String generatePaymentNo() {

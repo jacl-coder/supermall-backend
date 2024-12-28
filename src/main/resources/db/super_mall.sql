@@ -249,35 +249,10 @@ CREATE TABLE `notifications` (
 -- 系统日志表
 CREATE TABLE `system_logs` (
     `log_id` INT NOT NULL AUTO_INCREMENT,
-    `module` VARCHAR(100) NOT NULL,
-    `action` VARCHAR(100) NOT NULL,
-    `detail` TEXT,
+    `user_id` INT,
+    `action` VARCHAR(50) NOT NULL,
+    `description` TEXT,
     `ip_address` VARCHAR(50),
-    `user_agent` VARCHAR(255),
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- 发票表
-CREATE TABLE `invoice` (
-    `invoice_id` INT NOT NULL AUTO_INCREMENT,
-    `order_id` INT NOT NULL,
-    `user_id` INT NOT NULL,
-    `type` VARCHAR(20) NOT NULL,
-    `title_type` VARCHAR(20) NOT NULL,
-    `title` VARCHAR(100) NOT NULL,
-    `tax_number` VARCHAR(20),
-    `amount` DECIMAL(10,2) NOT NULL,
-    `content` VARCHAR(200) NOT NULL,
-    `status` VARCHAR(20) NOT NULL,
-    `company_address` VARCHAR(200),
-    `company_phone` VARCHAR(20),
-    `bank_name` VARCHAR(100),
-    `bank_account` VARCHAR(30),
-    `invoice_number` VARCHAR(50),
-    `issued_time` DATETIME,
-    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `remark` VARCHAR(500),
-    PRIMARY KEY (`invoice_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

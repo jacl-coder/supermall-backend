@@ -17,7 +17,7 @@ public class ReturnOrder {
     private Integer merchantId;
     private BigDecimal returnAmount;
     
-    @TableField(value = "status")
+    @TableField(value = "`status`")
     private ReturnStatus status;
     
     @TableField(value = "reason_type")
@@ -26,6 +26,11 @@ public class ReturnOrder {
     private String reasonDetail;
     private String handlingNotes;
     
+    // 物流信息字段
+    private String logisticsInfo;  // 物流信息，可以是文本描述
+    private String logisticsStatus; // 物流状态：PENDING(待发货)、SHIPPED(已发货)、RECEIVED(已收货)
+    private String logisticsRemark; // 物流备注
+    
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
     
@@ -33,17 +38,37 @@ public class ReturnOrder {
     private LocalDateTime updatedAt;
     
     public enum ReturnStatus {
-        PENDING,    // 待处理
-        APPROVED,   // 已批准
-        REJECTED,   // 已拒绝
-        RETURNED,   // 已退货
-        REFUNDED    // 已退款
+        PENDING("待审核"),
+        APPROVED("已通过"),
+        REJECTED("已拒绝"),
+        RETURNED("已退货"),
+        REFUNDED("已退款");
+        
+        private final String description;
+        
+        ReturnStatus(String description) {
+            this.description = description;
+        }
+        
+        public String getDescription() {
+            return description;
+        }
     }
     
     public enum ReasonType {
-        QUALITY_ISSUE,   // 质量问题
-        WRONG_ITEM,      // 错误商品
-        NOT_SATISFIED,   // 不满意
-        OTHER           // 其他原因
+        QUALITY_ISSUE("质量问题"),
+        WRONG_PRODUCT("错误商品"),
+        DAMAGED("商品损坏"),
+        OTHER("其他原因");
+        
+        private final String description;
+        
+        ReasonType(String description) {
+            this.description = description;
+        }
+        
+        public String getDescription() {
+            return description;
+        }
     }
 } 

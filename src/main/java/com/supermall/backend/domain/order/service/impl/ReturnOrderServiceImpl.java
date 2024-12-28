@@ -15,12 +15,15 @@ import com.supermall.backend.domain.order.dto.ReturnOrderRequest;
 import com.supermall.backend.domain.order.dto.ReturnOrderResponse;
 import com.supermall.backend.domain.order.service.ReturnOrderService;
 import com.supermall.backend.domain.product.service.StockService;
+import com.supermall.backend.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, ReturnOrder> implements ReturnOrderService {
@@ -28,6 +31,7 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
     private final StockService stockService;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -209,5 +213,58 @@ public class ReturnOrderServiceImpl extends ServiceImpl<ReturnOrderMapper, Retur
         }).toList());
         
         return responsePage;
+    }
+
+    @Override
+    @Transactional
+    public void updateReturnLogistics(Integer returnId, String logisticsInfo, String logisticsRemark) {
+        ReturnOrder returnOrder = getById(returnId);
+        if (returnOrder == null) {
+            throw new BusinessException("退货单不存在");
+        }
+
+        returnOrder.setLogisticsInfo(logisticsInfo);
+        returnOrder.setLogisticsRemark(logisticsRemark);
+        updateById(returnOrder);
+
+        // 发送退货物流通知
+        String content = String.format("退货物流信息已更新：%s", logisticsInfo);
+        notificationService.sendReturnOrderStatusNotification(
+            returnId, 
+            "logistics_updated",
+            content
+        );
+    }
+
+    @Override
+    @Transactional
+    public void updateReturnLogisticsStatus(Integer returnId, String status, String remark) {
+        ReturnOrder returnOrder = getById(returnId);
+        if (returnOrder == null) {
+            throw new BusinessException("退货单不存在");
+        }
+
+        returnOrder.setLogisticsStatus(status);
+        returnOrder.setLogisticsRemark(remark);
+        updateById(returnOrder);
+
+        // 发送退货物流状态更新通知
+        String content = String.format("退货物流状态更新：%s", status);
+        notificationService.sendReturnOrderStatusNotification(
+            returnId, 
+            "logistics_" + status.toLowerCase(),
+            content
+        );
+
+        // 如果退货商品已签收，自动更新退货单状态
+        if ("RECEIVED".equals(status)) {
+            returnOrder.setStatus(ReturnOrder.ReturnStatus.RETURNED);
+            updateById(returnOrder);
+            notificationService.sendReturnOrderStatusNotification(
+                returnId, 
+                "returned",
+                "退货商品已签收，退货单状态已更新为已退货"
+            );
+        }
     }
 } 

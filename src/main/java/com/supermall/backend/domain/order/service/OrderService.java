@@ -5,6 +5,7 @@ import com.supermall.backend.domain.order.dto.OrderCreateRequest;
 import com.supermall.backend.domain.order.dto.OrderResponse;
 import com.supermall.backend.domain.order.entity.Order;
 import com.supermall.backend.domain.order.entity.OrderItem;
+import com.supermall.backend.domain.order.entity.ReturnOrder;
 import com.supermall.backend.domain.order.enums.OrderStatus;
 import java.time.LocalDateTime;
 
@@ -27,4 +28,14 @@ public interface OrderService {
     // 退款相关方法
     void updateOrderItemRefundStatus(Integer orderItemId, boolean refunded);
     boolean isAllItemsRefunded(Integer orderId);
+    
+    /**
+     * 获取退货单详情
+     */
+    ReturnOrder getReturnOrder(Integer returnId);
+    
+    /**
+     * 更新退货单状态
+     */
+    void updateReturnOrderStatus(Integer returnId, ReturnOrder.ReturnStatus status);
 } 

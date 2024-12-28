@@ -19,6 +19,9 @@ import com.supermall.backend.domain.order.service.OrderService;
 import com.supermall.backend.domain.product.entity.Product;
 import com.supermall.backend.domain.product.service.ProductService;
 import com.supermall.backend.domain.order.dto.OrderItemResponse;
+import com.supermall.backend.domain.notification.service.NotificationService;
+import com.supermall.backend.domain.order.entity.ReturnOrder;
+import com.supermall.backend.domain.order.mapper.ReturnOrderMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private final ProductService productService;
     private final OrderItemMapper orderItemMapper;
     private final ObjectMapper objectMapper;
+    private final NotificationService notificationService;
+    private final ReturnOrderMapper returnOrderMapper;
 
     @Override
     @Transactional
@@ -219,24 +224,47 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         // 验证状态流转的合法性
         validateStatusTransition(order.getStatus(), status);
 
-        // 更新状态和相应的时间
+        OrderStatus oldStatus = order.getStatus();
         order.setStatus(status);
+
+        // 更新相应的时间字段
         switch (status) {
-            case PAID:
-                order.setPaymentTime(statusTime);
-                break;
-            case SHIPPED:
-                order.setShippingTime(statusTime);
-                break;
-            case COMPLETED:
-                order.setCompletionTime(statusTime);
-                break;
-            default:
-                break;
+            case PAID -> order.setPaymentTime(statusTime);
+            case SHIPPED -> order.setShippingTime(statusTime);
+            case COMPLETED -> order.setCompletionTime(statusTime);
+            default -> {}
         }
 
         updateById(order);
-        log.info("订单状态更新成功，订单号: {}, 新状态: {}", order.getOrderNo(), status);
+        
+        // 生成通知内容
+        String content = generateStatusChangeContent(order, oldStatus, status);
+        // 发送状态变更通知
+        notificationService.sendOrderStatusNotification(orderId, status.getValue(), content);
+        
+        log.info("订单状态更新成功，订单号: {}, 旧状态: {}, 新状态: {}", 
+            order.getOrderNo(), oldStatus, status);
+    }
+
+    /**
+     * 生成状态变更通知内容
+     */
+    private String generateStatusChangeContent(Order order, OrderStatus oldStatus, OrderStatus newStatus) {
+        String template = switch (newStatus) {
+            case PENDING_PAYMENT -> "订单创建成功，请在30分钟内完成支付，订单金额：%.2f元";
+            case PAID -> "订单支付成功，我们会尽快为您发货，订单金额：%.2f元";
+            case SHIPPED -> "订单已发货，请注意查收，订单号：%s";
+            case COMPLETED -> "订单已完成，感谢您的购买，期待您的评价";
+            case CANCELED -> "订单已取消，如有疑问请联系客服";
+            case REFUNDED -> "订单已退款，退款金额：%.2f元，将在1-3个工作日内到账";
+            default -> "订单状态已更新：%s";
+        };
+
+        return switch (newStatus) {
+            case PENDING_PAYMENT, PAID, REFUNDED -> String.format(template, order.getPaymentAmount());
+            case SHIPPED -> String.format(template, order.getOrderNo());
+            default -> String.format(template, newStatus.getDescription());
+        };
     }
 
     @Override
@@ -423,5 +451,39 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         
         // 检查是否所有订单项都已退款
         return items.stream().allMatch(OrderItem::getIsRefunded);
+    }
+
+    @Override
+    @Transactional
+    public void updateReturnOrderStatus(Integer returnId, ReturnOrder.ReturnStatus status) {
+        ReturnOrder returnOrder = returnOrderMapper.selectById(returnId);
+        if (returnOrder == null) {
+            throw new BusinessException("退货单不存在");
+        }
+        
+        returnOrder.setStatus(status);
+        returnOrderMapper.updateById(returnOrder);
+        
+        // 生成通知内容
+        String content = switch (status) {
+            case PENDING -> "退货申请已提交，请等待审核";
+            case APPROVED -> "退货申请已通过，请按照退货地址寄回商品";
+            case REJECTED -> String.format("退货申请已拒绝，原因：%s", returnOrder.getHandlingNotes());
+            case RETURNED -> "退货商品已收到，正在处理退款";
+            case REFUNDED -> String.format("退货已完成，退款金额：%.2f元将在1-3个工作日内到账", returnOrder.getReturnAmount());
+            default -> String.format("退货状态已更新为：%s", status.getDescription());
+        };
+        
+        // 发送通知
+        notificationService.sendReturnOrderStatusNotification(
+            returnId, 
+            status.name().toLowerCase(),
+            content
+        );
+    }
+
+    @Override
+    public ReturnOrder getReturnOrder(Integer returnId) {
+        return returnOrderMapper.selectById(returnId);
     }
 } 
