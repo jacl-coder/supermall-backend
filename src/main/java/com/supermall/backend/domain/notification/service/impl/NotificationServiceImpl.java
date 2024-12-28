@@ -15,24 +15,25 @@ import com.supermall.backend.domain.notification.service.NotificationService;
 import com.supermall.backend.domain.order.service.OrderService;
 import com.supermall.backend.domain.order.entity.Order;
 import com.supermall.backend.domain.order.entity.ReturnOrder;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.scheduling.annotation.Async;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
+import org.springframework.context.annotation.Lazy;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 public class NotificationServiceImpl extends ServiceImpl<NotificationMapper, Notification> implements NotificationService {
 
-    private static final Logger log = LoggerFactory.getLogger(NotificationServiceImpl.class);
-
     private final OrderService orderService;
+
+    public NotificationServiceImpl(@Lazy OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @Override
     @Transactional

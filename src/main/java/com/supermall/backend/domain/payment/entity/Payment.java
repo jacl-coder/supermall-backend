@@ -35,7 +35,7 @@ public class Payment {
     // 新增字段
     private LocalDateTime expireTime;    // 支付超时时间
     private String channelConfig;        // 支付渠道配置（JSON格式）
-    private Integer retryCount;          // 重试次数
+    private Integer retryCount;          // 重试��数
     private String notifyUrl;            // 支付回调通知地址
     
     @TableField(fill = FieldFill.INSERT)
@@ -55,10 +55,17 @@ public class Payment {
         REFUNDED("已退款"),
         CLOSED("已关闭");
         
+        @EnumValue
+        private final String value;
         private final String description;
         
         Status(String description) {
+            this.value = this.name().toLowerCase();
             this.description = description;
+        }
+        
+        public String getValue() {
+            return value;
         }
         
         public String getDescription() {
@@ -81,10 +88,17 @@ public class Payment {
         WECHAT("微信支付"),
         BANK_CARD("银行卡");
         
+        @EnumValue
+        private final String value;
         private final String description;
         
         PaymentMethod(String description) {
+            this.value = this.name().toLowerCase();
             this.description = description;
+        }
+        
+        public String getValue() {
+            return value;
         }
         
         public String getDescription() {

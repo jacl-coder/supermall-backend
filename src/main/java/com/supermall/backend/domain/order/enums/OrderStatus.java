@@ -5,6 +5,8 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 @Getter
 public enum OrderStatus {
@@ -19,23 +21,27 @@ public enum OrderStatus {
     @EnumValue
     private final String value;
     private final String description;
-    private final List<OrderStatus> nextStatus;
+    private List<OrderStatus> nextStatus;
+
+    private static final Map<OrderStatus, List<OrderStatus>> NEXT_STATUS_MAP = new HashMap<>();
+
+    static {
+        NEXT_STATUS_MAP.put(PENDING_PAYMENT, Arrays.asList(PAID, CANCELED));
+        NEXT_STATUS_MAP.put(PAID, Arrays.asList(SHIPPED, CANCELED, REFUNDED));
+        NEXT_STATUS_MAP.put(SHIPPED, Collections.singletonList(COMPLETED));
+        NEXT_STATUS_MAP.put(COMPLETED, Arrays.asList(REFUNDED, PARTIALLY_REFUNDED));
+        NEXT_STATUS_MAP.put(CANCELED, Collections.emptyList());
+        NEXT_STATUS_MAP.put(REFUNDED, Collections.emptyList());
+        NEXT_STATUS_MAP.put(PARTIALLY_REFUNDED, Collections.singletonList(REFUNDED));
+
+        for (OrderStatus status : values()) {
+            status.nextStatus = NEXT_STATUS_MAP.get(status);
+        }
+    }
 
     OrderStatus(String value, String description) {
         this.value = value;
         this.description = description;
-        this.nextStatus = initNextStatus();
-    }
-
-    private List<OrderStatus> initNextStatus() {
-        return switch (this) {
-            case PENDING_PAYMENT -> Arrays.asList(PAID, CANCELED);
-            case PAID -> Arrays.asList(SHIPPED, CANCELED, REFUNDED);
-            case SHIPPED -> Collections.singletonList(COMPLETED);
-            case COMPLETED -> Arrays.asList(REFUNDED, PARTIALLY_REFUNDED);
-            case CANCELED, REFUNDED -> Collections.emptyList();
-            case PARTIALLY_REFUNDED -> Collections.singletonList(REFUNDED);
-        };
     }
 
     public static OrderStatus fromValue(String value) {

@@ -22,8 +22,8 @@ import com.supermall.backend.domain.order.dto.OrderItemResponse;
 import com.supermall.backend.domain.notification.service.NotificationService;
 import com.supermall.backend.domain.order.entity.ReturnOrder;
 import com.supermall.backend.domain.order.mapper.ReturnOrderMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
 
     private final CartService cartService;
@@ -43,6 +42,21 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private final ObjectMapper objectMapper;
     private final NotificationService notificationService;
     private final ReturnOrderMapper returnOrderMapper;
+
+    public OrderServiceImpl(
+            CartService cartService,
+            ProductService productService,
+            OrderItemMapper orderItemMapper,
+            ObjectMapper objectMapper,
+            @Lazy NotificationService notificationService,
+            ReturnOrderMapper returnOrderMapper) {
+        this.cartService = cartService;
+        this.productService = productService;
+        this.orderItemMapper = orderItemMapper;
+        this.objectMapper = objectMapper;
+        this.notificationService = notificationService;
+        this.returnOrderMapper = returnOrderMapper;
+    }
 
     @Override
     @Transactional
