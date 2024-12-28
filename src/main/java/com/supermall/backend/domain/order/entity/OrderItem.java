@@ -19,6 +19,15 @@ public class OrderItem {
     private Integer quantity;
     private BigDecimal price;
     
+    @TableField("payment_amount")
+    private BigDecimal paymentAmount;
+    
+    @TableField("product_spec")
+    private String productSpec;
+    
+    @TableField("is_refunded")
+    private Boolean isRefunded;
+    
     @TableField(exist = false)
     private String productName;
     

@@ -15,11 +15,16 @@ public class Category {
     private Integer sortOrder;
     
     @TableField("`status`")
-    private String status;
+    private Status status;
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
     
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
+
+    public enum Status {
+        ACTIVE,
+        INACTIVE
+    }
 } 

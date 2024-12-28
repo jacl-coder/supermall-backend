@@ -23,7 +23,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
 
     @Override
     @Transactional
-    public AddressResponse createAddress(Long userId, AddressRequest request) {
+    public AddressResponse createAddress(Integer userId, AddressRequest request) {
         // 如果是默认地址，先将其他地址设为非默认
         if (Boolean.TRUE.equals(request.getIsDefault())) {
             update(new LambdaUpdateWrapper<UserAddress>()
@@ -42,7 +42,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
 
     @Override
     @Transactional
-    public AddressResponse updateAddress(Long userId, Long addressId, AddressRequest request) {
+    public AddressResponse updateAddress(Integer userId, Integer addressId, AddressRequest request) {
         UserAddress address = getOne(new LambdaQueryWrapper<UserAddress>()
                 .eq(UserAddress::getId, addressId)
                 .eq(UserAddress::getUserId, userId));
@@ -66,14 +66,14 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
 
     @Override
     @Transactional
-    public void deleteAddress(Long userId, Long addressId) {
+    public void deleteAddress(Integer userId, Integer addressId) {
         remove(new LambdaQueryWrapper<UserAddress>()
                 .eq(UserAddress::getId, addressId)
                 .eq(UserAddress::getUserId, userId));
     }
 
     @Override
-    public AddressResponse getAddress(Long userId, Long addressId) {
+    public AddressResponse getAddress(Integer userId, Integer addressId) {
         UserAddress address = getOne(new LambdaQueryWrapper<UserAddress>()
                 .eq(UserAddress::getId, addressId)
                 .eq(UserAddress::getUserId, userId));
@@ -86,7 +86,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
     }
 
     @Override
-    public List<AddressResponse> listAddresses(Long userId) {
+    public List<AddressResponse> listAddresses(Integer userId) {
         List<UserAddress> addresses = list(new LambdaQueryWrapper<UserAddress>()
                 .eq(UserAddress::getUserId, userId)
                 .orderByDesc(UserAddress::getIsDefault)
@@ -99,7 +99,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
 
     @Override
     @Transactional
-    public void setDefaultAddress(Long userId, Long addressId) {
+    public void setDefaultAddress(Integer userId, Integer addressId) {
         // 先将所有地址设为非默认
         update(new LambdaUpdateWrapper<UserAddress>()
                 .eq(UserAddress::getUserId, userId)
@@ -114,7 +114,7 @@ public class UserAddressServiceImpl extends ServiceImpl<UserAddressMapper, UserA
     }
 
     @Override
-    public AddressResponse getDefaultAddress(Long userId) {
+    public AddressResponse getDefaultAddress(Integer userId) {
         UserAddress address = getOne(new LambdaQueryWrapper<UserAddress>()
                 .eq(UserAddress::getUserId, userId)
                 .eq(UserAddress::getIsDefault, true));

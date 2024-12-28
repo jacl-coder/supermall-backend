@@ -11,17 +11,18 @@ import java.util.List;
 @Data
 public class SecurityUser implements UserDetails {
     private Integer id;
-    private Integer roleId;
     private String username;
     private String password;
-    private boolean enabled;
-    private List<String> permissions;
+    private Integer merchantId;
+    private String role;
+    private boolean enabled = true;
+    private boolean accountNonExpired = true;
+    private boolean accountNonLocked = true;
+    private boolean credentialsNonExpired = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return permissions.stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
+        return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
@@ -36,21 +37,33 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return accountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return accountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return credentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public boolean isMerchant() {
+        return "ROLE_MERCHANT".equals(role);
+    }
+
+    public boolean isAdmin() {
+        return "ROLE_ADMIN".equals(role);
+    }
+
+    public boolean isUser() {
+        return "ROLE_USER".equals(role);
     }
 } 

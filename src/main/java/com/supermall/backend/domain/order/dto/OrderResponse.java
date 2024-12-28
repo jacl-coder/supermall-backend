@@ -1,5 +1,6 @@
 package com.supermall.backend.domain.order.dto;
 
+import com.supermall.backend.domain.order.enums.OrderStatus;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class OrderResponse {
     private BigDecimal totalAmount;
     private BigDecimal paymentAmount;
     private BigDecimal shippingFee;
-    private String status;
+    private OrderStatus status;
     private LocalDateTime paymentTime;
     private LocalDateTime shippingTime;
     private LocalDateTime completionTime;

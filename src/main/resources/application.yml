@@ -22,7 +22,7 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler
+    default-enum-type-handler: com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler
   global-config:
     db-config:
       id-type: auto
@@ -43,13 +43,27 @@ springdoc:
     urls:
       - url: /v3/api-docs
         name: API文档
-  packages-to-scan: com.supermall.backend.domain
-  paths-to-match: /api/**
+  packages-to-scan: 
+    - com.supermall.backend.domain
+    - com.supermall.backend.common
+  paths-to-match: 
+    - /api/**
+    - /error
   show-actuator: false
 
 logging:
   level:
     root: info
     com.supermall.backend: debug
+    org.springframework.web: debug
   file:
     name: logs/supermall.log
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always

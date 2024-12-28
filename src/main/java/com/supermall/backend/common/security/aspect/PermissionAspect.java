@@ -3,45 +3,55 @@ package com.supermall.backend.common.security.aspect;
 import com.supermall.backend.common.exception.BusinessException;
 import com.supermall.backend.common.security.annotation.RequirePermission;
 import com.supermall.backend.common.security.model.SecurityUser;
-import com.supermall.backend.domain.auth.service.RoleService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Aspect
 @Component
 @RequiredArgsConstructor
 public class PermissionAspect {
 
-    private final RoleService roleService;
-
     @Before("@annotation(requirePermission)")
-    public void checkPermission(RequirePermission requirePermission) {
+    public void checkPermission(JoinPoint joinPoint, RequirePermission requirePermission) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
             throw new BusinessException("未登录");
         }
 
-        Integer roleId = getRoleIdFromAuthentication(authentication);
-        if (roleId == null) {
-            throw new BusinessException("用户角色信息不存在");
+        SecurityUser user = (SecurityUser) authentication.getPrincipal();
+        if (user == null) {
+            throw new BusinessException("用户信息不存在");
         }
 
-        List<String> permissions = roleService.getRolePermissionCodes(roleId);
-        if (!permissions.contains(requirePermission.value())) {
-            throw new BusinessException("没有操作权限");
+        // 管理员拥有所有权限
+        if (user.isAdmin()) {
+            return;
         }
-    }
 
-    private Integer getRoleIdFromAuthentication(Authentication authentication) {
-        if (authentication.getPrincipal() instanceof SecurityUser) {
-            return ((SecurityUser) authentication.getPrincipal()).getRoleId();
+        // 检查角色权限
+        String requiredRole = requirePermission.role();
+        if (!requiredRole.isEmpty()) {
+            if ("MERCHANT".equals(requiredRole) && !user.isMerchant()) {
+                throw new BusinessException("需要商家权限");
+            }
+            if ("USER".equals(requiredRole) && !user.isUser()) {
+                throw new BusinessException("需要用户权限");
+            }
         }
-        return null;
+
+        // 检查商家权限
+        if (requirePermission.requireMerchant() && !user.isMerchant()) {
+            throw new BusinessException("需要商家权限");
+        }
+
+        // 检查商家ID
+        if (requirePermission.requireMerchant() && user.getMerchantId() == null) {
+            throw new BusinessException("商家信息不存在");
+        }
     }
 } 

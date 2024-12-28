@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 @TableName("shopping_cart_items")
 public class CartItem {
     @TableId(value = "item_id", type = IdType.AUTO)
-    private Long id;
-    private Long userId;
-    private Long productId;
+    private Integer id;
+    private Integer userId;
+    private Integer productId;
     private Integer quantity;
     private Boolean selected;
     

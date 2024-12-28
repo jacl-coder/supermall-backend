@@ -4,10 +4,12 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.user.dto.AddressRequest;
 import com.supermall.backend.domain.user.dto.AddressResponse;
 import com.supermall.backend.domain.user.service.UserAddressService;
+import com.supermall.backend.common.security.model.SecurityUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,49 +24,50 @@ public class UserAddressController {
     private final UserAddressService addressService;
 
     @PostMapping
-    public Result<AddressResponse> createAddress(@Valid @RequestBody AddressRequest request) {
-        // TODO: 从SecurityContext获取userId
-        Long userId = 1L;
-        return Result.success(addressService.createAddress(userId, request));
+    public Result<AddressResponse> createAddress(
+            @Valid @RequestBody AddressRequest request,
+            @AuthenticationPrincipal SecurityUser user) {
+        return Result.success(addressService.createAddress(user.getId(), request));
     }
 
     @PutMapping("/{addressId}")
     public Result<AddressResponse> updateAddress(
-            @PathVariable Long addressId,
-            @Valid @RequestBody AddressRequest request) {
-        Long userId = 1L;
-        return Result.success(addressService.updateAddress(userId, addressId, request));
+            @PathVariable Integer addressId,
+            @Valid @RequestBody AddressRequest request,
+            @AuthenticationPrincipal SecurityUser user) {
+        return Result.success(addressService.updateAddress(user.getId(), addressId, request));
     }
 
     @DeleteMapping("/{addressId}")
-    public Result<Void> deleteAddress(@PathVariable Long addressId) {
-        Long userId = 1L;
-        addressService.deleteAddress(userId, addressId);
+    public Result<Void> deleteAddress(
+            @PathVariable Integer addressId,
+            @AuthenticationPrincipal SecurityUser user) {
+        addressService.deleteAddress(user.getId(), addressId);
         return Result.success();
     }
 
     @GetMapping("/{addressId}")
-    public Result<AddressResponse> getAddress(@PathVariable Long addressId) {
-        Long userId = 1L;
-        return Result.success(addressService.getAddress(userId, addressId));
+    public Result<AddressResponse> getAddress(
+            @PathVariable Integer addressId,
+            @AuthenticationPrincipal SecurityUser user) {
+        return Result.success(addressService.getAddress(user.getId(), addressId));
     }
 
     @GetMapping
-    public Result<List<AddressResponse>> listAddresses() {
-        Long userId = 1L;
-        return Result.success(addressService.listAddresses(userId));
+    public Result<List<AddressResponse>> listAddresses(@AuthenticationPrincipal SecurityUser user) {
+        return Result.success(addressService.listAddresses(user.getId()));
     }
 
     @PutMapping("/{addressId}/default")
-    public Result<Void> setDefaultAddress(@PathVariable Long addressId) {
-        Long userId = 1L;
-        addressService.setDefaultAddress(userId, addressId);
+    public Result<Void> setDefaultAddress(
+            @PathVariable Integer addressId,
+            @AuthenticationPrincipal SecurityUser user) {
+        addressService.setDefaultAddress(user.getId(), addressId);
         return Result.success();
     }
 
     @GetMapping("/default")
-    public Result<AddressResponse> getDefaultAddress() {
-        Long userId = 1L;
-        return Result.success(addressService.getDefaultAddress(userId));
+    public Result<AddressResponse> getDefaultAddress(@AuthenticationPrincipal SecurityUser user) {
+        return Result.success(addressService.getDefaultAddress(user.getId()));
     }
 } 

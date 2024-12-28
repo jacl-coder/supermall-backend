@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.supermall.backend.common.exception.BusinessException;
-import com.supermall.backend.domain.merchant.constant.MerchantStatus;
 import com.supermall.backend.domain.merchant.dto.MerchantRegisterRequest;
 import com.supermall.backend.domain.merchant.dto.MerchantUpdateRequest;
 import com.supermall.backend.domain.merchant.dto.MerchantResponse;
@@ -25,7 +24,7 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
 
     @Override
     @Transactional
-    public MerchantResponse register(Long authId, MerchantRegisterRequest request) {
+    public MerchantResponse register(Integer authId, MerchantRegisterRequest request) {
         // 检查是否已注册
         if (exists(new LambdaQueryWrapper<MerchantProfile>()
                 .eq(MerchantProfile::getAuthId, authId))) {
@@ -40,8 +39,8 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
 
         MerchantProfile merchant = new MerchantProfile();
         BeanUtils.copyProperties(request, merchant);
-        merchant.setAuthId(authId);
-        merchant.setStatus(MerchantStatus.PENDING);
+        merchant.setAuthId(authId.longValue());
+        merchant.setStatus(MerchantProfile.Status.PENDING);
 
         save(merchant);
         return convertToResponse(merchant);
@@ -49,13 +48,13 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
 
     @Override
     @Transactional
-    public MerchantResponse update(Long merchantId, MerchantUpdateRequest request) {
+    public MerchantResponse update(Integer merchantId, MerchantUpdateRequest request) {
         MerchantProfile merchant = getById(merchantId);
         if (merchant == null) {
             throw new BusinessException("商家信息不存在");
         }
 
-        // 检查店铺名称是否已被其他商��使用
+        // 检查店铺名称是否已被其他商家使用
         if (request.getShopName() != null && !request.getShopName().equals(merchant.getShopName())) {
             if (exists(new LambdaQueryWrapper<MerchantProfile>()
                     .eq(MerchantProfile::getShopName, request.getShopName()))) {
@@ -79,7 +78,7 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
     }
 
     @Override
-    public MerchantResponse getProfile(Long merchantId) {
+    public MerchantResponse getProfile(Integer merchantId) {
         MerchantProfile merchant = getById(merchantId);
         if (merchant == null) {
             throw new BusinessException("商家信息不存在");
@@ -88,18 +87,8 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
     }
 
     @Override
-    public MerchantResponse getProfileByAuthId(Long authId) {
-        MerchantProfile merchant = getOne(new LambdaQueryWrapper<MerchantProfile>()
-                .eq(MerchantProfile::getAuthId, authId));
-        if (merchant == null) {
-            throw new BusinessException("商家信息不存在");
-        }
-        return convertToResponse(merchant);
-    }
-
-    @Override
     @Transactional
-    public void updateStatus(Long merchantId, String status) {
+    public void updateStatus(Integer merchantId, MerchantProfile.Status status) {
         MerchantProfile merchant = getById(merchantId);
         if (merchant == null) {
             throw new BusinessException("商家信息不存在");
@@ -110,7 +99,7 @@ public class MerchantProfileServiceImpl extends ServiceImpl<MerchantProfileMappe
     }
 
     @Override
-    public Page<MerchantResponse> listMerchants(String status, int page, int size) {
+    public Page<MerchantResponse> listMerchants(MerchantProfile.Status status, int page, int size) {
         Page<MerchantProfile> merchantPage = page(
                 new Page<>(page, size),
                 new LambdaQueryWrapper<MerchantProfile>()

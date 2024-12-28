@@ -1,5 +1,6 @@
 package com.supermall.backend.domain.payment.dto;
 
+import com.supermall.backend.domain.payment.entity.Payment;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -9,5 +10,5 @@ public class PaymentRequest {
     private Integer orderId;
     
     @NotNull(message = "支付方式不能为空")
-    private String paymentMethod;
+    private Payment.PaymentMethod paymentMethod;
 } 

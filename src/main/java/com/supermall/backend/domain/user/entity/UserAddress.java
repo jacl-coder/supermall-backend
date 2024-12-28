@@ -8,15 +8,24 @@ import java.time.LocalDateTime;
 @TableName("user_addresses")
 public class UserAddress {
     @TableId(value = "address_id", type = IdType.AUTO)
-    private Long id;
-    private Long userId;
+    private Integer id;
+    
+    private Integer userId;
+    
     private String receiverName;
+    
     private String receiverPhone;
+    
     private String province;
+    
     private String city;
+    
     private String district;
+    
     private String street;
+    
     private String postalCode;
+    
     private Boolean isDefault;
     
     @TableField(fill = FieldFill.INSERT)

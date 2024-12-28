@@ -1,13 +1,13 @@
 package com.supermall.backend.domain.product.controller;
 
 import com.supermall.backend.common.api.Result;
+import com.supermall.backend.common.security.annotation.RequirePermission;
 import com.supermall.backend.domain.product.dto.CategoryRequest;
 import com.supermall.backend.domain.product.entity.Category;
 import com.supermall.backend.domain.product.service.CategoryService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +21,13 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @RequirePermission(role = "ADMIN")
     public Result<Category> createCategory(@Valid @RequestBody CategoryRequest request) {
         return Result.success(categoryService.createCategory(request));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @RequirePermission(role = "ADMIN")
     public Result<Category> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
         Category category = categoryService.updateCategory(id, request);
         if (category == null) {
@@ -37,7 +37,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @RequirePermission(role = "ADMIN")
     public Result<Boolean> deleteCategory(@PathVariable Long id) {
         if (!categoryService.deleteCategory(id)) {
             return Result.fail("删除失败，可能存在子分类");

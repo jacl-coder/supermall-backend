@@ -47,7 +47,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         authUser.setUsername(request.getUsername());
         authUser.setEmail(request.getEmail());
         authUser.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-        authUser.setStatus("active");
+        authUser.setStatus("ACTIVE");
         authUser.setRoleId(3); // ROLE_USER 的 ID
         save(authUser);
 
@@ -82,7 +82,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
             throw new BusinessException("用户名或密码错误");
         }
 
-        if (!"active".equals(authUser.getStatus())) {
+        if (!"ACTIVE".equals(authUser.getStatus())) {
             throw new BusinessException("账号已被禁用");
         }
 

@@ -37,15 +37,24 @@ public class UserProfileServiceImpl extends ServiceImpl<UserProfileMapper, UserP
 
     @Override
     @Transactional
-    public UserProfileResponse updateProfile(Integer userId, UserProfileRequest request) {
-        UserProfile profile = getById(userId);
+    public UserProfileResponse updateProfile(Integer authId, UserProfileRequest request) {
+        UserProfile profile = getOne(new LambdaQueryWrapper<UserProfile>()
+                .eq(UserProfile::getAuthId, authId));
+                
         if (profile == null) {
             throw new BusinessException("用户信息不存在");
         }
 
+        // 验证手机号格式
+        if (!request.getPhoneNumber().matches("^1[3-9]\\d{9}$")) {
+            throw new BusinessException("手机号格式不正确");
+        }
+
         profile.setFullName(request.getFullName());
         profile.setPhoneNumber(request.getPhoneNumber());
-        profile.setAvatarUrl(request.getAvatarUrl());
+        if (request.getAvatarUrl() != null) {
+            profile.setAvatarUrl(request.getAvatarUrl());
+        }
 
         updateById(profile);
         return convertToResponse(profile);

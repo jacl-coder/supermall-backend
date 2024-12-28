@@ -3,6 +3,9 @@ package com.supermall.backend.domain.product.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.supermall.backend.common.api.PageResult;
 import com.supermall.backend.common.api.Result;
+import com.supermall.backend.common.exception.BusinessException;
+import com.supermall.backend.common.security.annotation.RequirePermission;
+import com.supermall.backend.common.security.model.SecurityUser;
 import com.supermall.backend.domain.product.dto.ProductRequest;
 import com.supermall.backend.domain.product.dto.ProductResponse;
 import com.supermall.backend.domain.product.entity.Product;
@@ -11,7 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "商品管理", description = "商品相关接口，包含商品的增删改查等基本操作以及商品状态管理")
@@ -23,21 +26,30 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    @PreAuthorize("hasRole('MERCHANT')")
-    public Result<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
-        // TODO: 从SecurityContext获取��家ID
-        Integer merchantId = 1; // 临时写死，后续从登录用户获取
-        Product product = productService.createProduct(request, merchantId);
+    @RequirePermission(role = "MERCHANT", requireMerchant = true)
+    public Result<ProductResponse> createProduct(
+            @Valid @RequestBody ProductRequest request,
+            @AuthenticationPrincipal SecurityUser user) {
+        Product product = productService.createProduct(request, user.getMerchantId());
         return Result.success(convertToResponse(product));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('MERCHANT')")
-    public Result<ProductResponse> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductRequest request) {
-        Product product = productService.updateProduct(id, request);
-        if (product == null) {
+    @RequirePermission(role = "MERCHANT", requireMerchant = true)
+    public Result<ProductResponse> updateProduct(
+            @PathVariable Integer id,
+            @Valid @RequestBody ProductRequest request,
+            @AuthenticationPrincipal SecurityUser user) {
+        // 验证商品所属权
+        Product existingProduct = productService.getById(id);
+        if (existingProduct == null) {
             return Result.fail("商品不存在");
         }
+        if (!existingProduct.getMerchantId().equals(user.getMerchantId())) {
+            throw new BusinessException("无权操作此商品");
+        }
+
+        Product product = productService.updateProduct(id, request);
         return Result.success(convertToResponse(product));
     }
 
@@ -66,6 +78,32 @@ public class ProductController {
             @RequestParam(defaultValue = "10") int size) {
         Page<Product> productPage = productService.searchProducts(keyword, page, size);
         return Result.success(convertToPageResult(productPage));
+    }
+
+    @PutMapping("/{id}/status")
+    @RequirePermission(requireMerchant = true)
+    public Result<ProductResponse> updateProductStatus(
+            @PathVariable Integer id,
+            @RequestParam Product.Status status,
+            @AuthenticationPrincipal SecurityUser user) {
+        // 验证商品所属权
+        Product existingProduct = productService.getById(id);
+        if (existingProduct == null) {
+            return Result.fail("商品不存在");
+        }
+
+        // 商家只能操作自己的商品，管理员可以操作所有商品
+        if (user.isMerchant() && !existingProduct.getMerchantId().equals(user.getMerchantId())) {
+            throw new BusinessException("无权操作此商品");
+        }
+
+        // 商家不能直接审核商品
+        if (user.isMerchant() && (status == Product.Status.APPROVED || status == Product.Status.REJECTED)) {
+            throw new BusinessException("商家不能审核商品");
+        }
+
+        Product product = productService.updateProductStatus(id, status);
+        return Result.success(convertToResponse(product));
     }
 
     private ProductResponse convertToResponse(Product product) {

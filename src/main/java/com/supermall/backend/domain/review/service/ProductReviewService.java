@@ -11,4 +11,16 @@ public interface ProductReviewService {
     Page<ProductReviewResponse> getUserReviews(Integer userId, int page, int size);
     Page<ProductReviewResponse> getMerchantReviews(Integer merchantId, int page, int size);
     void deleteReview(Integer userId, Integer reviewId);
+    
+    // 评论审核相关方法
+    void approveReview(Integer reviewId);
+    void rejectReview(Integer reviewId, String reason);
+    Page<ProductReviewResponse> getPendingReviews(int page, int size);
+    
+    // 评分统计相关方法
+    double getProductAverageRating(Integer productId);
+    int getProductReviewCount(Integer productId);
+    
+    // 获取评论详情
+    ProductReview getById(Integer reviewId);
 } 

@@ -8,11 +8,14 @@ import java.time.LocalDateTime;
 @TableName("user_favorites")
 public class UserFavorite {
     @TableId(value = "favorite_id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     
-    private Long userId;
-    private Long productId;
+    private Integer userId;
+    private Integer productId;
     
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdAt;
+    
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updatedAt;
 } 

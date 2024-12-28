@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supermall.backend.domain.user.mapper.UserFavoriteMapper">
+    <resultMap id="favoriteResponseMap" type="com.supermall.backend.domain.user.dto.FavoriteResponse">
+        <id column="favorite_id" property="favoriteId"/>
+        <result column="product_id" property="productId"/>
+        <result column="name" property="productName"/>
+        <result column="main_image" property="productImage"/>
+        <result column="price" property="price"/>
+        <result column="original_price" property="originalPrice"/>
+        <result column="description" property="description"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <select id="selectFavoritesByUserId" resultMap="favoriteResponseMap">
+        SELECT
+            f.favorite_id,
+            f.product_id,
+            p.name,
+            p.main_image,
+            p.price,
+            p.original_price,
+            p.description,
+            f.created_at
+        FROM user_favorites f
+        LEFT JOIN products p ON f.product_id = p.product_id
+        WHERE f.user_id = #{userId}
+        ORDER BY f.created_at DESC
+    </select>
+</mapper> 

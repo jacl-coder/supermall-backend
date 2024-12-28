@@ -11,6 +11,7 @@ import com.supermall.backend.domain.product.service.ProductService;
 import com.supermall.backend.domain.review.dto.ProductReviewRequest;
 import com.supermall.backend.domain.review.dto.ProductReviewResponse;
 import com.supermall.backend.domain.review.entity.ProductReview;
+import com.supermall.backend.domain.review.exception.ReviewException;
 import com.supermall.backend.domain.review.mapper.ProductReviewMapper;
 import com.supermall.backend.domain.review.service.ProductReviewService;
 import com.supermall.backend.domain.user.entity.UserProfile;
@@ -38,17 +39,23 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
         // 检查订单商品是否存在且属于当前用户
         OrderItem orderItem = orderService.getOrderItem(request.getOrderItemId());
         if (orderItem == null || !orderService.isUserOrder(userId, orderItem.getOrderId())) {
-            throw new BusinessException("订单商品不存在或不属于当前用户");
+            throw new ReviewException("订单商品不存在或不属于当前用户");
         }
 
         // 检查是否已经评价过
         if (exists(new LambdaQueryWrapper<ProductReview>()
                 .eq(ProductReview::getOrderItemId, request.getOrderItemId()))) {
-            throw new BusinessException("该订单商品已评价");
+            throw new ReviewException(ReviewException.ALREADY_REVIEWED);
+        }
+
+        // 检查评分是否有效
+        if (request.getRating() < 1 || request.getRating() > 5) {
+            throw new ReviewException(ReviewException.INVALID_RATING);
         }
 
         // 创建评价
         ProductReview review = new ProductReview();
+        review.setOrderId(orderItem.getOrderId());
         review.setOrderItemId(request.getOrderItemId());
         review.setUserId(userId);
         review.setProductId(orderItem.getProductId());
@@ -56,7 +63,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
         review.setRating(request.getRating());
         review.setContent(request.getContent());
         review.setImages(request.getImages() != null ? String.join(",", request.getImages()) : null);
-        review.setStatus("active");
+        review.setStatus(ProductReview.Status.PENDING);
 
         save(review);
 
@@ -68,7 +75,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
         Page<ProductReview> reviewPage = page(new Page<>(page, size),
                 new LambdaQueryWrapper<ProductReview>()
                         .eq(ProductReview::getProductId, productId)
-                        .eq(ProductReview::getStatus, "active")
+                        .eq(ProductReview::getStatus, ProductReview.Status.PUBLISHED)
                         .orderByDesc(ProductReview::getCreatedAt));
 
         return convertToResponsePage(reviewPage);
@@ -79,6 +86,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
         Page<ProductReview> reviewPage = page(new Page<>(page, size),
                 new LambdaQueryWrapper<ProductReview>()
                         .eq(ProductReview::getUserId, userId)
+                        .ne(ProductReview::getStatus, ProductReview.Status.DELETED)
                         .orderByDesc(ProductReview::getCreatedAt));
 
         return convertToResponsePage(reviewPage);
@@ -89,6 +97,7 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
         Page<ProductReview> reviewPage = page(new Page<>(page, size),
                 new LambdaQueryWrapper<ProductReview>()
                         .eq(ProductReview::getMerchantId, merchantId)
+                        .ne(ProductReview::getStatus, ProductReview.Status.DELETED)
                         .orderByDesc(ProductReview::getCreatedAt));
 
         return convertToResponsePage(reviewPage);
@@ -98,11 +107,89 @@ public class ProductReviewServiceImpl extends ServiceImpl<ProductReviewMapper, P
     @Transactional
     public void deleteReview(Integer userId, Integer reviewId) {
         ProductReview review = getById(reviewId);
-        if (review == null || !review.getUserId().equals(userId)) {
-            throw new BusinessException("评价不存在或无权删除");
+        if (review == null) {
+            throw new ReviewException(ReviewException.REVIEW_NOT_FOUND);
+        }
+        if (!review.getUserId().equals(userId)) {
+            throw new ReviewException(ReviewException.NO_PERMISSION);
+        }
+        if (review.getStatus() == ProductReview.Status.DELETED) {
+            throw new ReviewException("评价已删除");
         }
 
-        removeById(reviewId);
+        review.setStatus(ProductReview.Status.DELETED);
+        updateById(review);
+    }
+
+    @Override
+    @Transactional
+    public void approveReview(Integer reviewId) {
+        ProductReview review = getById(reviewId);
+        if (review == null) {
+            throw new ReviewException(ReviewException.REVIEW_NOT_FOUND);
+        }
+        if (review.getStatus() != ProductReview.Status.PENDING) {
+            throw new ReviewException("评价状态不是待审核");
+        }
+
+        review.setStatus(ProductReview.Status.PUBLISHED);
+        updateById(review);
+    }
+
+    @Override
+    @Transactional
+    public void rejectReview(Integer reviewId, String reason) {
+        ProductReview review = getById(reviewId);
+        if (review == null) {
+            throw new ReviewException(ReviewException.REVIEW_NOT_FOUND);
+        }
+        if (review.getStatus() != ProductReview.Status.PENDING) {
+            throw new ReviewException("评价状态不是待审核");
+        }
+
+        review.setStatus(ProductReview.Status.REJECTED);
+        review.setRejectReason(reason);
+        updateById(review);
+    }
+
+    @Override
+    public Page<ProductReviewResponse> getPendingReviews(int page, int size) {
+        Page<ProductReview> reviewPage = page(new Page<>(page, size),
+                new LambdaQueryWrapper<ProductReview>()
+                        .eq(ProductReview::getStatus, ProductReview.Status.PENDING)
+                        .orderByDesc(ProductReview::getCreatedAt));
+
+        return convertToResponsePage(reviewPage);
+    }
+
+    @Override
+    public double getProductAverageRating(Integer productId) {
+        List<ProductReview> reviews = list(new LambdaQueryWrapper<ProductReview>()
+                .eq(ProductReview::getProductId, productId)
+                .eq(ProductReview::getStatus, ProductReview.Status.PUBLISHED)
+                .select(ProductReview::getRating));
+
+        if (reviews.isEmpty()) {
+            return 0.0;
+        }
+
+        double totalRating = reviews.stream()
+                .mapToInt(ProductReview::getRating)
+                .sum();
+
+        return totalRating / reviews.size();
+    }
+
+    @Override
+    public int getProductReviewCount(Integer productId) {
+        return (int) count(new LambdaQueryWrapper<ProductReview>()
+                .eq(ProductReview::getProductId, productId)
+                .eq(ProductReview::getStatus, ProductReview.Status.PUBLISHED));
+    }
+
+    @Override
+    public ProductReview getById(Integer reviewId) {
+        return baseMapper.selectById(reviewId);
     }
 
     private ProductReviewResponse convertToResponse(ProductReview review) {

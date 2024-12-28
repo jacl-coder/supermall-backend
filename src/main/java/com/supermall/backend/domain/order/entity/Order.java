@@ -1,6 +1,7 @@
 package com.supermall.backend.domain.order.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.supermall.backend.domain.order.enums.OrderStatus;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,12 +13,13 @@ public class Order {
     private Integer id;
     private String orderNo;
     private Integer userId;
+    private Integer merchantId;
     private BigDecimal totalAmount;
     private BigDecimal paymentAmount;
     private BigDecimal shippingFee;
     
-    @TableField("`status`")  // status是MySQL关键字，需要转义
-    private String status;
+    @TableField("`status`")
+    private OrderStatus status;
     
     private LocalDateTime paymentTime;
     private LocalDateTime shippingTime;

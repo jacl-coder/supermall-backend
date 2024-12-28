@@ -1,0 +1,3 @@
+ALTER TABLE order_items
+ADD COLUMN payment_amount DECIMAL(10,2) NOT NULL DEFAULT 0.00 COMMENT '实际支付金额',
+ADD COLUMN product_spec VARCHAR(255) DEFAULT NULL COMMENT '商品规格'; 

@@ -1,5 +1,6 @@
 package com.supermall.backend.domain.payment.dto;
 
+import com.supermall.backend.domain.payment.entity.Payment;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -9,17 +10,11 @@ public class PaymentResponse {
     private Integer id;
     private String paymentNo;
     private Integer orderId;
-    private Integer userId;
     private BigDecimal amount;
-    private String paymentMethod;
+    private Payment.PaymentMethod paymentMethod;
     private String transactionId;
-    private String status;
+    private Payment.Status status;
     private String failureReason;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private LocalDateTime paidAt;
-    
-    // 额外的展示信息
-    private String orderNo;
-    private String statusDesc;
+    private LocalDateTime createdAt;
 } 
