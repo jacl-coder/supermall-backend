@@ -1,9 +1,9 @@
 package com.supermall.backend.domain.auth.service;
 
 import com.supermall.backend.domain.auth.entity.AuthUser;
+import com.supermall.backend.common.security.model.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,19 +26,21 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("用户不存在");
         }
 
-        // 获取用户权限
+        // 获取用户权���
         List<String> permissions = roleService.getRolePermissionCodes(authUser.getRoleId());
         List<SimpleGrantedAuthority> authorities = permissions.stream()
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        // 根据数据库表的字段构建 UserDetails
-        return User.builder()
-                .username(authUser.getUsername())
-                .password(authUser.getPasswordHash())
-                .disabled(!"active".equals(authUser.getStatus()))
-                .accountLocked("locked".equals(authUser.getStatus()))
-                .authorities(authorities)
-                .build();
+        // 创建 SecurityUser 对象
+        SecurityUser securityUser = new SecurityUser();
+        securityUser.setId(authUser.getId());
+        securityUser.setUsername(authUser.getUsername());
+        securityUser.setPassword(authUser.getPasswordHash());
+        securityUser.setRole("ROLE_" + roleService.getRole(authUser.getRoleId()).getName().toUpperCase());
+        securityUser.setEnabled("ACTIVE".equalsIgnoreCase(authUser.getStatus()));
+        securityUser.setAccountNonLocked(!"LOCKED".equalsIgnoreCase(authUser.getStatus()));
+
+        return securityUser;
     }
 } 

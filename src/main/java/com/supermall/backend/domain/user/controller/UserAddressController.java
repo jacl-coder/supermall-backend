@@ -4,6 +4,7 @@ import com.supermall.backend.common.api.Result;
 import com.supermall.backend.domain.user.dto.AddressRequest;
 import com.supermall.backend.domain.user.dto.AddressResponse;
 import com.supermall.backend.domain.user.service.UserAddressService;
+import com.supermall.backend.domain.user.service.UserProfileService;
 import com.supermall.backend.common.security.model.SecurityUser;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -22,12 +23,14 @@ import java.util.List;
 public class UserAddressController {
 
     private final UserAddressService addressService;
+    private final UserProfileService profileService;
 
     @PostMapping
     public Result<AddressResponse> createAddress(
             @Valid @RequestBody AddressRequest request,
             @AuthenticationPrincipal SecurityUser user) {
-        return Result.success(addressService.createAddress(user.getId(), request));
+        Integer profileId = profileService.getProfileByAuthId(user.getId()).getId();
+        return Result.success(addressService.createAddress(profileId, request));
     }
 
     @PutMapping("/{addressId}")
@@ -35,14 +38,16 @@ public class UserAddressController {
             @PathVariable Integer addressId,
             @Valid @RequestBody AddressRequest request,
             @AuthenticationPrincipal SecurityUser user) {
-        return Result.success(addressService.updateAddress(user.getId(), addressId, request));
+        Integer profileId = profileService.getProfileByAuthId(user.getId()).getId();
+        return Result.success(addressService.updateAddress(profileId, addressId, request));
     }
 
     @DeleteMapping("/{addressId}")
     public Result<Void> deleteAddress(
             @PathVariable Integer addressId,
             @AuthenticationPrincipal SecurityUser user) {
-        addressService.deleteAddress(user.getId(), addressId);
+        Integer profileId = profileService.getProfileByAuthId(user.getId()).getId();
+        addressService.deleteAddress(profileId, addressId);
         return Result.success();
     }
 
@@ -50,24 +55,28 @@ public class UserAddressController {
     public Result<AddressResponse> getAddress(
             @PathVariable Integer addressId,
             @AuthenticationPrincipal SecurityUser user) {
-        return Result.success(addressService.getAddress(user.getId(), addressId));
+        Integer profileId = profileService.getProfileByAuthId(user.getId()).getId();
+        return Result.success(addressService.getAddress(profileId, addressId));
     }
 
     @GetMapping
     public Result<List<AddressResponse>> listAddresses(@AuthenticationPrincipal SecurityUser user) {
-        return Result.success(addressService.listAddresses(user.getId()));
+        Integer profileId = profileService.getProfileByAuthId(user.getId()).getId();
+        return Result.success(addressService.listAddresses(profileId));
     }
 
     @PutMapping("/{addressId}/default")
     public Result<Void> setDefaultAddress(
             @PathVariable Integer addressId,
             @AuthenticationPrincipal SecurityUser user) {
-        addressService.setDefaultAddress(user.getId(), addressId);
+        Integer profileId = profileService.getProfileByAuthId(user.getId()).getId();
+        addressService.setDefaultAddress(profileId, addressId);
         return Result.success();
     }
 
     @GetMapping("/default")
     public Result<AddressResponse> getDefaultAddress(@AuthenticationPrincipal SecurityUser user) {
-        return Result.success(addressService.getDefaultAddress(user.getId()));
+        Integer profileId = profileService.getProfileByAuthId(user.getId()).getId();
+        return Result.success(addressService.getDefaultAddress(profileId));
     }
 } 

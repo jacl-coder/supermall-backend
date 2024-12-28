@@ -86,7 +86,7 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
         AuthUser authUser = getByUsername(request.getUsername());
 
         if (authUser == null || !passwordEncoder.matches(request.getPassword(), authUser.getPasswordHash())) {
-            throw new BusinessException("用户���或密码错误");
+            throw new BusinessException("用户名或密码错误");
         }
 
         if (!"ACTIVE".equals(authUser.getStatus())) {
@@ -171,9 +171,33 @@ public class AuthUserServiceImpl extends ServiceImpl<AuthUserMapper, AuthUser> i
 
     @Override
     public void logout(Integer authId) {
-        // 可在这里添加���出相关的业务逻辑
+        // 可在这里添加出相关的业务逻辑
         // 比如记录登出时间、清除用户token等
         // 目前数据库表中没有相关字段，所以暂时不做处理
+    }
+
+    @Override
+    public void logoutByUsername(String username) {
+        AuthUser authUser = getByUsername(username);
+        if (authUser != null) {
+            logout(authUser.getId());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updatePasswordByUsername(String username, String oldPassword, String newPassword) {
+        AuthUser authUser = getByUsername(username);
+        if (authUser == null) {
+            throw new BusinessException("用户不存在");
+        }
+
+        if (!passwordEncoder.matches(oldPassword, authUser.getPasswordHash())) {
+            throw new BusinessException("原密码错误");
+        }
+
+        authUser.setPasswordHash(passwordEncoder.encode(newPassword));
+        updateById(authUser);
     }
 
     private UserInfoResponse convertToUserInfoResponse(AuthUser authUser) {

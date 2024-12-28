@@ -1,0 +1,242 @@
+{
+    "info": {
+        "_postman_id": "1234567-89ab-cdef-0123-456789abcdef",
+        "name": "Supermall User Favorite API Tests",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": "超级商城用户收藏管理接口测试集合"
+    },
+    "item": [
+        {
+            "name": "用户登录",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const jsonData = pm.response.json();",
+                            "",
+                            "pm.test('登录响应格式正确', function() {",
+                            "    pm.expect(jsonData.success).to.be.true;",
+                            "    pm.expect(jsonData.data).to.be.an('object');",
+                            "    pm.expect(jsonData.data.token).to.be.a('string');",
+                            "    pm.expect(jsonData.data.id).to.be.a('number');",
+                            "    pm.expect(jsonData.data.username).to.be.a('string');",
+                            "});",
+                            "",
+                            "if (jsonData.success && jsonData.data) {",
+                            "    pm.environment.set('token', jsonData.data.token);",
+                            "    pm.environment.set('userId', jsonData.data.id);",
+                            "    pm.environment.set('username', jsonData.data.username);",
+                            "",
+                            "    console.log('Auth info saved:', {",
+                            "        userId: jsonData.data.id,",
+                            "        username: jsonData.data.username",
+                            "    });",
+                            "}",
+                            "",
+                            "const savedToken = pm.environment.get('token');",
+                            "console.log('Saved token:', savedToken ? savedToken.substring(0, 20) + '...' : 'null');"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"username\": \"testuser4092350\",\n    \"password\": \"Test123456\"\n}"
+                },
+                "url": {
+                    "raw": "{{baseUrl}}/api/auth/login",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "auth",
+                        "login"
+                    ]
+                },
+                "description": "用户登录接口"
+            }
+        },
+        {
+            "name": "添加收藏",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const jsonData = pm.response.json();",
+                            "",
+                            "pm.test('添加收藏响应格式正确', function() {",
+                            "    pm.expect(jsonData.success).to.be.true;",
+                            "    pm.expect(jsonData.data).to.be.null;",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/favorites/products/1",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "users",
+                        "favorites",
+                        "products",
+                        "1"
+                    ]
+                },
+                "description": "添加商品到收藏"
+            }
+        },
+        {
+            "name": "获取收藏列表",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const jsonData = pm.response.json();",
+                            "",
+                            "pm.test('获取收藏列表响应格式正确', function() {",
+                            "    pm.expect(jsonData.success).to.be.true;",
+                            "    pm.expect(jsonData.data).to.be.an('object');",
+                            "    pm.expect(jsonData.data.records).to.be.an('array');",
+                            "    pm.expect(jsonData.data.total).to.be.a('number');",
+                            "    pm.expect(jsonData.data.size).to.be.a('number');",
+                            "    pm.expect(jsonData.data.current).to.be.a('number');",
+                            "",
+                            "    if (jsonData.data.records.length > 0) {",
+                            "        const favorite = jsonData.data.records[0];",
+                            "        pm.expect(favorite.id).to.be.a('number');",
+                            "        pm.expect(favorite.productId).to.be.a('number');",
+                            "        pm.expect(favorite.productName).to.be.a('string');",
+                            "        pm.expect(favorite.productImage).to.be.a('string');",
+                            "        pm.expect(favorite.price).to.be.a('number');",
+                            "        pm.expect(favorite.originalPrice).to.be.a('number');",
+                            "        pm.expect(favorite.description).to.be.a('string');",
+                            "        pm.expect(favorite.createdAt).to.be.a('string');",
+                            "    }",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/favorites?page=1&size=10",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "users",
+                        "favorites"
+                    ],
+                    "query": [
+                        {
+                            "key": "page",
+                            "value": "1"
+                        },
+                        {
+                            "key": "size",
+                            "value": "10"
+                        }
+                    ]
+                },
+                "description": "获取用户的收藏列表"
+            }
+        },
+        {
+            "name": "取消收藏",
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "type": "text/javascript",
+                        "exec": [
+                            "const jsonData = pm.response.json();",
+                            "",
+                            "pm.test('取消收藏响应格式正确', function() {",
+                            "    pm.expect(jsonData.success).to.be.true;",
+                            "    pm.expect(jsonData.data).to.be.null;",
+                            "});"
+                        ]
+                    }
+                }
+            ],
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{baseUrl}}/api/users/favorites/products/1",
+                    "host": [
+                        "{{baseUrl}}"
+                    ],
+                    "path": [
+                        "api",
+                        "users",
+                        "favorites",
+                        "products",
+                        "1"
+                    ]
+                },
+                "description": "取消收藏商品"
+            }
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    "console.log('=== Request Info ===');",
+                    "console.log('Request URL:', pm.request.url.toString());",
+                    "console.log('Request Method:', pm.request.method);",
+                    "console.log('==================');"
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:8080",
+            "type": "string"
+        }
+    ]
+} 

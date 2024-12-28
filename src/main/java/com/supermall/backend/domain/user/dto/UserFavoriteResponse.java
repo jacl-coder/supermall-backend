@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 
 @Data
 public class UserFavoriteResponse {
-    private Long id;
-    private Long userId;
-    private Long productId;
+    private Integer id;
+    private Integer userId;
+    private Integer productId;
     private LocalDateTime createdAt;
     
     // 商品信息

@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class AddressResponse {
-    private Long id;
+    private Integer id;
     private String receiverName;
     private String receiverPhone;
     private String province;

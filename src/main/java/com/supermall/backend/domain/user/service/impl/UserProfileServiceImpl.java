@@ -82,7 +82,8 @@ public class UserProfileServiceImpl extends ServiceImpl<UserProfileMapper, UserP
     @Override
     @Transactional
     public void deleteProfile(Integer userId) {
-        if (!removeById(userId)) {
+        if (!remove(new LambdaQueryWrapper<UserProfile>()
+                .eq(UserProfile::getAuthId, userId))) {
             throw new BusinessException("用户信息不存在");
         }
     }

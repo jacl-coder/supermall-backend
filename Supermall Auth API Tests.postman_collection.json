@@ -1,0 +1,353 @@
+{
+	"info": {
+		"_postman_id": "9d271475-6ef2-4a7d-95d8-125c57e7433f",
+		"name": "Supermall Auth API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33064293"
+	},
+	"item": [
+		{
+			"name": "检查用户名是否可用",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/check-username?username={{testUsername}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"check-username"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{testUsername}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "用户注册",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('注册响应格���正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.token).to.be.a('string');",
+							"    pm.expect(jsonData.data.username).to.equal(pm.variables.get('testUsername'));",
+							"});",
+							"",
+							"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+							"    // 保存认证信息到本地环境",
+							"    pm.environment.set('token', jsonData.data.token);",
+							"    pm.environment.set('userId', jsonData.data.id);",
+							"    // 保存用户名供后续测试使用",
+							"    pm.environment.set('lastRegisteredUsername', jsonData.data.username);",
+							"    console.log('Registration successful. Username:', jsonData.data.username);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// 生成测试用户名",
+							"const timestamp = new Date().getTime().toString().slice(-4);",
+							"const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');",
+							"const testUsername = `testuser${timestamp}${randomNum}`;",
+							"const testEmail = `${testUsername}@example.com`;",
+							"",
+							"pm.environment.set('testUsername', testUsername);",
+							"pm.environment.set('testEmail', testEmail);",
+							"console.log('Generated test user:', testUsername);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{testUsername}}\",\n    \"email\": \"{{testEmail}}\",\n    \"password\": \"Test123456\",\n    \"fullName\": \"测试用户\",\n    \"phoneNumber\": \"13800138000\",\n    \"userType\": \"USER\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "用户登录",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// 获取注册时保存的用户名",
+							"const savedUsername = pm.environment.get('lastRegisteredUsername');",
+							"if (savedUsername) {",
+							"    pm.environment.set('loginUsername', savedUsername);",
+							"    console.log('Using saved username for login:', savedUsername);",
+							"} else {",
+							"    console.error('No saved username found for login');",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('登录响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.token).to.be.a('string');",
+							"    pm.expect(jsonData.data.username).to.be.a('string');",
+							"    ",
+							"    // 打印实际使用的用户名",
+							"    console.log('Login successful with username:', jsonData.data.username);",
+							"});",
+							"",
+							"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+							"    pm.environment.set('token', jsonData.data.token);",
+							"    pm.environment.set('userId', jsonData.data.id);",
+							"    console.log('Token saved to environment');",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{loginUsername}}\",\n    \"password\": \"Test123456\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "修改密码",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('修改密码响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.null;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"oldPassword\": \"Test123456\",\n    \"newPassword\": \"NewTest123456\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/update-password",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"update-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "使用新密码登录",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('使用新密码登录成功', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.an('object');",
+							"    pm.expect(jsonData.data.token).to.be.a('string');",
+							"    pm.expect(jsonData.data.username).to.equal(pm.environment.get('testUsername'));",
+							"});",
+							"",
+							"if (jsonData.success && jsonData.data && jsonData.data.token) {",
+							"    pm.environment.set('token', jsonData.data.token);",
+							"    pm.environment.set('userId', jsonData.data.id);",
+							"    console.log('Token saved to environment');",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{loginUsername}}\",\n    \"password\": \"NewTest123456\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "退出登录",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"pm.test('退出登录响应格式正确', function() {",
+							"    pm.expect(jsonData.success).to.be.true;",
+							"    pm.expect(jsonData.data).to.be.null;",
+							"});",
+							"",
+							"if (pm.response.code === 200) {",
+							"    pm.environment.unset('token');",
+							"    pm.environment.unset('userId');",
+							"    pm.environment.unset('lastRegisteredUsername');",
+							"    pm.environment.unset('testUsername');",
+							"    pm.environment.unset('testEmail');",
+							"    console.log('All environment variables cleared');",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/api/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// 全局预请求脚本",
+					"const token = pm.environment.get('token');",
+					"const username = pm.environment.get('testUsername');",
+					"",
+					"console.log('=== Request Info ===');",
+					"console.log('Request URL:', pm.request.url.toString());",
+					"console.log('Current token:', token ? token.substring(0, 20) + '...' : 'null');",
+					"console.log('Current username:', username || 'null');",
+					"console.log('==================');"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

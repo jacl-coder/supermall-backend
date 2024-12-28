@@ -13,8 +13,11 @@ public interface AuthUserService extends IService<AuthUser> {
     // 用户登录
     LoginResponse login(LoginRequest request);
     
-    // 用户登出
+    // 用户登出（通过ID）
     void logout(Integer authId);
+    
+    // 用户登出（通过用户名）
+    void logoutByUsername(String username);
     
     // 检查用户名是否存在
     boolean existsByUsername(String username);
@@ -25,8 +28,11 @@ public interface AuthUserService extends IService<AuthUser> {
     // 根据用户名查找用户
     AuthUser getByUsername(String username);
     
-    // 更新密码
+    // 更新密码（通过ID）
     void updatePassword(Integer authId, String oldPassword, String newPassword);
+    
+    // 更新密码（通过用户名）
+    void updatePasswordByUsername(String username, String oldPassword, String newPassword);
     
     // 更新用户状态
     void updateStatus(Integer authId, String status);

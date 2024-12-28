@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class UserProfileResponse {
-    private Long id;
+    private Integer id;
     private String fullName;
     private String phoneNumber;
     private String avatarUrl;

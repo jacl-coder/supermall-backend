@@ -33,10 +33,13 @@ public class AuthController {
     @PostMapping("/logout")
     public Result<Void> logout() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            Integer authId = Integer.parseInt(authentication.getName());
-            authUserService.logout(authId);
+        if (authentication == null || !authentication.isAuthenticated() || 
+            "anonymousUser".equals(authentication.getPrincipal())) {
+            return Result.fail("用户未登录");
         }
+        
+        String username = authentication.getName();
+        authUserService.logoutByUsername(username);
         SecurityContextHolder.clearContext();
         return Result.success();
     }
@@ -47,13 +50,15 @@ public class AuthController {
     }
 
     @PostMapping("/update-password")
-    public Result<Void> updatePassword(@RequestBody PasswordUpdateRequest request) {
+    public Result<Void> updatePassword(@Valid @RequestBody PasswordUpdateRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return Result.fail("未登录");
+        if (authentication == null || !authentication.isAuthenticated() || 
+            "anonymousUser".equals(authentication.getPrincipal())) {
+            return Result.fail("用户未登录");
         }
-        Integer authId = Integer.parseInt(authentication.getName());
-        authUserService.updatePassword(authId, request.getOldPassword(), request.getNewPassword());
+        
+        String username = authentication.getName();
+        authUserService.updatePasswordByUsername(username, request.getOldPassword(), request.getNewPassword());
         return Result.success();
     }
 

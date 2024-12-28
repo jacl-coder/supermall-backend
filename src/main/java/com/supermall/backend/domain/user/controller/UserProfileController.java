@@ -39,7 +39,7 @@ public class UserProfileController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     public Result<UserProfileResponse> getProfile(@AuthenticationPrincipal SecurityUser user) {
-        return Result.success(userProfileService.getProfile(user.getId()));
+        return Result.success(userProfileService.getProfileByAuthId(user.getId()));
     }
 
     @DeleteMapping
